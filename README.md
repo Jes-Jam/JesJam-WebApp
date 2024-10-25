@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# JesJam
 
-## Getting Started
+<img src="./public/images/jesjam_logo.svg" align="right" alt="JesJam Logo" width="250" height="200" style="margin-top: -10px; margin-right: -10px; margin-bottom: -10px !important;"/>
 
-First, run the development server:
+JesJam is a flashcards app that use spaced repetition method and gamification to enhance learning engagement and retention.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+trust me it work!
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<br/> 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Features 🐦‍🔥
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## User Roles and Capabilities
 
-## Learn More
+### Super Admin
+- Review and moderate flashcard publications from authorized users
+- Account management capabilities:
+  - Suspend or remove authorized user accounts
+  - Grant streak continuity exceptions for users
 
-To learn more about Next.js, take a look at the following resources:
+### Authorized User
+- **Flashcard Management**
+  - Create, read, update, and delete personal flashcards
+  - Request publication of flashcards for public access
+  - Add favorite cards and classes
+  - View personal flashcard collection
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Learning Features**
+  - Study specific classes
+  - View comprehensive question lists within classes
+  - Track learning streaks
+  - Access study history
+  - View favorite classes and cards
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Social Features**
+  - Share daily scores on Facebook
+  - Share milestone streaks on Facebook
+  - Invite friends to join specific classes
+  - View personal ranking on leaderboard
+  - Share leaderboard achievements on Facebook
 
-## Deploy on Vercel
+### Non-Authorized User
+- Browse and review public flashcards
+- Access featured classes
+- Register to become an authorized user
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Authentication System
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Implemented using Clerk Authentication:
+- Multiple registration/login options:
+  - Email and password
+  - Social login via Facebook
+  - Secure user authentication flow
+
+## Content Management
+
+### Class Management
+- Comprehensive CRUD operations for flashcard categories
+- Organize flashcards into structured classes
+- Feature specific classes for broader visibility
+
+### Flashcard System
+- **Content Creation**
+  - Rich media support (Audio/Image)
+  - Add memory tips and hints
+  - Public and private card creation modes
+
+- **Visibility Control**
+  - Private flashcard creation
+  - Publication request system
+  - Admin review process for public visibility
+
+## User Interface
+
+### Landing Page
+- Welcoming interface for all users
+- Featured content showcase
+- Easy access to key features
+
+### Personalization
+- **Favorite Management**
+  - Add/remove favorite flashcards
+  - Add/remove favorite classes
+  - Personalized collection view
+
+### Social and Competitive Features
+- **Leaderboard System**
+  - Real-time ranking
+  - Personal progress tracking
+  - Social sharing capabilities
+
+# Licence
+
+<img src="./public/images/AGPLv3_Logo.svg" align="right" alt="JesJam Logo" width="150" height="100" style="margin-top: -10px; margin-right: -10px; margin-bottom: -10px !important;"/>
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0) with the following additional terms:
+
+- ✅ The source code is open for viewing, modification, and educational use
+- ✅ Contributions to the project are welcome
+- ❌ Commercial deployment of this codebase as a competing service is not permitted without prior written agreement
+- ❌ The project name and branding are protected and require explicit permission for use
+
+For business inquiries, commercial licensing, or any questions, please contact [vireakrothpun@gmail.com]
+
+See the [LICENSE](LICENSE) file for the full AGPL-3.0 terms.
