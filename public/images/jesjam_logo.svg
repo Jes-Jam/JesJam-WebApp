@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <!-- White background -->
+  <rect x="0" y="0" width="300" height="200" fill="white" />
+  
+  <!-- First J (background) -->
+  <rect x="60" y="60" width="80" height="80" rx="10" ry="10" fill="#3498db" />
+  <path d="M110 80 Q110 120 90 120" stroke="white" stroke-width="12" fill="none" />
+  
+  <!-- Second J (foreground, centered in its container) -->
+  <rect x="70" y="70" width="80" height="80" rx="10" ry="10" fill="#2980b9" />
+  <path d="M120 90 Q120 125 100 125" stroke="white" stroke-width="12" fill="none" />
+</svg>
