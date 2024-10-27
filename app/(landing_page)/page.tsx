@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
     return (
-        <div className="max-w-[988px] mx-auto flex-1 w-full flex flex-col lg:flex-row items-center justify-center p-4 gap-4">
-            <div className="relative w-[240px] h-[240px] lg:w-[480px] lg:h-[480px] mb:8 lg:mb:0">
-                <Image src="/images/jesjam_logo.svg" alt="jesjam-logo" fill className="object-contain" />
+        <div className="max-w-[988px] mx-auto flex-1 w-full flex flex-col lg:flex-row items-center justify-center p-4 gap-x-8">
+            <div className="relative w-[240px] h-[240px] lg:w-[780px] lg:h-[780px] mb:8 lg:mb:0">
+                <Image src="/images/landing_page_animation.svg" alt="jesjam-logo" fill className="object-contain" />
             </div>
-            <div className="flex flex-col gap-y-8">
-                <h1 className="text-3xl lg:text-4xl font-bold text-sky-600 max-w-[480px] text-center">
+            <div className="flex flex-col gap-y-9">
+                <h1 className="text-3xl lg:text-4xl font-bold text-sky-600 text-left whitespace-nowrap">
                     Learn with ease! &nbsp;😁
                 </h1>
                 <div className="flex flex-col items-center gap-y-3 max-w-[330px] w-full">

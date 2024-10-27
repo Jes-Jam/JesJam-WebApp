@@ -1,0 +1,222 @@
+<svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&amp;display=swap');
+      text { 
+        font-family: 'Rubik', sans-serif;
+        fill: #60a5fa;
+      }
+    </style>
+  </defs>
+
+  <defs>
+    <!-- Flower petal rotation animations -->
+    <animate id="rotateFlower1" dur="8s" repeatCount="indefinite"
+             attributeName="transform" type="rotate"
+             values="0 20 -20; 5 20 -20; 0 20 -20"
+             calcMode="spline"
+             keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
+             
+    <animate id="rotateFlower2" dur="10s" repeatCount="indefinite"
+             attributeName="transform" type="rotate"
+             values="0 25 -35; 8 25 -35; 0 25 -35"
+             calcMode="spline"
+             keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
+  </defs>
+
+
+  <!-- Background -->
+  <rect width="600" height="500" fill="white"/>
+  
+  <!-- Graph Container -->
+  <rect x="50" y="50" width="400" height="300" rx="15" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+  
+  <!-- Grid Lines -->
+  <g stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4">
+    <line x1="50" y1="125" x2="450" y2="125"/>
+    <line x1="50" y1="200" x2="450" y2="200"/>
+    <line x1="50" y1="275" x2="450" y2="275"/>
+  </g>
+  
+  <!-- Y-axis Labels -->
+  <g font-size="12" text-anchor="end">
+    <text x="40" y="125">75%</text>
+    <text x="40" y="200">50%</text>
+    <text x="40" y="275">25%</text>
+    <text x="40" y="330">0%</text>
+  </g>
+  
+  <!-- Growth Curve -->
+  <path d="M 80 300 C 150 290, 200 200, 250 180 S 350 120, 420 80" 
+        fill="none" 
+        stroke="#3b82f6" 
+        stroke-width="3"/>
+  
+  <!-- Point 1: Beginning Stage -->
+  <g transform="translate(80, 300)">
+    <!-- Stacked Cards with Rotation -->
+    <g>
+      <!-- Bottom Card -->
+      <rect width="40" height="50" rx="5" fill="#93c5fd" opacity="0.6" 
+            transform="translate(4, 4)">
+        <animate attributeName="transform" dur="3s" repeatCount="indefinite"
+                 values="translate(4, 4) rotate(0); translate(4, 4) rotate(-2); translate(4, 4) rotate(0)"
+                 calcMode="spline"
+                 keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
+      </rect>
+      <!-- Middle Card -->
+      <rect width="40" height="50" rx="5" fill="#93c5fd" opacity="0.8" 
+            transform="translate(2, 2)">
+        <animate attributeName="transform" dur="3s" repeatCount="indefinite"
+                 values="translate(2, 2) rotate(0); translate(2, 2) rotate(2); translate(2, 2) rotate(0)"
+                 calcMode="spline"
+                 keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
+      </rect>
+      <!-- Top Card -->
+      <rect width="40" height="50" rx="5" fill="#93c5fd" filter="drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1))">
+        <animate attributeName="transform" dur="3s" repeatCount="indefinite"
+                 values="rotate(0); rotate(-1); rotate(0)"
+                 calcMode="spline"
+                 keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
+      </rect>
+    </g>
+    <!-- Small Daisy (same as before) -->
+    <g transform="translate(20, -10)">
+      <path d="M 0 0 C 0 -5, 0 -10, 0 -15" stroke="#4ade80" stroke-width="1.5" fill="none"/>
+      <circle cx="0" cy="-15" r="5" fill="#fef3c7"/>
+      <circle cx="0" cy="-15" r="2" fill="#fbbf24"/>
+    </g>
+  </g>
+  
+  <!-- Point 2: Middle Stage -->
+  <g transform="translate(250, 180)">
+    <!-- Stacked Cards with Rotation -->
+    <g>
+      <rect width="40" height="50" rx="5" fill="#60a5fa" opacity="0.6" 
+            transform="translate(4, 4)">
+        <animate attributeName="transform" dur="4s" repeatCount="indefinite"
+                 values="translate(4, 4) rotate(0); translate(4, 4) rotate(-2); translate(4, 4) rotate(0)"
+                 calcMode="spline"
+                 keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
+      </rect>
+      <rect width="40" height="50" rx="5" fill="#60a5fa" opacity="0.8" 
+            transform="translate(2, 2)">
+        <animate attributeName="transform" dur="4s" repeatCount="indefinite"
+                 values="translate(2, 2) rotate(0); translate(2, 2) rotate(2); translate(2, 2) rotate(0)"
+                 calcMode="spline"
+                 keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
+      </rect>
+      <rect width="40" height="50" rx="5" fill="#60a5fa" filter="drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1))">
+        <animate attributeName="transform" dur="4s" repeatCount="indefinite"
+                 values="rotate(0); rotate(-1); rotate(0)"
+                 calcMode="spline"
+                 keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
+      </rect>
+    </g>
+    <!-- Medium Daisy (same as before) -->
+    <g transform="translate(20, -15)">
+      <!-- [Previous daisy code remains the same] -->
+      <path d="M 0 0 C 0 -10, 0 -20, 0 -25" stroke="#4ade80" stroke-width="1.5" fill="none"/>
+      <path d="M 0 -15 C -5 -18, -8 -15, -5 -12" fill="#4ade80"/>
+      <path d="M 0 -15 C 5 -18, 8 -15, 5 -12" fill="#4ade80"/>
+      <g>
+        <path d="M -8 -25 A 8 8 0 0 1 8 -25 A 8 8 0 0 1 -8 -25" fill="white"/>
+        <path d="M -5 -32 A 8 8 0 0 1 5 -32 A 8 8 0 0 1 -5 -32" fill="white"/>
+        <path d="M 0 -33 A 8 8 0 0 1 8 -25 A 8 8 0 0 1 0 -17" fill="white"/>
+        <path d="M 0 -33 A 8 8 0 0 1 -8 -25 A 8 8 0 0 1 0 -17" fill="white"/>
+        <circle cx="0" cy="-25" r="4" fill="#fbbf24"/>
+      </g>
+    </g>
+  </g>
+  
+  <!-- Point 3: Final Stage -->
+  <g transform="translate(420, 70)">
+    <!-- Stacked Cards with Rotation -->
+    <g>
+      <rect width="40" height="50" rx="5" fill="#2563eb" opacity="0.6" 
+            transform="translate(4, 4)">
+        <animate attributeName="transform" dur="3.5s" repeatCount="indefinite"
+                 values="translate(4, 4) rotate(0); translate(4, 4) rotate(-2); translate(4, 4) rotate(0)"
+                 calcMode="spline"
+                 keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
+      </rect>
+      <rect width="40" height="50" rx="5" fill="#2563eb" opacity="0.8" 
+            transform="translate(2, 2)">
+        <animate attributeName="transform" dur="3.5s" repeatCount="indefinite"
+                 values="translate(2, 2) rotate(0); translate(2, 2) rotate(2); translate(2, 2) rotate(0)"
+                 calcMode="spline"
+                 keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
+      </rect>
+      <rect width="40" height="50" rx="5" fill="#2563eb" filter="drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1))">
+        <animate attributeName="transform" dur="3.5s" repeatCount="indefinite"
+                 values="rotate(0); rotate(-1); rotate(0)"
+                 calcMode="spline"
+                 keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
+      </rect>
+    </g>
+    <!-- Full Daisy Bush (same as before) -->
+    <g transform="translate(22, -5)">
+      <!-- [Previous daisy bush code remains the same] -->
+      <!-- [All the previous flower and stem code remains identical] -->
+      <!-- Main Stem -->
+      <path d="M 0 0 C 0 -20, 0 -40, 0 -45" stroke="#4ade80" stroke-width="2" fill="none"/>
+      <!-- Side Stems -->
+      <path d="M 0 -20 C -10 -30, -15 -35, -20 -40" stroke="#4ade80" stroke-width="1.5" fill="none"/>
+      <path d="M 0 -20 C 10 -30, 15 -35, 20 -40" stroke="#4ade80" stroke-width="1.5" fill="none"/>
+      <!-- [Rest of the daisy bush code remains the same] -->
+      <!-- Leaves -->
+      <path d="M 0 -25 C -8 -28, -12 -25, -8 -22" 
+            fill="#4ade80"/>
+      <path d="M 0 -25 C 8 -28, 12 -25, 8 -22" 
+            fill="#4ade80"/>
+      <path d="M 0 -38 C -8 -38, -12 -35, -8 -40" 
+            fill="#4ade80"/>
+      <path d="M 0 -38 C 8 -38, 12 -35, 8 -40" 
+            fill="#4ade80"/>
+      <!-- Flowers -->
+    </g>
+    <!-- Center Flower -->
+      <g transform="translate(22, -57)">
+        <g>
+          <!-- Petals -->
+          <path d="M -10 0 A 10 10 0 0 1 10 0 A 10 10 0 0 1 -10 0" fill="white"/>
+          <path d="M -7 -8 A 10 10 0 0 1 7 -8 A 10 10 0 0 1 -7 -8" fill="white"/>
+          <path d="M 0 -10 A 10 10 0 0 1 10 0 A 10 10 0 0 1 0 10" fill="white"/>
+          <path d="M 0 -10 A 10 10 0 0 1 -10 0 A 10 10 0 0 1 0 10" fill="white"/>
+          <!-- Center -->
+          <circle cx="0" cy="0" r="5" fill="#fbbf24"/>
+        </g>
+      </g>
+    <!-- Side Flowers -->
+      <g transform="translate(3, -44)">
+        <g transform="scale(0.7)">
+          <!-- Petals -->
+          <path d="M -10 0 A 10 10 0 0 1 10 0 A 10 10 0 0 1 -10 0" fill="white"/>
+          <path d="M -7 -8 A 10 10 0 0 1 7 -8 A 10 10 0 0 1 -7 -8" fill="white"/>
+          <path d="M 0 -10 A 10 10 0 0 1 10 0 A 10 10 0 0 1 0 10" fill="white"/>
+          <path d="M 0 -10 A 10 10 0 0 1 -10 0 A 10 10 0 0 1 0 10" fill="white"/>
+          <!-- Center -->
+          <circle cx="0" cy="0" r="5" fill="#fbbf24"/>
+        </g>
+      </g>
+    <g transform="translate(40, -44)">
+        <g transform="scale(0.7)">
+          <!-- Petals -->
+          <path d="M -10 0 A 10 10 0 0 1 10 0 A 10 10 0 0 1 -10 0" fill="white"/>
+          <path d="M -7 -8 A 10 10 0 0 1 7 -8 A 10 10 0 0 1 -7 -8" fill="white"/>
+          <path d="M 0 -10 A 10 10 0 0 1 10 0 A 10 10 0 0 1 0 10" fill="white"/>
+          <path d="M 0 -10 A 10 10 0 0 1 -10 0 A 10 10 0 0 1 0 10" fill="white"/>
+          <!-- Center -->
+          <circle cx="0" cy="0" r="5" fill="#fbbf24"/>
+        </g>
+      </g>
+  </g>
+  
+  
+  <!-- X-axis Labels -->
+  <g font-size="12" text-anchor="middle">
+    <text x="80" y="370">Week 1</text>
+    <text x="250" y="370">Week 4</text>
+    <text x="420" y="370">Week 8</text>
+  </g>
+</svg>
