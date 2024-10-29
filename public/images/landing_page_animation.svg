@@ -120,10 +120,10 @@
       <path d="M 0 -15 C -5 -18, -8 -15, -5 -12" fill="#4ade80"/>
       <path d="M 0 -15 C 5 -18, 8 -15, 5 -12" fill="#4ade80"/>
       <g>
-        <path d="M -8 -25 A 8 8 0 0 1 8 -25 A 8 8 0 0 1 -8 -25" fill="white"/>
-        <path d="M -5 -32 A 8 8 0 0 1 5 -32 A 8 8 0 0 1 -5 -32" fill="white"/>
-        <path d="M 0 -33 A 8 8 0 0 1 8 -25 A 8 8 0 0 1 0 -17" fill="white"/>
-        <path d="M 0 -33 A 8 8 0 0 1 -8 -25 A 8 8 0 0 1 0 -17" fill="white"/>
+        <path d="M -8 -25 A 8 8 0 0 1 8 -25 A 8 8 0 0 1 -8 -25" fill="#fef3c7"/>
+        <path d="M -5 -32 A 8 8 0 0 1 5 -32 A 8 8 0 0 1 -5 -32" fill="#fef3c7"/>
+        <path d="M 0 -33 A 8 8 0 0 1 8 -25 A 8 8 0 0 1 0 -17" fill="#fef3c7"/>
+        <path d="M 0 -33 A 8 8 0 0 1 -8 -25 A 8 8 0 0 1 0 -17" fill="#fef3c7"/>
         <circle cx="0" cy="-25" r="4" fill="#fbbf24"/>
       </g>
     </g>
@@ -131,39 +131,40 @@
   
   <!-- Point 3: Final Stage -->
   <g transform="translate(420, 70)">
-    <!-- Stacked Cards with Rotation -->
+    <!-- Stacked Cards with Rotation and Floating -->
     <g>
+      <!-- Bottom Card (rotate to the right and float) -->
       <rect width="40" height="50" rx="5" fill="#2563eb" opacity="0.6" 
             transform="translate(4, 4)">
         <animate attributeName="transform" dur="3.5s" repeatCount="indefinite"
-                 values="translate(4, 4) rotate(0); translate(4, 4) rotate(-2); translate(4, 4) rotate(0)"
+                 values="translate(4, 4) rotate(0, 20, 25); translate(4, 14) rotate(2, 20, 25); translate(4, 4) rotate(0, 20, 25)"
                  calcMode="spline"
                  keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
       </rect>
+      <!-- Middle Card (rotate to the left and float) -->
       <rect width="40" height="50" rx="5" fill="#2563eb" opacity="0.8" 
             transform="translate(2, 2)">
         <animate attributeName="transform" dur="3.5s" repeatCount="indefinite"
-                 values="translate(2, 2) rotate(0); translate(2, 2) rotate(2); translate(2, 2) rotate(0)"
+                 values="translate(2, 2) rotate(0, 20, 25); translate(2, 12) rotate(-2, 20, 25); translate(2, 2) rotate(0, 20, 25)"
                  calcMode="spline"
                  keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
       </rect>
+      <!-- Top Card (rotate to the right and float) -->
       <rect width="40" height="50" rx="5" fill="#2563eb" filter="drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1))">
         <animate attributeName="transform" dur="3.5s" repeatCount="indefinite"
-                 values="rotate(0); rotate(-1); rotate(0)"
+                 values="translate(0, 0) rotate(0, 20, 25); translate(0, 10) rotate(1, 20, 25); translate(0, 0) rotate(0, 20, 25)"
                  calcMode="spline"
                  keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
       </rect>
     </g>
     <!-- Full Daisy Bush (same as before) -->
     <g transform="translate(22, -5)">
-      <!-- [Previous daisy bush code remains the same] -->
       <!-- [All the previous flower and stem code remains identical] -->
       <!-- Main Stem -->
       <path d="M 0 0 C 0 -20, 0 -40, 0 -45" stroke="#4ade80" stroke-width="2" fill="none"/>
       <!-- Side Stems -->
       <path d="M 0 -20 C -10 -30, -15 -35, -20 -40" stroke="#4ade80" stroke-width="1.5" fill="none"/>
       <path d="M 0 -20 C 10 -30, 15 -35, 20 -40" stroke="#4ade80" stroke-width="1.5" fill="none"/>
-      <!-- [Rest of the daisy bush code remains the same] -->
       <!-- Leaves -->
       <path d="M 0 -25 C -8 -28, -12 -25, -8 -22" 
             fill="#4ade80"/>
@@ -179,10 +180,10 @@
       <g transform="translate(22, -57)">
         <g>
           <!-- Petals -->
-          <path d="M -10 0 A 10 10 0 0 1 10 0 A 10 10 0 0 1 -10 0" fill="white"/>
-          <path d="M -7 -8 A 10 10 0 0 1 7 -8 A 10 10 0 0 1 -7 -8" fill="white"/>
-          <path d="M 0 -10 A 10 10 0 0 1 10 0 A 10 10 0 0 1 0 10" fill="white"/>
-          <path d="M 0 -10 A 10 10 0 0 1 -10 0 A 10 10 0 0 1 0 10" fill="white"/>
+          <path d="M -10 0 A 10 10 0 0 1 10 0 A 10 10 0 0 1 -10 0" fill="#fef3c7"/>
+          <path d="M -7 -8 A 10 10 0 0 1 7 -8 A 10 10 0 0 1 -7 -8" fill="#fef3c7"/>
+          <path d="M 0 -10 A 10 10 0 0 1 10 0 A 10 10 0 0 1 0 10" fill="#fef3c7"/>
+          <path d="M 0 -10 A 10 10 0 0 1 -10 0 A 10 10 0 0 1 0 10" fill="#fef3c7"/>
           <!-- Center -->
           <circle cx="0" cy="0" r="5" fill="#fbbf24"/>
         </g>
