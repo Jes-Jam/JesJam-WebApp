@@ -1,7 +1,9 @@
+"use client"
+
 import { cn } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
-import { ClerkLoading, ClerkLoaded, UserButton } from "@clerk/nextjs"
+import { ClerkLoading, ClerkLoaded, UserButton, useUser } from "@clerk/nextjs"
 import { Loader } from "lucide-react"
 import SidebarItem from "@/components/sidebar-item"
 
@@ -14,6 +16,11 @@ type Props = {
 
 
 const Sidebar = ({ className }: Props) => {
+
+    const { user } = useUser()
+
+    console.log(user)
+
     return (
         <div className={cn(
             "flex h-full flex-col lg:w-[256px] lg:fixed left-0 top-0 px-4 border-r-2",
@@ -38,14 +45,20 @@ const Sidebar = ({ className }: Props) => {
             </div>
 
 
-            <div className="p-4 pb-8">
+            <div className="p-6 pl-8 border-t-2">
                 <ClerkLoading>
                     <Loader className="h-6 w-6 text-muted-foreground animate-spin" />
                 </ClerkLoading>
                 <ClerkLoaded>
-                    <UserButton afterSignOutUrl="/">
-                        <Image src="/images/user.svg" alt="user" width={40} height={40} className="object-contain" />
-                    </UserButton>
+                    <div className="flex items-center gap-x-3">
+                        <UserButton afterSignOutUrl="/">
+                            <Image src="/images/user.svg" alt="user" width={40} height={40} className="object-contain rounded-full border-2 border-slate-200" />
+                        </UserButton>
+                        <div className="flex flex-col">
+                            <span className="font-bold text-sky-600">{user?.fullName}</span>
+                            <span className="text-xs text-muted-foreground">{user?.primaryEmailAddress?.emailAddress}</span>
+                        </div>
+                    </div>
                 </ClerkLoaded>
             </div>
         </div >
