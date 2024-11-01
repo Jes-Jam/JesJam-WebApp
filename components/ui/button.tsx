@@ -29,7 +29,7 @@ const buttonVariants = cva(
           "bg-gradient-to-r from-amber-100 via-yellow-100 to-amber-200 text-amber-800 border-2 border-amber-500 active:border-b-4 hover:from-amber-200 hover:via-yellow-200 hover:to-amber-300 shadow-inner shadow-white/50",
         ghost: "bg-transparent text-slate-500 border:transparent border-0",
         sidebar: "bg-transparent text-slate-500 border-slate-300 border-2 border-b-4 active:border-b-2 hover:border-slate-100 transition-none",
-        sidebarOutline: "bg-transparent text-slate-500 border-2 border-transparent active:border-b-4 hover:bg-slate-100 transition-none",
+        sidebarOutline: "bg-transparent text-slate-500 border-2 border-transparent active:border-b-4 hover:bg-sky-100 transition-none relative overflow-hidden group",
         link: "text-sky-500 underline-offset-4 hover:underline",
       },
       size: {

@@ -76,3 +76,32 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+
+/* Sidebar hover animation */
+
+@keyframes lightReflect {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.group:hover::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -100%;
+  width: 120%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(45deg);
+  animation: lightReflect 1s ease-in-out;
+}

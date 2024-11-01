@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 const font = Rubik({
   subsets: ["latin"],
+  weight: ['400', '700'],
 });
 
 export const metadata: Metadata = {
