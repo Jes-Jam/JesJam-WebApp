@@ -20,7 +20,7 @@ const Sidebar = ({ className }: Props) => {
             className)}>
             <div className="flex-1 flex flex-col">
                 <Link href="/">
-                    <div className="pt-8 pl-4 pb-7 flex items-center gap-x-3">
+                    <div className="pt-8 pl-4 pb-9 flex items-center gap-x-3">
                         <Image src="/images/jesjam_logo.svg"
                             alt="jesjam-logo"
                             width={80}
@@ -30,20 +30,22 @@ const Sidebar = ({ className }: Props) => {
                     </div>
                 </Link>
                 <div className="flex flex-col gap-y-3">
-                    <SidebarItem label="Study" iconImg="/images/planet.svg" href="/study" />
-                    <SidebarItem label="Profile" iconImg="/images/planet.svg" href="/leaderboard" />
-                    <SidebarItem label="Leaderboard" iconImg="/images/planet.svg" href="/quests" />
-                    <SidebarItem label="Explore" iconImg="/images/planet.svg" href="/courses" />
+                    <SidebarItem label="Study" iconImg="/images/home.svg" href="/study" />
+                    <SidebarItem label="Profile" iconImg="/images/account.svg" href="/profile" />
+                    <SidebarItem label="Leaderboard" iconImg="/images/star.svg" href="/leaderboard" />
+                    <SidebarItem label="Explore" iconImg="/images/explore.svg" href="/explore" />
                 </div>
             </div>
 
 
-            <div className="p-4">
+            <div className="p-4 pb-8">
                 <ClerkLoading>
-                    <Loader className="h-5 w-5 text-muted-foreground animate-spin" />
+                    <Loader className="h-6 w-6 text-muted-foreground animate-spin" />
                 </ClerkLoading>
                 <ClerkLoaded>
-                    <UserButton afterSignOutUrl="/" />
+                    <UserButton afterSignOutUrl="/">
+                        <Image src="/images/user.svg" alt="user" width={40} height={40} className="object-contain" />
+                    </UserButton>
                 </ClerkLoaded>
             </div>
         </div >

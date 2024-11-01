@@ -34,7 +34,7 @@ const SidebarItem = ({ label, iconImg, href }: Props) => {
             asChild
         >
             <Link href={href}>
-                <Image src={iconImg} alt={label} width={35} height={35} />
+                <Image src={iconImg} alt={label} width={40} height={40} />
                 <p className="font-simibold tracking-wide">{label}</p>
             </Link>
         </Button>
