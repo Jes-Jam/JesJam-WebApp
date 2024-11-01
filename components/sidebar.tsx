@@ -30,7 +30,7 @@ const Sidebar = ({ className }: Props) => {
                     </div>
                 </Link>
                 <div className="flex flex-col gap-y-3">
-                    <SidebarItem label="Study" iconImg="/images/planet.svg" href="/" />
+                    <SidebarItem label="Study" iconImg="/images/planet.svg" href="/study" />
                     <SidebarItem label="Profile" iconImg="/images/planet.svg" href="/leaderboard" />
                     <SidebarItem label="Leaderboard" iconImg="/images/planet.svg" href="/quests" />
                     <SidebarItem label="Explore" iconImg="/images/planet.svg" href="/courses" />

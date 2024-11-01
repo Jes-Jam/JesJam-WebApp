@@ -28,7 +28,9 @@ const buttonVariants = cva(
         premiumOutline:
           "bg-gradient-to-r from-amber-100 via-yellow-100 to-amber-200 text-amber-800 border-2 border-amber-500 active:border-b-4 hover:from-amber-200 hover:via-yellow-200 hover:to-amber-300 shadow-inner shadow-white/50",
         ghost: "bg-transparent text-slate-500 border:transparent border-0",
-        sidebar: "bg-transparent text-slate-500 border-slate-300 border-2 border-b-4 active:border-b-2 hover:border-slate-100 transition-none",
+        // sidebar: "bg-transparent text-slate-500 border-slate-300 border-2 hover:border-slate-200 transition-none",
+        // sidebar: "bg-gradient-to-r from-sky-100 via-blue-100 to-sky-200 text-sky-700 border-2 border-sky-300 hover:from-sky-200 hover:via-blue-200 hover:to-sky-300 hover:border-sky-400 transition-all duration-300 shadow-inner shadow-white/50",
+        sidebar: "bg-gradient-to-r from-sky-100 via-blue-100 to-sky-200 text-sky-700 border-2 border-sky-300 hover:from-sky-200 hover:via-blue-200 hover:to-sky-300 hover:border-sky-400 transition-all duration-300 shadow-inner shadow-white/50 relative overflow-hidden group [&>*]:relative [&>*]:z-10 before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-b before:from-white/30 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300",
         sidebarOutline: "bg-transparent text-slate-500 border-2 border-transparent active:border-b-4 hover:bg-sky-100 transition-none relative overflow-hidden group",
         link: "text-sky-500 underline-offset-4 hover:underline",
       },

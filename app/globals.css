@@ -105,3 +105,23 @@ body {
   transform: rotate(45deg);
   animation: lightReflect 1s ease-in-out;
 }
+
+/* Active sidebar animation */
+
+@keyframes reflectAnimation {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+.sidebar-button:hover::before {
+  animation: reflectAnimation 2s ease-in-out infinite;
+}
