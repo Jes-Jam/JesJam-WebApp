@@ -4,13 +4,11 @@ import {
     ClerkLoaded,
     SignedIn,
     SignedOut,
-    SignUpButton,
     SignInButton,
     UserButton
 } from "@clerk/nextjs"
 import { Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 const Header = () => {
     return (
@@ -30,8 +28,8 @@ const Header = () => {
                     <SignedOut>
                         <SignInButton
                             mode="modal"
-                            afterSignInUrl="/learn"
-                            afterSignUpUrl="/learn"
+                            afterSignInUrl="/study"
+                            afterSignUpUrl="/study"
                         >
                             <Button size="lg" variant="ghost">Sign In</Button>
                         </SignInButton>
