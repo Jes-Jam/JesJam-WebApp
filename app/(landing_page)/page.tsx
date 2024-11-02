@@ -21,10 +21,10 @@ export default function Home() {
                     </ClerkLoading>
                     <ClerkLoaded>
                         <SignedOut>
-                            <SignUpButton mode="modal" afterSignUpUrl="/study" afterSignInUrl="/study">
+                            <SignUpButton {...({ afterSignUpUrl: "/study", afterSignInUrl: "/study" } as any)} mode="modal">
                                 <Button size="lg" variant="primary" className="w-full">Get Started</Button>
                             </SignUpButton>
-                            <SignInButton mode="modal" afterSignUpUrl="/study" afterSignInUrl="/study">
+                            <SignInButton {...({ afterSignUpUrl: "/study", afterSignInUrl: "/study" } as any)} mode="modal">
                                 <Button size="lg" variant="primaryOutline" className="w-full">I already have an account</Button>
                             </SignInButton>
                         </SignedOut>
