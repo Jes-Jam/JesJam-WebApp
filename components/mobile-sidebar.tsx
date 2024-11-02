@@ -12,7 +12,7 @@ export const MobileSidebar = () => {
         <Sheet>
             <SheetTrigger asChild>
                 <button className="lg:hidden">
-                    <Menu />
+                    <Menu className="text-white" size={32} />
                 </button>
             </SheetTrigger>
             <SheetContent className="p-0 z-[100]" side="left">
