@@ -28,8 +28,7 @@ const Header = () => {
                     <SignedOut>
                         <SignInButton
                             mode="modal"
-                            afterSignInUrl="/study"
-                            afterSignUpUrl="/study"
+                            {...({ afterSignInUrl: "/study", afterSignUpUrl: "/study" } as any)}
                         >
                             <Button size="lg" variant="ghost">Sign In</Button>
                         </SignInButton>
