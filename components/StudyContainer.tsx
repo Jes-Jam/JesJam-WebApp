@@ -4,7 +4,7 @@ type Props = {
 
 const StudyContainer = ({ children }: Props) => {
     return (
-        <div className="flex-1 relative pb-10">
+        <div className="flex-1 pt-10 relative pb-10">
             {children}
         </div>
     )

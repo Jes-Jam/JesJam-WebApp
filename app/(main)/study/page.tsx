@@ -5,7 +5,7 @@ import StudentStates from "@/components/StudentStates";
 
 const StudyPage = () => {
     return (
-        <div className="flex flex-row pt-4 gap-[50px] px-6">
+        <div className="flex flex-row gap-[50px]">
             <StudyContainer>
                 <Header title="Biology" />
             </StudyContainer>

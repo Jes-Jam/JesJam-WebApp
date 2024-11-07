@@ -10,22 +10,22 @@ type Props = {
 
 const StudentProgress = ({ activeCourse, petals, points, isPremium }: Props) => {
     return (
-        <div className="flex items-center justify-between gap-x-2 w-full">
+        <div className="flex items-center justify-between pb-4 gap-x-2 w-full border-b-2 border-slate-100/50 shadow-white">
             <Link href="classes">
-                <Button variant="ghost">
-                    <Image src="/images/planet.svg" alt={activeCourse?.title} width={40} height={40} className="object-contain">
+                <Button variant="ghost" className="text-white">
+                    <Image src="/images/subject.svg" alt={activeCourse?.title} width={45} height={45} className="object-contain mr-2">
                     </Image>
                     {activeCourse?.title}
                 </Button>
             </Link>
             <Link href="/premium">
-                <Button variant="ghost">
-                    <Image src="/images/points.svg" alt={activeCourse?.title} width={40} height={40} className="object-contain" />
+                <Button variant="ghost" className="text-white">
+                    <Image src="/images/white_points.svg" alt={activeCourse?.title} width={45} height={45} className="object-contain" />
                     {points}
                 </Button>
             </Link>
             <Link href="/premium">
-                <Button variant="ghost">
+                <Button variant="ghost" className="text-white">
                     {isPremium
                         ?
                         "Premium"
