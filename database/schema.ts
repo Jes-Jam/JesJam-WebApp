@@ -5,3 +5,5 @@ export const classes = pgTable("classes", {
     title: text("title"),
     imageSrc: text("imageSrc"),
 })
+
+
