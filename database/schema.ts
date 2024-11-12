@@ -14,7 +14,7 @@ export const classInUserProgress = relations(classes, ({many}) => ({
 
 export const userProgress = pgTable('user_progress', {
     userId: text("user_id").primaryKey(),
-    activeClassId: text("active_class_id").references(() => classes.id, {onDelete: 'cascade', onUpdate: 'cascade'}),
+    activeClassId: integer("active_class_id").references(() => classes.id, {onDelete: 'cascade', onUpdate: 'cascade'}),
     userName: text("user_name").notNull().default("User"),
     patels: integer("patels").notNull().default(10), 
     points: integer("points").notNull().default(0),

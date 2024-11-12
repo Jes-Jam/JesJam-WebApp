@@ -1,6 +1,6 @@
 import StickyContainer from "@/components/StickyContainer";
 import StudyContainer from "@/components/StudyContainer";
-import Header from "@/components/Header";
+import Header from "./header";
 import StudentStates from "@/components/StudentStates";
 
 const StudyPage = () => {
