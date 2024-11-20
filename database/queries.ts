@@ -4,10 +4,12 @@ import { auth } from "@clerk/nextjs/server";
 import { classes, userProgress } from "./schema";
 import { eq } from "drizzle-orm";
 
-export const getClasses = cache(async () => {
+
+export const getClasses = async () => {
     const classes = await db.query.classes.findMany();
+    console.log("Classes", classes)
     return classes
-})
+};
 
 export const getClassById = cache(async (classId: number) =>{
     const data = await db.query.classes.findFirst({
