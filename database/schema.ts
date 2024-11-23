@@ -8,8 +8,8 @@ export const classes = pgTable("classes", {
 })
 
 // Relationship: classes hasMany userProgress
-export const classInUserProgress = relations(classes, ({many}) => ({
-    userProgress: many(userProgress)
+export const classesRelation = relations(classes, ({ many }) => ({
+    userProgress: many(userProgress),
 }))
 
 export const userProgress = pgTable('user_progress', {
@@ -22,7 +22,7 @@ export const userProgress = pgTable('user_progress', {
 
 
 // Relationship: userProgress belongsTo classes 
-export const userProgressInClasses = relations(userProgress, ({one}) => ({
+export const userProgressRelations = relations(userProgress, ({one}) => ({
     activeClass: one(classes, {
         fields: [userProgress.activeClassId],
         references: [classes.id],

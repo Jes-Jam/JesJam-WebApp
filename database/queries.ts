@@ -21,14 +21,27 @@ export const getClassById = cache(async (classId: number) =>{
 export const getUserProgress = cache(async () => {
     const { userId } = await auth();
 
-    if(!userId) return;
+    if(!userId) {
+        return;
+    }
 
-    const data = await db.query.userProgress.findFirst({
-        where : eq(userProgress.userId, userId),
-        with: {
-            activeClass: true
-        }
-    })
+    try {
+        const data = await db.query.userProgress.findFirst({
+            where: eq(userProgress.userId, userId),
+            with: {
+                activeClass: true
+            }
+        });
 
-    return data
-})
+        console.log("User progress: ", data);
+
+        if (!data) {
+            return null;
+        } 
+
+        return data;
+    } catch (error) {
+        console.error("[getUserProgress] Error fetching user progress: ", error);
+        throw new Error("Failed to fetch user progress");
+    }
+});
