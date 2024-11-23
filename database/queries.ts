@@ -1,7 +1,7 @@
 import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
-import { classes, userProgress } from "./schema";
+import { challengeAnswers, challenges, chapters, classes, lessons, userProgress } from "./schema";
 import { eq } from "drizzle-orm";
 
 
@@ -41,6 +41,43 @@ export const getUserProgress = cache(async () => {
         return data;
     } catch (error) {
         console.error("[getUserProgress] Error fetching user progress: ", error);
-        // throw new Error("Failed to fetch user progress");
     }
 });
+
+// Get all chapters
+export const getChapters = cache(async () => {
+    const userProgress = await getUserProgress();
+
+    if(!userProgress) {
+        return [];
+    }
+
+    const data = await db.query.chapters.findMany({
+        where: eq(chapters.classId, userProgress.activeClassId!),
+        with: {
+            lessons: {
+                with: {
+                    challenges: {
+                        with: {
+                            challengeAnswers: true,
+                        }
+                    }
+                }
+            }
+        }
+    })
+
+    const chaptersWithProgress = data.map((chapter) => ({
+        ...chapter,
+        lessons: chapter.lessons.map((lesson) => ({
+            ...lesson,
+            completed: lesson.challenges.every((challenge) =>
+                challenge.challengeAnswers?.every((answer) => answer.completed)
+            )
+        }))
+    }));
+
+    return chaptersWithProgress;
+})
+
+    
