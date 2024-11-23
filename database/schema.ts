@@ -50,6 +50,10 @@ export const challengesEnum = pgEnum("challenges_enum", [
     "SELECT", 
     "CARD",
     "FILL_IN_THE_BLANK",
+    // Potential additions:
+    // "MULTIPLE_CHOICE",
+    // "MATCHING",
+    // "SPEAKING",
 ])
 
 export const challenges = pgTable("challenges", {

@@ -5,11 +5,11 @@ import { classes, userProgress } from "./schema";
 import { eq } from "drizzle-orm";
 
 
-export const getClasses = async () => {
+export const getClasses = cache(async () => {
     const classes = await db.query.classes.findMany();
     console.log("Classes", classes)
     return classes
-};
+});
 
 export const getClassById = cache(async (classId: number) =>{
     const data = await db.query.classes.findFirst({
@@ -36,12 +36,11 @@ export const getUserProgress = cache(async () => {
         console.log("User progress: ", data);
 
         if (!data) {
-            return null;
+            return;
         } 
-
         return data;
     } catch (error) {
         console.error("[getUserProgress] Error fetching user progress: ", error);
-        throw new Error("Failed to fetch user progress");
+        // throw new Error("Failed to fetch user progress");
     }
 });
