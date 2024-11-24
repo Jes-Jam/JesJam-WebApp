@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm"
-import { pgTable, integer, serial, text, pgEnum, boolean } from "drizzle-orm/pg-core"
+import { pgTable, integer, serial, text, pgEnum, boolean, timestamp } from "drizzle-orm/pg-core"
 
 export const classes = pgTable("classes", {
     id: serial("id").primaryKey(),
@@ -10,7 +10,8 @@ export const classes = pgTable("classes", {
 // Relationship: classes hasMany userProgress and chapters
 export const classesRelation = relations(classes, ({ many }) => ({
     userProgress: many(userProgress),
-    chapters: many(chapters)
+    chapters: many(chapters),
+    enrollments: many(classEnrollments)
 }))
 
 export const chapters = pgTable("chapters", {
@@ -107,6 +108,25 @@ export const challengeProgressRelations = relations(challengeProgress, ({ one })
     })
 }))
 
+export const classEnrollments = pgTable("class_enrollments", {
+    userId: text("user_id").notNull(),
+    classId: integer("class_id").references(() => classes.id, {onDelete: 'cascade'}).notNull(),
+    enrolledAt: timestamp('enrolled_at').defaultNow().notNull(),
+    completedAt: timestamp('completed_at'),
+    status: text("status", { enum: ["active", "completed", "dropped"]}).notNull().default("active"),
+})
+
+export const classEnrollmentRelations = relations(classEnrollments, ({one}) => ({
+    user: one(userProgress, {
+        fields: [classEnrollments.userId],
+        references: [userProgress.userId]
+    }),
+    class: one(classes, {
+        fields: [classEnrollments.classId],
+        references: [classes.id]
+    })
+}))
+
 export const userProgress = pgTable('user_progress', {
     userId: text("user_id").primaryKey(),
     activeClassId: integer("active_class_id").references(() => classes.id, {onDelete: 'cascade', onUpdate: 'cascade'}),
@@ -117,11 +137,12 @@ export const userProgress = pgTable('user_progress', {
 
 
 // Relationship: userProgress belongsTo classes 
-export const userProgressRelations = relations(userProgress, ({one}) => ({
+export const userProgressRelations = relations(userProgress, ({one, many}) => ({
     activeClass: one(classes, {
         fields: [userProgress.activeClassId],
         references: [classes.id],
-    })
+    }),
+    enrollments: many(classEnrollments)
 }))
 
 

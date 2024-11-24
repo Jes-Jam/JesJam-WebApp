@@ -25,6 +25,7 @@ const main = async () => {
         await db.delete(schema.challenges)
         await db.delete(schema.challengeAnswers)
         await db.delete(schema.challengeProgress)
+        await db.delete(schema.classEnrollments)
 
         await db.insert(schema.classes).values([
             {
@@ -107,7 +108,29 @@ const main = async () => {
             },
         ])
 
-        console.log("------------ Database seeded ------------")
+        await db.insert(schema.classEnrollments).values([
+            {
+                userId: "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN", 
+                classId: 1,
+                status: "active",
+                enrolledAt: new Date(),
+            },
+            {
+                userId: "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN", 
+                classId: 2,
+                status: "completed",
+                enrolledAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
+                completedAt: new Date(),
+            },
+            {
+                userId: "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN", 
+                classId: 3,
+                status: "dropped",
+                enrolledAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 14 days ago
+            },
+        ])
+
+        console.log("------------ Database seeded 🌱🌱 ------------")
 
     } catch (error: any) {
         console.error("Detailed error:", error);
