@@ -19,8 +19,6 @@ const Sidebar = ({ className }: Props) => {
 
     const { user } = useUser()
 
-    console.log(user)
-
     return (
         <div className={cn(
             "flex h-full flex-col lg:w-[256px] lg:fixed left-0 top-0 px-4 border-r-2",

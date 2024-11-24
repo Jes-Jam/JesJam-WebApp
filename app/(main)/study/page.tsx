@@ -27,9 +27,11 @@ const StudyPage = async () => {
                     {chapters.map((chapter) => {
                         return (
                             <div key={chapter.id}>
-                                <pre className="mt-2 p-2 bg-gray-100 rounded">
+                                {/* <pre className="mt-2 p-2 bg-gray-100 rounded">
                                     {JSON.stringify(chapter, null, 2)}
-                                </pre>
+                                </pre> */}
+
+                                {JSON.stringify(chapter)}
                             </div>
                         )
                     })}

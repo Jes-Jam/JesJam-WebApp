@@ -1,7 +1,7 @@
 import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
-import { challengeAnswers, challenges, chapters, classes, lessons, userProgress } from "./schema";
+import { challengeAnswers, challengeProgress, challenges, chapters, classEnrollments, classes, lessons, userProgress } from "./schema";
 import { eq } from "drizzle-orm";
 
 
@@ -46,9 +46,10 @@ export const getUserProgress = cache(async () => {
 
 // Get all chapters
 export const getChapters = cache(async () => {
+    const { userId } = await auth();
     const userProgress = await getUserProgress();
 
-    if(!userProgress) {
+    if(!userId || !userProgress) {
         return [];
     }
 
@@ -59,7 +60,12 @@ export const getChapters = cache(async () => {
                 with: {
                     challenges: {
                         with: {
-                            challengeAnswers: true,
+                            challengeProgress: {
+                                where: eq(
+                                    challengeProgress.userId, 
+                                    userId
+                                )
+                            }
                         }
                     }
                 }
@@ -72,7 +78,7 @@ export const getChapters = cache(async () => {
         lessons: chapter.lessons.map((lesson) => ({
             ...lesson,
             completed: lesson.challenges.every((challenge) =>
-                challenge.challengeAnswers?.every((answer) => answer.completed)
+                challenge.challengeProgress?.every((progress) => progress.completed)
             )
         }))
     }));
@@ -80,4 +86,22 @@ export const getChapters = cache(async () => {
     return chaptersWithProgress;
 })
 
-    
+
+// Get all enrollments with class details
+export const getEnrollments = cache(async () => {
+    const { userId } = await auth();
+
+    if(!userId) {
+        return [];
+    }
+
+    const data = await db.query.classEnrollments.findMany({
+        where: eq(classEnrollments.userId, userId),
+        with: {
+            class: true
+        }
+    })
+
+    return data;
+})    
+
