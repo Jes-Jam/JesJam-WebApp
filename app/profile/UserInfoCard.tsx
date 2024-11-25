@@ -4,6 +4,8 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 
+import { Flame } from "lucide-react";
+
 export const UserInfoCard = async () => {
     const userProgress = await getUserProgress();
 
@@ -30,6 +32,7 @@ export const UserInfoCard = async () => {
 
                         <div className="flex items-center gap-x-2">
                             <Button variant="ghost" className="text-white">
+                                {/* <Flame className="w-6 h-6 text-sky-500" /> */}
                                 <Image src="/images/streak.svg" alt="Points" width={45} height={45} className="object-contain" />
                                 {<p className="text-gray-500">{userProgress?.points || 0} Streaks</p>}
                             </Button>
