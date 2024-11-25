@@ -35,7 +35,7 @@ export const EnrolledCourses = ({
 
     return (
         <div className={cn("mb-20", isExpanded ? "flex flex-col gap-4" : "space-y-4")}>
-            <div className="flex justify-between items-center pb-10">
+            <div className="flex justify-between items-center pb-6">
                 <h2 className="text-2xl font-semibold text-sky-500">My Classes</h2>
                 <button
                     onClick={() => setIsExpanded(!isExpanded)}

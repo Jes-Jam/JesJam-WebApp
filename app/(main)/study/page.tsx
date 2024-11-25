@@ -5,11 +5,10 @@ import StudentStates from "@/components/StudentStates";
 import { userProgress } from "@/database/schema";
 import { getUserProgress, getChapters } from "@/database/queries";
 import { redirect } from "next/navigation";
+import { Chapter } from "./Chapter";
 
 const StudyPage = async () => {
     const userProgress = await getUserProgress();
-
-
     const chapters = await getChapters();
 
 
@@ -27,11 +26,15 @@ const StudyPage = async () => {
                     {chapters.map((chapter) => {
                         return (
                             <div key={chapter.id}>
-                                {/* <pre className="mt-2 p-2 bg-gray-100 rounded">
-                                    {JSON.stringify(chapter, null, 2)}
-                                </pre> */}
-
-                                {JSON.stringify(chapter)}
+                                <Chapter
+                                    id={chapter.id}
+                                    title={chapter.title}
+                                    description={chapter.description ?? ''}
+                                    order={chapter.order}
+                                    lessons={chapter.lessons}
+                                    activeLesson={undefined}
+                                    activeLessonPercentage={0}
+                                />
                             </div>
                         )
                     })}
