@@ -108,27 +108,27 @@ const main = async () => {
             },
         ])
 
-        await db.insert(schema.classEnrollments).values([
-            {
-                userId: "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN", 
-                classId: 1,
-                status: "active",
-                enrolledAt: new Date(),
-            },
-            {
-                userId: "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN", 
-                classId: 2,
-                status: "completed",
-                enrolledAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
-                completedAt: new Date(),
-            },
-            {
-                userId: "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN", 
-                classId: 3,
-                status: "dropped",
-                enrolledAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 14 days ago
-            },
-        ])
+        // await db.insert(schema.classEnrollments).values([
+        //     {
+        //         userId: "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN", 
+        //         classId: 1,
+        //         status: "active",
+        //         enrolledAt: new Date(),
+        //     },
+        //     {
+        //         userId: "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN", 
+        //         classId: 2,
+        //         status: "completed",
+        //         enrolledAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
+        //         completedAt: new Date(),
+        //     },
+        //     {
+        //         userId: "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN", 
+        //         classId: 3,
+        //         status: "dropped",
+        //         enrolledAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 14 days ago
+        //     },
+        // ])
 
         console.log("------------ Database seeded 🌱🌱 ------------")
 

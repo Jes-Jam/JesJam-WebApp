@@ -29,12 +29,12 @@ export const Chapter = ({ id, title, description, order, lessons, activeLesson, 
 
                     return (
                         <LessonStage
+                            key={lesson.id}
                             id={lesson.id}
                             index={index}
-                            key={lesson.id}
                             totalLessons={lessons.length - 1}
+                            currentLesson={true}
                             isLocked={isLockedLesson}
-                            activeLesson={activeLesson}
                             activeLessonPercentage={activeLessonPercentage}
                         />
                     )

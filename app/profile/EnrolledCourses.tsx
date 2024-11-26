@@ -8,6 +8,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
+
+import dynamic from "next/dynamic";
+
+dynamic(() => import("@/components/sidebar"), { ssr: false });
+
+
 export const EnrolledCourses = ({
     enrollments,
     userProgress }: {

@@ -20,8 +20,6 @@ const List = ({ classes, activeClassId }: Props) => {
 
 
     const onClick = (id: number) => {
-        console.log("clicked", id)
-
         if (isPending) return;
 
         if (id === activeClassId) {

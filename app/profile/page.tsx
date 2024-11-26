@@ -10,6 +10,7 @@ const ProfilePage = async () => {
 
     return (
         <div className="min-h-screen lg:max-w-[900px] sm:max-w-[600px] mx-auto pt-6 sm:px-4 md:px-4 lg:px-0 space-y-10">
+
             <div className="grid lg:grid-cols-1 md:grid-cols-1 gap-6">
                 <UserInfoCard />
                 <ExamCountdown />
