@@ -2,11 +2,16 @@ import { UserInfoCard } from "./UserInfoCard";
 import { ExamCountdown } from "./ExamCountdown";
 import { EnrolledCourses } from "./EnrolledCourses";
 import { getEnrollments, getUserProgress, } from "@/database/queries";
+import { redirect } from "next/navigation";
 
 
 const ProfilePage = async () => {
     const enrollments = await getEnrollments();
     const userProgress = await getUserProgress();
+
+    if (!userProgress || !userProgress.activeClass) {
+        redirect("/classes")
+    }
 
     return (
         <div className="min-h-screen lg:max-w-[900px] sm:max-w-[600px] mx-auto pt-6 sm:px-4 md:px-4 lg:px-0 space-y-10">
