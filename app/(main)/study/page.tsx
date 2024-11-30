@@ -17,12 +17,16 @@ const StudyPage = async () => {
     const lessonPercentage = await getLessonPercentage();
     const chapters = await getChapters();
 
+    if (!chapters) {
+        console.log("Debug: No chapters found");
+    } else {
+        console.log("Debug: Found chapters:", chapters.length);
+    }
 
     // If user doesn't have active class
     if (!userProgress || !userProgress.activeClass) {
         redirect("/classes")
     }
-
 
     return (
         <div className="flex flex-row gap-[50px]">

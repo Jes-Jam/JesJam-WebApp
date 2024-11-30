@@ -64,6 +64,8 @@ export const getUserProgress = cache(async () => {
 
 // Get all chapters
 export const getChapters = cache(async () => {
+    console.log("Starting getChapters function");
+
     const { userId } = await auth();
     const userProgress = await getUserProgress();
 
@@ -100,6 +102,8 @@ export const getChapters = cache(async () => {
             ) : false
         }))
     }));
+
+    console.log(`These are the chapters with progress: ${JSON.stringify(chaptersWithProgress, null, 2)}`)
 
     return chaptersWithProgress;
 })
