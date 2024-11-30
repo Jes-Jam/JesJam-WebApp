@@ -68,12 +68,17 @@ const config: Config = {
 			'sway-grass': {
 				'0%, 100%': { transform: 'translateX(0px)' },
 				'50%': { transform: 'translateX(3px)' },
+			}, 
+			shine: {
+				'0%': { transform: 'translateX(-100%)' },
+				'100%': { transform: 'translateX(100%)' }
 			}
 		},
 		animation: {
 			'sway': 'sway 4s ease-in-out infinite',
 			'bounce-daisy': 'bounce-daisy 6s ease-in-out infinite',
 			'sway-grass': 'sway-grass 4s ease-in-out infinite',
+			shine: 'shine 2s ease-in-out infinite',
 		}
   	}
   },
