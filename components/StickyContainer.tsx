@@ -5,16 +5,17 @@ type Props = {
 }
 
 
-const StickyContainer = ({ children }: Props) => (
-    // <div className="hidden lg:block w-[405px] sticky self-end pb-6">
-    //     {/* The container should take up the full height of the viewport on large screens */}
-    //     <div className="flex flex-col pt-10 px-6 gap-y-4 min-h-[calc(100vh-50px)] sticky bg-gradient-to-b from-[#3398DB] via-[#3398DB]/10 to-white border-l-2 border-l-slate-200">{children}</div>
-    // </div>
-
-    <div className="hidden lg:block w-[405px] sticky self-end pb-6">
-        <div className="flex flex-col pt-10 px-6 gap-y-4 min-h-[calc(100vh-50px)] sticky bg-sky-400/10 bg-gradient-to-b from-sky-400/50 via-[#6A42C2]/10 to-white border-l-2 border-l-slate-200">{children}</div>
-    </div>
-)
+const StickyContainer = ({ children }: Props) => {
+    return (
+        <div className="hidden lg:block w-[405px]">
+            <div className="fixed top-0 right-0 w-[405px] flex flex-col pt-10 px-6 gap-y-4 h-screen 
+            bg-sky-400/10 bg-gradient-to-b from-sky-400/50 via-[#6A42C2]/10 to-white 
+            border-l-2 border-l-slate-200">
+                {children}
+            </div>
+        </div>
+    )
+}
 
 
 export default StickyContainer

@@ -1,6 +1,7 @@
 import { chapters, lessons } from "@/database/schema";
 import { ChapterHeader } from "./ChapterHeader";
 import { LessonStage } from "./LessonStage";
+import { div } from "framer-motion/client";
 
 type Props = {
     id: number;
@@ -20,25 +21,26 @@ export const Chapter = ({ id, title, description, order, lessons, activeLesson, 
     return (
         <>
             <ChapterHeader title={title} description={description} />
-            <div className="flex items-center flex-col relative">
-                {lessons.map((lesson, index) => {
+            {/* Single container for all lessons */}
+            <div className="relative w-full min-h-[calc(100vh-100px)] p-10">
+                <div className="relative mx-auto">
+                    {lessons.map((lesson, index) => {
+                        const isCurrentLesson = lesson.id === activeLesson?.id;
+                        const isLockedLesson = !isCurrentLesson && !lesson.completed;
 
-                    const isCurrentLesson = lesson.id === activeLesson?.id;
-                    const isLockedLesson = !isCurrentLesson && !lesson.completed;
-
-
-                    return (
-                        <LessonStage
-                            key={lesson.id}
-                            id={lesson.id}
-                            index={index}
-                            totalLessons={lessons.length - 1}
-                            currentLesson={true}
-                            isLocked={isLockedLesson}
-                            activeLessonPercentage={activeLessonPercentage}
-                        />
-                    )
-                })}
+                        return (
+                            <LessonStage
+                                key={lesson.id}
+                                id={lesson.id}
+                                index={index}
+                                totalLessons={lessons.length - 1}
+                                currentLesson={isCurrentLesson}
+                                isLocked={isLockedLesson}
+                                activeLessonPercentage={activeLessonPercentage}
+                            />
+                        )
+                    })}
+                </div>
             </div>
         </>
     )

@@ -31,6 +31,8 @@ const buttonVariants = cva(
         sidebar: "bg-gradient-to-r from-sky-100 via-blue-100 to-sky-200 text-sky-700 border-2 border-sky-300 hover:from-sky-200 hover:via-blue-200 hover:to-sky-300 hover:border-sky-400 transition-all duration-300 shadow-inner shadow-white/50 relative overflow-hidden group [&>*]:relative [&>*]:z-10 before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-b before:from-white/30 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300",
         sidebarOutline: "bg-transparent text-slate-500 border-2 border-transparent active:border-b-4 hover:bg-sky-100 transition-none relative overflow-hidden group",
         link: "text-sky-500 underline-offset-4 hover:underline",
+        activeLesson: "bg-gradient-to-r from-sky-400 to-sky-500 text-primary-foreground hover:from-sky-400 hover:to-sky-500 border-sky-600 border-2 border-b-4 active:border-b-0",
+        locked: "bg-neutral-200 text-primary-foreground hover:bg-neutral-200/90 border-neutral-400 border-2 active:border-0",
       },
       size: {
         default: "h-10 px-4 py-2",

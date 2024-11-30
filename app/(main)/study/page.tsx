@@ -2,13 +2,19 @@ import StickyContainer from "@/components/StickyContainer";
 import StudyContainer from "@/components/StudyContainer";
 import Header from "./header";
 import StudentStates from "@/components/StudentStates";
-import { userProgress } from "@/database/schema";
-import { getUserProgress, getChapters } from "@/database/queries";
+import {
+    getUserProgress,
+    getChapters,
+    getCurrentLatestLesson,
+    getLessonPercentage
+} from "@/database/queries";
 import { redirect } from "next/navigation";
 import { Chapter } from "./Chapter";
 
 const StudyPage = async () => {
     const userProgress = await getUserProgress();
+    const activeLatestLesson = await getCurrentLatestLesson();
+    const lessonPercentage = await getLessonPercentage();
     const chapters = await getChapters();
 
 
@@ -32,8 +38,8 @@ const StudyPage = async () => {
                                     description={chapter.description ?? ''}
                                     order={chapter.order}
                                     lessons={chapter.lessons}
-                                    activeLesson={undefined}
-                                    activeLessonPercentage={0}
+                                    activeLesson={activeLatestLesson?.activeLesson}
+                                    activeLessonPercentage={lessonPercentage ?? 0}
                                 />
                             </div>
                         )
