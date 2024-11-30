@@ -55,7 +55,26 @@ const config: Config = {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+  		},
+		keyframes: {
+			'sway': {
+				'0%, 100%': { transform: 'translateX(0px)' },
+				'50%': { transform: 'translateX(5px)' },
+			},
+			'bounce-daisy': {
+				'0%, 100%': { transform: 'translateY(0px)' },
+				'50%': { transform: 'translateY(5px)' },
+			},
+			'sway-grass': {
+				'0%, 100%': { transform: 'translateX(0px)' },
+				'50%': { transform: 'translateX(3px)' },
+			}
+		},
+		animation: {
+			'sway': 'sway 4s ease-in-out infinite',
+			'bounce-daisy': 'bounce-daisy 6s ease-in-out infinite',
+			'sway-grass': 'sway-grass 4s ease-in-out infinite',
+		}
   	}
   },
   plugins: [require("tailwindcss-animate")],

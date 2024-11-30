@@ -31,7 +31,24 @@ const buttonVariants = cva(
         sidebar: "bg-gradient-to-r from-sky-100 via-blue-100 to-sky-200 text-sky-700 border-2 border-sky-300 hover:from-sky-200 hover:via-blue-200 hover:to-sky-300 hover:border-sky-400 transition-all duration-300 shadow-inner shadow-white/50 relative overflow-hidden group [&>*]:relative [&>*]:z-10 before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-b before:from-white/30 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300",
         sidebarOutline: "bg-transparent text-slate-500 border-2 border-transparent active:border-b-4 hover:bg-sky-100 transition-none relative overflow-hidden group",
         link: "text-sky-500 underline-offset-4 hover:underline",
-        activeLesson: "bg-gradient-to-r from-sky-400 to-sky-500 text-primary-foreground hover:from-sky-400 hover:to-sky-500 border-sky-600 border-2 border-b-4 active:border-b-0",
+        activeLesson: [
+          "bg-gradient-to-r from-sky-400 to-sky-500 text-primary-foreground hover:from-sky-400 hover:to-sky-500 border-sky-600 border-2 active:border-b-0",
+          "relative",
+          // Add grass using background image
+          "after:absolute after:bottom-[-8px] after:left-0 after:right-0 after:h-4",
+          "after:bg-[url('/images/grass.svg')] after:bg-repeat-x after:bg-[length:80px_20px]",
+          "after:opacity-90",
+          "after:animate-sway-grass",
+          // Add 4 daisies with irregular spacing both vertically and horizontally
+          "before:absolute before:bottom-[-14px] before:left-0 before:right-0 before:h-6",
+          "before:bg-[url('/images/mascot.svg'),url('/images/mascot.svg'),url('/images/mascot.svg'),url('/images/mascot.svg')]",
+          "before:bg-no-repeat",
+          "before:bg-[length:16px_16px,16px_16px,16px_16px,16px_16px]",
+          "before:bg-[position:10%_-2px,35%_2px,65%_-1px,85%_1px]", // Different vertical positions for each flower
+          "before:opacity-90",
+          "before:animate-sway",
+          "before:animate-bounce-daisy",
+        ].join(" "),
         locked: "bg-neutral-200 text-primary-foreground hover:bg-neutral-200/90 border-neutral-400 border-2 active:border-0",
       },
       size: {
