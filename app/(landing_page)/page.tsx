@@ -66,7 +66,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-
+      
+      {/* labels */}
       <div className="w-full px-[32px]">
         <h1 className="text-2xl font-bold mb-4">How is it work?</h1>
         <div className="w-full flex justify-between flex-col md:flex-row gap-3 md: gap:0">
@@ -76,6 +77,10 @@ export default function Home() {
         </div>
       </div>
       
+      {/* video */}
+      <div className=" w-full px-[32px]">
+        <video className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 my-10" src=""></video>
+      </div>
     </div>
   );
 }
