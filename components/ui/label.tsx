@@ -4,7 +4,7 @@ export const Label = ({ children, className }: { children: React.ReactNode, clas
   return (
     <label
       className={cn(
-        "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+        "md:text-md lg:text-lg font-medium leading-none px-5 py-5 rounded-md inline-block text-center",
         className
       )}
     >

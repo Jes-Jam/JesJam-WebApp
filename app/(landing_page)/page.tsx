@@ -10,13 +10,13 @@ import {
 import { Loader } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { div } from "framer-motion/client";
+import { Label } from "@/components/ui/label";
 
 export default function Home() {
   return (
-    <div className="flex items-center">
-      <div className="flex-1 w-full flex flex-col lg:flex-row items-center justify-center p-4 gap-x-8 mt-[100px]">
-        <div className="relative w-[240px] h-[240px] lg:w-[565px] lg:h-[480px] mb:8 lg:mb:0 ">
+    <div className="flex items-center flex-col w-full">
+      <div className="flex-1 w-full flex flex-col lg:flex-row items-center justify-center p-4 gap-x-8 mt-[100px] my-[30px]">
+        <div className="relative w-[240px] h-[240px] lg:w-[565px] lg:h-[400px] mb:8 lg:mb:0 ">
           <Image
             src="/images/landing_page_animation.svg"
             alt="jesjam-logo"
@@ -66,6 +66,16 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <div className="w-full px-[32px]">
+        <h1 className="text-2xl font-bold mb-4">How is it work?</h1>
+        <div className="w-full flex justify-between flex-col md:flex-row gap-3 md: gap:0">
+          <Label className="bg-pink-400 ">Explore ton of classes</Label>
+          <Label className="bg-violet-400 ">Start enroll</Label>
+          <Label className="bg-yellow-400 ">Begin your journey</Label>
+        </div>
+      </div>
+      
     </div>
   );
 }
