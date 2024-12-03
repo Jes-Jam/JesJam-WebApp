@@ -32,7 +32,7 @@ const buttonVariants = cva(
         sidebarOutline: "bg-transparent text-slate-500 border-2 border-transparent active:border-b-4 hover:bg-sky-100 transition-none relative overflow-hidden group",
         link: "text-sky-500 underline-offset-4 hover:underline",
         activeLesson: [
-          "bg-gradient-to-r from-sky-400 to-sky-500 text-primary-foreground hover:from-sky-400 hover:to-sky-500 border-sky-600 border-2 active:border-b-0",
+          "bg-gradient-to-r from-sky-400 to-sky-500 text-primary-foreground hover:from-sky-400 hover:to-sky-500 border-sky-600 border-2 border-b-8 border-r-4 active:border-b-0 active:border-r-0",
           "relative",
           // Add grass using background image
           "after:absolute after:bottom-[-8px] after:left-0 after:right-0 after:h-4",

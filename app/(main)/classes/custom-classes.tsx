@@ -8,4 +8,3 @@ const CustomClasses = () => {
 }
 
 export default CustomClasses;
-

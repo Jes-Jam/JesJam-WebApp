@@ -77,7 +77,7 @@ export const LessonStage = ({ id, totalLessons, isLocked, currentLesson, activeL
                         <Button
                             size="lg"
                             variant={isLocked ? "locked" : "activeLesson"}
-                            className="h-[70px] w-[140px] border-b-8 flex items-center justify-center rounded-xl"
+                            className="h-[70px] w-[140px] flex items-center justify-center rounded-xl"
                         >
                             {/* <Icon className={cn(
                                 "h-10 w-10",
