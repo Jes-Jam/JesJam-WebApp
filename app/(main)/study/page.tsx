@@ -1,7 +1,7 @@
-import StickyContainer from "@/components/StickyContainer";
-import StudyContainer from "@/components/StudyContainer";
+import StickyContainer from "@/components/main/StickyContainer";
+import StudyContainer from "@/components/main/StudyContainer";
 import Header from "./header";
-import StudentStates from "@/components/StudentStates";
+import StudentStates from "@/components/main/StudentStates";
 import {
     getUserProgress,
     getChapters,
