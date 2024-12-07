@@ -1,4 +1,6 @@
 import Image from "next/image"
+import Link from "next/link";
+
 import {
     ClerkLoading,
     ClerkLoaded,
@@ -26,12 +28,19 @@ const Header = () => {
                         <UserButton afterSignOutUrl="/" />
                     </SignedIn>
                     <SignedOut>
-                        <SignInButton
-                            mode="modal"
-                            {...({ afterSignInUrl: "/study", afterSignUpUrl: "/study" } as any)}
-                        >
-                            <Button size="lg" variant="ghost">Sign In</Button>
-                        </SignInButton>
+                        <div className="flex items-center gap-x-4">
+                            <SignInButton
+                                mode="modal"
+                                {...({ afterSignInUrl: "/study", afterSignUpUrl: "/study" } as any)}
+                            >
+                                <Button size="lg" variant="ghost">Sign In</Button>
+                            </SignInButton>
+                            <Link href="/study">
+                                <Button size="lg" variant="sidebar">
+                                    Try For Free
+                                </Button>
+                            </Link>
+                        </div>
                     </SignedOut>
                 </ClerkLoaded>
             </div>
