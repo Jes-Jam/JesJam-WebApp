@@ -8,7 +8,7 @@ interface ModalStore {
 }
 
 export const useModal = create<ModalStore>((set) => ({
-    isOpen: true,
+    isOpen: false,
     onOpen: () => set({ isOpen: true }),
     onClose: () => set({ isOpen: false }),
 }))

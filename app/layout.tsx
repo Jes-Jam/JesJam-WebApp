@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Rubik } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
+import { ExitModal } from "@/components/modal/ExitModal";
 
 const font = Rubik({
   subsets: ["latin"],
@@ -44,6 +46,8 @@ export default function RootLayout({
           className={`${font.className} antialiased`}
         >
           {children}
+          <Toaster />
+          <ExitModal />
         </body>
       </html>
     </ClerkProvider>
