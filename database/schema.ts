@@ -5,6 +5,8 @@ export const classes = pgTable("classes", {
     id: serial("id").primaryKey(),
     title: text("title"),
     imageSrc: text("imageSrc"),
+    isPreviewAvailable: boolean("is_preview_available").default(false),
+    previewChaptersCount: integer("preview_chapters_count").default(1)
 })
 
 // Relationship: classes hasMany userProgress and chapters
@@ -51,10 +53,6 @@ export const challengesEnum = pgEnum("challenges_enum", [
     "SELECT", 
     "CARD",
     "FILL_IN_THE_BLANK",
-    // Potential additions:
-    // "MULTIPLE_CHOICE",
-    // "MATCHING",
-    // "SPEAKING",
 ])
 
 export const challenges = pgTable("challenges", {

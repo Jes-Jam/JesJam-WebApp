@@ -37,7 +37,7 @@ const Header = () => {
                             </SignInButton>
                             <Link href="/study">
                                 <Button size="lg" variant="sidebar">
-                                    Try For Free
+                                    Start Learning For Free
                                 </Button>
                             </Link>
                         </div>
