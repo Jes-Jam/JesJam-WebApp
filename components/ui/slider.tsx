@@ -36,13 +36,15 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
         {items.map((classItem) => (
           <div key={classItem.id} className="keen-slider__slide">
             <div className="flex flex-col items-center bg-gray-100 p-4 rounded-lg shadow-md h-[px]">
-              <Image
-                src={classItem.image}
-                alt={`${classItem.name} image`}
-                width={200}
-                height={200}
-                className="rounded-lg object-cover w-full h-[250px] "
-              />
+              <figure className="w-full h-[250px] overflow-hidden rounded-lg">
+                <Image
+                  src={classItem.image}
+                  alt={`${classItem.name} image`}
+                  width={200}
+                  height={200}
+                  className="object-cover w-full h-full hover:scale-105 transition duration-300"
+                />
+              </figure>
               <h3 className="text-lg font-semibold mt-4 capitalize">
                 {classItem.name}
               </h3>

@@ -100,6 +100,14 @@ export default function Home() {
           <Slider items={transformedClasses} />
         </div>
       </div>
+
+      {/* reviews */}
+      <div className="w-full px-[32px] my-10">
+        <h2 className="text-xl font-bold mb-6">What our students say?</h2>
+        <div className="w-full relative">
+          
+        </div>
+      </div>
     </div>
   );
 }
