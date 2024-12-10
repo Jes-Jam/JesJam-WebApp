@@ -1,4 +1,3 @@
-"use client"
 import Image from "next/image";
 import {
   ClerkLoaded,
@@ -11,39 +10,18 @@ import {
 import { Loader } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import Biology from "../../public/images/static-images/biology.webp";
-import History from "../../public/images/static-images/history.webp";
-import { useKeenSlider } from "keen-slider/react";
-import "keen-slider/keen-slider.min.css";
-import { useState, Fragment } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import Label from "@/components/ui/label";
+import Slider from "../../components/ui/slider";
+
+import classes from "../../dev-data/classes";
 
 export default function Home() {
-  const classes = [
-    { id: 1, name: "biology", image: Biology},
-    { id: 2, name: "chemistry", image: History},
-    { id: 3, name: "biology", image: Biology},
-    { id: 4, name: "chemistry", image: History},
-  ];
 
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [loaded, setLoaded] = useState(false);
-
-  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
-    slides: {
-      perView: 2,
-      spacing: 15,
-    },
-    loop: true,
-    slideChanged(s) {
-      setCurrentSlide(s.track.details.rel);
-    },
-    created() {
-      setLoaded(true);
-    }
-  });
-
+  const transformedClasses = classes.map((cls) => ({
+    id: cls.id.toString(), // convert id to string
+    name: cls.name,
+    image: cls.image.src, // extract the src property from the StaticImageData object
+  }));
 
   return (
     <div className="flex items-center flex-col w-full">
@@ -119,44 +97,7 @@ export default function Home() {
         <h2 className="text-xl font-bold mb-6">Available Classes</h2>
         <div className="w-full relative">
           {/* Keen Slider */}
-          <div ref={sliderRef} className="keen-slider">
-            {classes.map((classItem) => (
-              <div key={classItem.id} className="keen-slider__slide">
-                <div className="flex flex-col items-center bg-gray-100 p-4 rounded-lg shadow-md h-[px]">
-                  <Image
-                    src={classItem.image}
-                    alt={`${classItem.name} image`}
-                    width={200}
-                    height={200}
-                    className="rounded-lg object-cover w-full h-[250px] "
-                  />
-                  <h3 className="text-lg font-semibold mt-4 capitalize">
-                    {classItem.name}
-                  </h3>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {loaded && instanceRef.current && (
-            <Fragment>
-              <button 
-              onClick={() => instanceRef.current?.prev()} 
-              aria-label="Previous Slide"
-              className=" absolute h-full w-[30px] bg-gray-300 opacity-50 rounded-tl-md rounded-bl-md top-0 left-0"
-              >
-              <ArrowLeft />
-              </button>
-
-              <button 
-              onClick={() => instanceRef.current?.next()} 
-              aria-label="Next Slide"
-              className=" absolute h-full w-[30px] bg-gray-300 opacity-40 rounded-tr-md rounded-br-md top-0 right-0"
-              >
-                <ArrowRight />
-              </button>
-            </Fragment>
-          )}
+          <Slider items={transformedClasses} />
         </div>
       </div>
     </div>
