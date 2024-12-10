@@ -76,5 +76,4 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
   )
 };
 
-
 export default Slider;

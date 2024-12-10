@@ -12,8 +12,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Label from "@/components/ui/label";
 import Slider from "../../components/ui/slider";
+import ReviewCards from "@/components/ui/reviewCards";
 
 import classes from "../../dev-data/classes";
+import reviews from "../../dev-data/reviews";
 
 export default function Home() {
 
@@ -24,7 +26,7 @@ export default function Home() {
   }));
 
   return (
-    <div className="flex items-center flex-col w-full">
+    <div className="flex items-center flex-col w-full text-gray-900">
       <div className="flex-1 w-full flex flex-col lg:flex-row items-center justify-center p-4 gap-x-8 mt-[100px] my-[30px]">
         <div className="relative w-[240px] h-[240px] lg:w-[565px] lg:h-[400px] mb:8 lg:mb:0 ">
           <Image
@@ -105,7 +107,7 @@ export default function Home() {
       <div className="w-full px-[32px] my-10">
         <h2 className="text-xl font-bold mb-6">What our students say?</h2>
         <div className="w-full relative">
-          
+          <ReviewCards reviews={reviews} />
         </div>
       </div>
     </div>
