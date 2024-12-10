@@ -1,6 +1,7 @@
 import { Star } from "lucide-react";
 import Image from "next/image";
 import profileHolder from "../../public/images/static-images/vector-users-icon.webp";
+import { FaStar, FaRegStar } from "react-icons/fa";
 
 /**
  * A component to render a review card.
@@ -23,7 +24,7 @@ function ReviewCard({
   const ratingStars = [];
 
   for (let i = 0; i < 5; i++) {
-   i < review.rating ? ratingStars.push(<Star key={i} />) : ratingStars.push(<Star key={i} className="text-gray-400" />);
+   i < review.rating ? ratingStars.push(<FaStar key={i} className="text-yellow-300 text-lg" />) : ratingStars.push(<FaRegStar key={i} className="text-gray-400" />);
   }
 
   return (
