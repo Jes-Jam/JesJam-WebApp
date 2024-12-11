@@ -9,14 +9,16 @@ import { motion, useMotionValue, useSpring } from "framer-motion"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { upsertUserProgress } from "@/actions/user-progress"
+import { guestProgressService } from "@/lib/services/guest-progress"
 
 type Props = {
     classes: typeof classes.$inferSelect[];
     activeClassId?: typeof userProgress.$inferSelect["activeClassId"];
     userEnrollments?: typeof classEnrollments.$inferSelect[];
+    isGuest?: boolean;
 }
 
-const List = ({ classes, activeClassId, userEnrollments }: Props) => {
+const List = ({ classes, activeClassId, userEnrollments, isGuest = false }: Props) => {
     const router = useRouter();
     const [isPending, startTransition] = React.useTransition();
     const [updatingClassId, setUpdatingClassId] = React.useState<number | null>(null)
@@ -28,6 +30,22 @@ const List = ({ classes, activeClassId, userEnrollments }: Props) => {
 
     const onClick = (id: number) => {
         if (isPending) return;
+
+        if (isGuest) {
+            const classData = classes.find(c => c.id === id);
+            if (!classData?.isPreviewAvailable) {
+                //TODO: Show update prompt
+                return;
+            }
+
+            guestProgressService.updateProgress({ activeClassId: id });
+            startTransition(() => {
+                upsertUserProgress(id, true)
+                    .catch((err) => console.log(err))
+                    .finally(() => setUpdatingClassId(null))
+            })
+            return;
+        }
 
         if (id === activeClassId) {
             return router.push(`/study`)
@@ -47,16 +65,16 @@ const List = ({ classes, activeClassId, userEnrollments }: Props) => {
 
     // Smooth spring animation for the tooltip
     const springConfig = { damping: 25, stiffness: 700 }
-    const tooltipX = useSpring(mouseX, springConfig)
-    const tooltipY = useSpring(mouseY, springConfig)
+    // const tooltipX = useSpring(mouseX, springConfig)
+    // const tooltipY = useSpring(mouseY, springConfig)
     const [isHoveringActive, setIsHoveringActive] = React.useState(false);
     const [isHoveringEnrolled, setIsHoveringEnrolled] = React.useState(false);
 
-    const handleMouseMove = (e: React.MouseEvent) => {
-        const rect = e.currentTarget.getBoundingClientRect()
-        mouseX.set(e.clientX - rect.left - 90)
-        mouseY.set(e.clientY - rect.top - 15)
-    }
+    // const handleMouseMove = (e: React.MouseEvent) => {
+    //     const rect = e.currentTarget.getBoundingClientRect()
+    //     mouseX.set(e.clientX - rect.left - 90)
+    //     mouseY.set(e.clientY - rect.top - 15)
+    // }
 
     return (
         <div className="pt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
