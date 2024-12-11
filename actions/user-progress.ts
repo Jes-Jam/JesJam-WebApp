@@ -8,10 +8,16 @@ import { revalidatePath } from "next/cache";
 import { eq, and } from "drizzle-orm";
 
 import { redirect } from "next/navigation";
+import { handleGuestProgress } from "./guest-progress";
 
 // Insert or update user progress (When user open class for the first time)
     // In addition to that, it also creates an enrollment record for the user
-export const upsertUserProgress = async (classId: number) => {
+export const upsertUserProgress = async (classId: number, isGuest: boolean = false) => {
+    if (isGuest) {
+        return handleGuestProgress(classId);
+    }
+
+
     const { userId } = await auth();
     const user = await currentUser();
 

@@ -14,6 +14,11 @@ const StickyContainer = ({ children }: Props) => {
                 {children}
             </div>
         </div>
+        // <div className="hidden lg:block w-[405px]">
+        //     <div className="noise-background fixed top-0 right-0 w-[405px] flex flex-col pt-10 px-6 gap-y-4 h-screen border-l-2 border-l-slate-200">
+        //         {children}
+        //     </div>
+        // </div>
     )
 }
 

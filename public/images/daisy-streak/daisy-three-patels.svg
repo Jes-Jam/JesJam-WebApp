@@ -1,0 +1,27 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="irregular-shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur" />
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.796   0 0 0 0 0.522   0 0 0 0 0.102  0 0 0 0.5 0" result="amber-shadow" />
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise" />
+      <feDisplacementMap in="amber-shadow" in2="noise" scale="7" xChannelSelector="R" yChannelSelector="G" />
+      <feMerge>
+        <feMergeNode in="amber-shadow" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Petals with 3 original positions -->
+  <g fill="white" filter="url(#irregular-shadow)" transform="translate(10 10)">
+    <ellipse cx="50" cy="28" rx="12" ry="26" transform="rotate(0 50 50)" />
+    <ellipse cx="50" cy="27" rx="11" ry="25" transform="rotate(120 50 50)" />
+    <ellipse cx="50" cy="28" rx="11.5" ry="26" transform="rotate(240 50 50)" />
+  </g>
+  
+  <!-- Center of the flower -->
+  <g transform="translate(10 10)">
+    <circle cx="50" cy="50" r="16" fill="#FFD54F" />
+    <circle cx="50" cy="50" r="12" fill="#FFC107" />
+  </g>
+</svg>

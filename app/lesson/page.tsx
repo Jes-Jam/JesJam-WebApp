@@ -19,7 +19,7 @@ const LessonPage = async () => {
     const initialPercentage = lesson.challenges.filter((challenge) => challenge.completed).length / lesson.challenges.length * 100;
 
     return (
-        <div>
+        <div className="noise-background">
             <LessonProgress
                 initialLessonId={lesson.id}
                 initialLessonChallenges={lesson.challenges}
