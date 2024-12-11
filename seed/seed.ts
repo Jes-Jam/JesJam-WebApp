@@ -23,7 +23,7 @@ const main = async () => {
         await db.delete(schema.chapters)
         await db.delete(schema.lessons)
         await db.delete(schema.challenges)
-        await db.delete(schema.challengeAnswers)
+        await db.delete(schema.challengeContent)
         await db.delete(schema.challengeProgress)
         await db.delete(schema.classEnrollments)
 
@@ -109,7 +109,7 @@ const main = async () => {
         ])
 
 
-        await db.insert(schema.challengeAnswers).values([
+        await db.insert(schema.challengeContent).values([
             {
                 id: 1,
                 challengeId: 1,

@@ -1,7 +1,7 @@
 import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
-import { challengeAnswers, challengeProgress, challenges, chapters, classEnrollments, classes, lessons, userProgress } from "./schema";
+import { challengeContent, challengeProgress, challenges, chapters, classEnrollments, classes, lessons, userProgress } from "./schema";
 import { eq } from "drizzle-orm";
 
 
@@ -176,7 +176,7 @@ export const getLesson = cache(async (id?: number) => {
             challenges: {
                 orderBy: (challenges, { asc }) => [asc(challenges.order)],
                 with: {
-                    challengeAnswers: true,
+                    challengeContent: true,
                     challengeProgress: {
                         where: eq(challengeProgress.userId, userId)
                     }
