@@ -27,7 +27,7 @@ export const Header = ({
             />
 
             <div className="text-amber-500 flex gap-x-2 items-center font-bold">
-                <Image src="/images/daisy-patels.svg" alt="mascot" width={50} height={50} />
+                <Image src="/images/daisy-streak/daisy-patels.svg" alt="mascot" width={50} height={50} />
                 {patels}
             </div>
         </header>
