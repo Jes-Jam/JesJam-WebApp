@@ -35,10 +35,10 @@ const Sidebar = ({ className }: Props) => {
                     </div>
                 </Link>
                 <div className="flex flex-col gap-y-3">
-                    <SidebarItem label="Study" iconImg="/images/home.svg" href="/study" />
-                    <SidebarItem label="Profile" iconImg="/images/account.svg" href="/profile" />
-                    <SidebarItem label="Leaderboard" iconImg="/images/star.svg" href="/leaderboard" />
-                    <SidebarItem label="Explore" iconImg="/images/explore.svg" href="/explore" />
+                    <SidebarItem label="Study" iconImg="/images/sidebar-icons/home.svg" href="/study" />
+                    <SidebarItem label="Profile" iconImg="/images/sidebar-icons/account.svg" href="/profile" />
+                    <SidebarItem label="Leaderboard" iconImg="/images/sidebar-icons/star.svg" href="/leaderboard" />
+                    <SidebarItem label="Explore" iconImg="/images/sidebar-icons/explore.svg" href="/explore" />
                 </div>
             </div>
 

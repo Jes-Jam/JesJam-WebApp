@@ -54,8 +54,8 @@ const main = async () => {
             {
                 id: 1,
                 classId: 1,
-                title: "Title go here",
-                description: "Description go here",
+                title: "Chapter 1: Immune System",
+                description: "This chapter covers the basics of the immune system.",
                 order: 1
             }
         ])
@@ -64,38 +64,38 @@ const main = async () => {
             {
                 id: 1,
                 chapterId: 1,
-                title: "Lesson's title go here",
-                description: "Lesson's description goes here",
+                title: "Lesson 1: The Basics of the Immune System",
+                description: "This lesson covers the basics of the immune system, including the different types of immune cells and how they work together to protect the body.",
                 order: 1
             },
             {
                 id: 2,
                 chapterId: 1,
-                title: "Lesson's title go here",
-                description: "Lesson's description goes here",
+                title: "Lesson 2: The Basics of the Immune System",
+                description: "This lesson covers the basics of the immune system, including the different types of immune cells and how they work together to protect the body.",
                 order: 2
             },
             {
                 id: 3,
                 chapterId: 1,
-                title: "Lesson's title go here",
-                description: "Lesson's description goes here",
+                title: "Lesson 3: The Basics of the Immune System",
+                description: "This lesson covers the basics of the immune system, including the different types of immune cells and how they work together to protect the body.",
                 order: 3
             },
             {
                 id: 4,
                 chapterId: 1,
-                title: "Lesson's title go here",
-                description: "Lesson's description goes here",
+                title: "Lesson 4: The Basics of the Immune System",
+                description: "This lesson covers the basics of the immune system, including the different types of immune cells and how they work together to protect the body.",
                 order: 4
             },
             {
                 id: 5,
                 chapterId: 1,
-                title: "Lesson's title go here",
-                description: "Lesson's description goes here",
+                title: "Lesson 5: The Basics of the Immune System",
+                description: "This lesson covers the basics of the immune system, including the different types of immune cells and how they work together to protect the body.",
                 order: 5
-            }        
+            }
         ])
 
         await db.insert(schema.challenges).values([
@@ -103,60 +103,98 @@ const main = async () => {
                 id: 1,
                 lessonId: 1,
                 type: "SELECT",
-                question: 'Challenge title go here',
+                question: 'What is the immune system?',
                 order: 1
+            },
+            {
+                id: 2,
+                lessonId: 1,
+                type: "SELECT",
+                question: 'How does the immune system work?',
+                order: 2
+            },
+            {
+                id: 3,
+                lessonId: 1,
+                type: "SELECT",
+                question: 'How many types of immune cells are there?',
+                order: 3
             },
         ])
 
 
         await db.insert(schema.challengeContent).values([
             {
-                id: 1,
                 challengeId: 1,
-                text: 'Text here',
-                imageSrc: '/placeholder.jpg',
+                text: 'The immune system is a complex network of cells, tissues, and organs that work together to defend the body against foreign invaders, such as bacteria, viruses, and other pathogens.',
+                imageSrc: '/mascot.svg',
                 correct: true,
                 audioSrc: '/placeholder.mp3',
             },
             {
-                id: 2,
                 challengeId: 1,
-                text: 'Text here',
-                imageSrc: '/placeholder.jpg',
+                text: 'The immune system is a complex network of cells, tissues, and organs that work together to defend the body against foreign invaders, such as bacteria, viruses, and other pathogens.',
+                imageSrc: '/mascot.svg',
                 correct: false,
                 audioSrc: '/placeholder.mp3',
             },
             {
-                id: 3,
                 challengeId: 1,
-                text: 'Text here',
-                imageSrc: '/placeholder.jpg',
+                text: 'The immune system is a complex network of cells, tissues, and organs that work together to defend the body against foreign invaders, such as bacteria, viruses, and other pathogens.',
+                imageSrc: '/mascot.svg',
                 correct: false,
                 audioSrc: '/placeholder.mp3',
             },
         ])
 
-        // await db.insert(schema.classEnrollments).values([
-        //     {
-        //         userId: "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN", 
-        //         classId: 1,
-        //         status: "active",
-        //         enrolledAt: new Date(),
-        //     },
-        //     {
-        //         userId: "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN", 
-        //         classId: 2,
-        //         status: "completed",
-        //         enrolledAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
-        //         completedAt: new Date(),
-        //     },
-        //     {
-        //         userId: "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN", 
-        //         classId: 3,
-        //         status: "dropped",
-        //         enrolledAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 14 days ago
-        //     },
-        // ])
+        await db.insert(schema.challengeContent).values([
+            {
+                challengeId: 2,
+                text: 'It works by producing antibodies that target and neutralize foreign invaders.',
+                imageSrc: '/mascot.svg',
+                correct: false,
+                audioSrc: '/placeholder.mp3',
+            },
+            {
+                challengeId: 2,
+                text: 'It works by producing antibodies that target and neutralize foreign invaders.',
+                imageSrc: '/mascot.svg',
+                correct: true,
+                audioSrc: '/placeholder.mp3',
+            },
+            {
+                challengeId: 2,
+                text: 'It works by producing antibodies that target and neutralize foreign invaders.',
+                imageSrc: '/mascot.svg',
+                correct: false,
+                audioSrc: '/placeholder.mp3',
+            },
+        ])
+
+        await db.insert(schema.challengeContent).values([
+            {
+                challengeId: 3,
+                text: 'There are 3 types of immune cells.',
+                imageSrc: '/mascot.svg',
+                correct: false,
+                audioSrc: '/placeholder.mp3',
+            },
+            {
+                challengeId: 3,
+                text: 'There are 2 types of immune cells.',
+                imageSrc: '/mascot.svg',
+                correct: true,
+                audioSrc: '/placeholder.mp3',
+            },
+            {
+                challengeId: 3,
+                text: 'There are 4 types of immune cells.',
+                imageSrc: '/mascot.svg',
+                correct: false,
+                audioSrc: '/placeholder.mp3',
+            },
+        ])
+
 
         console.log("------------ Database seeded 🌱🌱 ------------")
 

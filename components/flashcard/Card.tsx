@@ -1,9 +1,9 @@
 
 
-export const Card = ({ content, status, selectedOption, disabled }: Props) => {
+export const Card = () => {
     return (
         <div>
-
+            Hello
         </div>
     )
 }
