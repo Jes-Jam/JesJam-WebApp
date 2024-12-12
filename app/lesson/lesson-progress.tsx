@@ -25,10 +25,17 @@ export const LessonProgress = ({ initialLessonId,
 }: Props) => {
     const [percentage, setPercentage] = useState(initialPercentage);
     const [patels, setPatels] = useState(initialPatels);
+    const [challenges] = useState(initialLessonChallenges)
+    const [activeChallengeIndex, setActiveChallengeIndex] = useState(() => {
+        const unansweredChallenge = challenges.find((challenge) => !challenge.completed)
+        return unansweredChallenge ? challenges.indexOf(unansweredChallenge) : 0
+    })
 
-    const title = initialLessonChallenges[0].type === "SELECT" ? "Select the correct meaning" : initialLessonChallenges[0].question;
+    const challenge = challenges[activeChallengeIndex]
 
-    console.log(initialLessonChallenges[0].challengeContent)
+    const title = challenge.type === "SELECT" ? challenge.question : challenge.question;
+
+    console.log(challenge.challengeContent)
 
 
     return (
@@ -41,23 +48,24 @@ export const LessonProgress = ({ initialLessonId,
 
             <div className="flex-1">
                 <div className="h-full flex items-center justify-center">
-                    <div className="lg:min-h-[350px] lg:w-[600px] w-full px-6 lg:px-0 flex flex-col gap-y-12">
+                    <div className="lg:min-h-[350px] lg:w-[800px] md:w-[600px] w-full px-6 lg:px-0 flex flex-col gap-y-12">
                         <h1 className="text-lg lg:text-2xl mt-12 text-center font-bold lg:text-start text-sky-900">
                             {title}
                         </h1>
                         <div>
-                            {initialLessonChallenges[0].type === "CARD" && (
+                            {challenge.type === "CARD" && (
                                 <Card />
                             )}
-
-                            <ChallengeContent
-                                contents={initialLessonChallenges[0].challengeContent}
-                                status="CORRECT"
-                                selectedOption={null}
-                                disabled={false}
-                                type={initialLessonChallenges[0].type}
-                                onSelect={() => { }}
-                            />
+                            {challenge.type === "SELECT" && (
+                                <ChallengeContent
+                                    contents={challenge.challengeContent}
+                                    status="CORRECT"
+                                    selectedOption={null}
+                                    disabled={false}
+                                    type={challenge.type}
+                                    onSelect={() => { }}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

@@ -54,8 +54,8 @@ const main = async () => {
             {
                 id: 1,
                 classId: 1,
-                title: "Chapter 1: Immune System",
-                description: "This chapter covers the basics of the immune system.",
+                title: "ជំពូកទី 1: ប្រព័ន្ធអង់ដូគ្រីន",
+                description: "យើងនិងរៀនពីប្រព័ន្ធអង់ដូគ្រីន និងការដំណើរការរបស់វា។",
                 order: 1
             }
         ])
@@ -64,8 +64,8 @@ const main = async () => {
             {
                 id: 1,
                 chapterId: 1,
-                title: "Lesson 1: The Basics of the Immune System",
-                description: "This lesson covers the basics of the immune system, including the different types of immune cells and how they work together to protect the body.",
+                title: "មេរៀនទី 1: ប្រព័ន្ធអង់ដូគ្រីន",
+                description: "យើងនិងរៀនពីប្រព័ន្ធអង់ដូគ្រីន និងការដំណើរការរបស់វា។",
                 order: 1
             },
             {
@@ -103,21 +103,21 @@ const main = async () => {
                 id: 1,
                 lessonId: 1,
                 type: "SELECT",
-                question: 'What is the immune system?',
+                question: 'ដូចម្ដេចដែលហៅថាក្រពេញ?',
                 order: 1
             },
             {
                 id: 2,
                 lessonId: 1,
                 type: "SELECT",
-                question: 'How does the immune system work?',
+                question: 'ហេតុអ្វីបានជាអរម៉ូនបុិបទីតមិនអាចឆ្លងកាត់ភ្នាសកោសិកាបាន?',
                 order: 2
             },
             {
                 id: 3,
                 lessonId: 1,
                 type: "SELECT",
-                question: 'How many types of immune cells are there?',
+                question: 'តើអុីប៉ូតាឡាមុសផលិតអរម៉ូនប៉ុន្មានប្រភេទ?',
                 order: 3
             },
         ])
@@ -126,71 +126,71 @@ const main = async () => {
         await db.insert(schema.challengeContent).values([
             {
                 challengeId: 1,
-                text: 'The immune system is a complex network of cells, tissues, and organs that work together to defend the body against foreign invaders, such as bacteria, viruses, and other pathogens.',
+                text: 'ក្រពេញជាកោសិកាឬជាសរីរាង្គដែលកើតឡើងពីកោសិកាអេពីតេល្យូមដែលមានឯកទេសកម្មក្នុងការបញ្ចេញសារធាតុចាំបាច់សម្រាប់សារពាង្គកាយ។',
                 imageSrc: '/mascot.svg',
                 correct: true,
-                audioSrc: '/placeholder.mp3',
+                audioSrc: '/audio/c1o1.mp3',
             },
             {
                 challengeId: 1,
-                text: 'The immune system is a complex network of cells, tissues, and organs that work together to defend the body against foreign invaders, such as bacteria, viruses, and other pathogens.',
+                text: 'ក្រពេញអិចសូគ្រីនជាក្រពេញមានបំពង់នាំដែលបញ្ចេញរសរំលាយអាហារនិងសំណល់មេតាប៉ូលីសទៅខាងក្រៅចរន្តឈាម។ ',
                 imageSrc: '/mascot.svg',
                 correct: false,
-                audioSrc: '/placeholder.mp3',
+                audioSrc: '/audio/c1o1.mp3',
             },
             {
                 challengeId: 1,
-                text: 'The immune system is a complex network of cells, tissues, and organs that work together to defend the body against foreign invaders, such as bacteria, viruses, and other pathogens.',
+                text: 'ក្រពេញអង់ដូគ្រីនជាក្រពេញគ្មានបំពង់នាំដែលបញ្ចេញសារធាតុគីមីហៅថាអរម៉ូនហើយធ្វើដំណើរទៅក្នុងឈាម់',
                 imageSrc: '/mascot.svg',
                 correct: false,
-                audioSrc: '/placeholder.mp3',
+                audioSrc: '/audio/c1o1.mp3',
             },
         ])
 
         await db.insert(schema.challengeContent).values([
             {
                 challengeId: 2,
-                text: 'It works by producing antibodies that target and neutralize foreign invaders.',
+                text: 'អរម៉ូននៃប្រដាប់រំលាយអាហារផលិតចេញពីសរីរាង្គក្រពះនិងពោះវៀនតូច។',
                 imageSrc: '/mascot.svg',
                 correct: false,
-                audioSrc: '/placeholder.mp3',
+                audioSrc: '/audio/c1o1.mp3',
             },
             {
                 challengeId: 2,
-                text: 'It works by producing antibodies that target and neutralize foreign invaders.',
+                text: 'បានជាអរម៉ូនបិបទីតមិនអាចឆ្លងកាត់ភ្នាសកោសិកាបាន ពីព្រោះវាជាម៉ូលេគុលប្រូតេអ៊ីនធំៗហើយមិនរលាយនៅក្នុងស្រទាប់លីពីតដែលមានវត្តមានក្នុងភ្នាសកោសិកា។',
                 imageSrc: '/mascot.svg',
                 correct: true,
-                audioSrc: '/placeholder.mp3',
+                audioSrc: '/audio/c1o1.mp3',
             },
             {
                 challengeId: 2,
-                text: 'It works by producing antibodies that target and neutralize foreign invaders.',
+                text: 'នៅពេលអរម៉ូនស្តេរ៉ូអុីតជ្រាបចូលក្នុងកោសិកាវាបានភ្ជាប់ទៅនឹងធ្មួលក្នុងស៊ីតូប្លាសហើយបង្កើតបានជាម៉ូលេគុលចម្រុះអរម៉ូនធ្មួល។',
                 imageSrc: '/mascot.svg',
                 correct: false,
-                audioSrc: '/placeholder.mp3',
+                audioSrc: '/audio/c1o1.mp3',
             },
         ])
 
         await db.insert(schema.challengeContent).values([
             {
                 challengeId: 3,
-                text: 'There are 3 types of immune cells.',
+                text: '១ ប្រភេទអង់ដូគ្រីន។',
                 imageSrc: '/mascot.svg',
                 correct: false,
                 audioSrc: '/placeholder.mp3',
             },
             {
                 challengeId: 3,
-                text: 'There are 2 types of immune cells.',
+                text: '៤ ប្រភេទអង់ដូគ្រីន។',
                 imageSrc: '/mascot.svg',
                 correct: true,
                 audioSrc: '/placeholder.mp3',
             },
             {
                 challengeId: 3,
-                text: 'There are 4 types of immune cells.',
+                text: '២ ប្រភេទអង់ដូគ្រីន។',
                 imageSrc: '/mascot.svg',
-                correct: false,
+                correct: true,
                 audioSrc: '/placeholder.mp3',
             },
         ])

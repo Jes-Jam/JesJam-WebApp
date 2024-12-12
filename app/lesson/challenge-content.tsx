@@ -15,7 +15,7 @@ export const ChallengeContent = ({ contents, status, selectedOption, disabled, t
         <div className={cn(
             "grid gap-2",
             type === "CARD" && "grid-cols-1",
-            type === "SELECT" && "grid-cols-2 lg:grid-cols-3"
+            type === "SELECT" && "grid-cols-2 lg:grid-cols-2"
         )}>
             {contents.map((content, i) => (
                 <Choice
