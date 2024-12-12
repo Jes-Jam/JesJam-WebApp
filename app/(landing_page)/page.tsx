@@ -106,6 +106,12 @@ export default function Home() {
           <ReviewCards reviews={reviews} secondary={true} />
         </div>
       </div>
+
+      {/* recruit */}
+      <div className="w-full my-10 flex flex-col justify-center items-center gap-3 bg-blue-600 py-12 md:rounded-md">
+        <p className="font-bold text-lg text-white">Enter the next level of digital learning</p>
+        <Button className="text-blue-500">Start Learning Now!</Button>
+      </div>
     </div>
   );
 }
