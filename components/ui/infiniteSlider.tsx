@@ -1,68 +1,51 @@
 "use client";
 
-import { useKeenSlider } from "keen-slider/react";
-import "keen-slider/keen-slider.min.css";
-
-const animation = { duration: 10000, easing: (t: number) => t };
+import { useEffect, useRef } from "react";
+import slogans from "../../dev-data/sloogans"; // Replace with your actual slogans data
 
 export default function App() {
-  const [sliderRef] = useKeenSlider<HTMLDivElement>({
-    loop: true,
-    renderMode: "performance",
-    drag: false,
-    slides: {
-      perView: "auto", 
-      spacing: 10, 
-    },
-    created(s) {
-      s.moveToIdx(5, true, animation);
-    },
-    updated(s) {
-      s.moveToIdx(s.track.details.abs + 5, true, animation);
-    },
-    animationEnded(s) {
-      s.moveToIdx(s.track.details.abs + 5, true, animation);
-    },
-  });
+  // Use a ref to access the slider element
+  const infiniteSliderRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // Make sure the slider element is available
+    const sliderElement = infiniteSliderRef.current;
+    if (!sliderElement) return;
+
+    let scrollAmount = 0;
+    const scrollStep = .3; // Amount to scroll in each frame
+    const scrollInterval = 1; // Interval in ms
+
+    // Function to move the slider content
+    const moveSlider = () => {
+      scrollAmount += scrollStep;
+      if (scrollAmount >= sliderElement.scrollWidth / 2) {
+        scrollAmount = 0; // Reset scroll when we reach the end
+      }
+      sliderElement.scrollLeft = scrollAmount;
+    };
+
+    // Start the scrolling interval
+    const intervalId = setInterval(moveSlider, scrollInterval);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
-    <div ref={sliderRef} className="keen-slider w-full overflow-hidden">
-      <div className="keen-slider__slide number-slide1 bg-amber-600 text-white p-8 rounded-md">
-        1
-      </div>
-      <div className="keen-slider__slide number-slide2 bg-amber-500 text-white p-8 rounded-md">
-        2
-      </div>
-      <div className="keen-slider__slide number-slide3 bg-amber-400 text-white p-8 rounded-md">
-        3
-      </div>
-      <div className="keen-slider__slide number-slide4 bg-amber-300 text-white p-8 rounded-md">
-        4
-      </div>
-      <div className="keen-slider__slide number-slide5 bg-amber-200 text-black p-8 rounded-md">
-        5
-      </div>
-      <div className="keen-slider__slide number-slide6 bg-amber-600 text-white p-8 rounded-md">
-        6
-      </div>
-      <div className="keen-slider__slide number-slide1 bg-amber-600 text-white p-8 rounded-md">
-        1
-      </div>
-      <div className="keen-slider__slide number-slide2 bg-amber-500 text-white p-8 rounded-md">
-        2
-      </div>
-      <div className="keen-slider__slide number-slide3 bg-amber-400 text-white p-8 rounded-md">
-        3
-      </div>
-      <div className="keen-slider__slide number-slide4 bg-amber-300 text-white p-8 rounded-md">
-        4
-      </div>
-      <div className="keen-slider__slide number-slide5 bg-amber-200 text-black p-8 rounded-md">
-        5
-      </div>
-      <div className="keen-slider__slide number-slide6 bg-amber-600 text-white p-8 rounded-md">
-        6
-      </div>
+    <div
+      ref={infiniteSliderRef}
+      className="w-full overflow-x-hidden flex flex-nowrap"
+    >
+      {/* Duplicate the slogans to create an infinite effect */}
+      {slogans.map((slogan) => (
+        <div
+          key={slogan.id}
+          className="font-bold text-lg text-blue-500 p-8 rounded-md inline-block whitespace-nowrap"
+        >
+          {slogan.slogan}
+        </div>
+      ))}
+
     </div>
   );
 }
