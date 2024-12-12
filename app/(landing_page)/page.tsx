@@ -10,7 +10,7 @@ import {
 import { Loader } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import Label from "@/components/ui/label";
+import InfiniteSlider from "../../components/ui/infiniteSlider";
 import Slider from "../../components/ui/slider";
 import ReviewCards from "@/components/ui/reviewCards";
 
@@ -82,11 +82,7 @@ export default function Home() {
       {/* labels */}
       <div className="w-full px-[32px]">
         <h1 className="text-2xl font-bold mb-4">How is it work?</h1>
-        <div className="w-full flex justify-between flex-col md:flex-row gap-3 md: gap:0">
-          <Label className="bg-pink-400 ">Explore ton of classes</Label>
-          <Label className="bg-violet-400 ">Start enroll</Label>
-          <Label className="bg-yellow-400 ">Begin your journey</Label>
-        </div>
+        <InfiniteSlider/>
       </div>
       
       {/* video */}
