@@ -17,9 +17,14 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
   const [loaded, setLoaded] = useState(false);
 
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
+    breakpoints: {
+      "(min-width: 1080px)": {
+        slides: { perView: 2, spacing: 10 }, // For screens >= 640px
+      },
+    },
     slides: {
-      perView: 2,
-      spacing: 15,
+      perView: 1, 
+      spacing: 5,
     },
     loop: true,
     slideChanged(s) {
