@@ -87,7 +87,7 @@ export default function Home() {
       
       {/* video */}
       <div className=" w-full px-[32px]">
-        <video className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 my-10 rounded-md" src=""></video>
+        <div className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 my-10 rounded-md shadow-[0_5px_15px_5px_rgba(0,0,0,0.2)]"></div>
       </div>
 
       {/* classes */}
