@@ -85,7 +85,7 @@ export default function Home() {
         <InfiniteSlider/>
       </div>
       
-      {/* video */}
+      {/* screen */}
       <div className=" w-full px-[32px]">
         <div className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 my-10 rounded-md shadow-[0_5px_15px_5px_rgba(0,0,0,0.2)]"></div>
       </div>
@@ -103,7 +103,7 @@ export default function Home() {
       <div className="w-full px-[32px] my-10">
         <h2 className="text-xl font-bold mb-6">What our students say?</h2>
         <div className="w-full relative">
-          <ReviewCards reviews={reviews} />
+          <ReviewCards reviews={reviews} secondary={true} />
         </div>
       </div>
     </div>
