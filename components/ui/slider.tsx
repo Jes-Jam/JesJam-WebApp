@@ -36,12 +36,12 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
   });
 
   return (
-    <div className="px-[30px]">
+    <div className="px-[32px]">
       <div ref={sliderRef} className="keen-slider">
         {items.map((classItem) => (
           <div key={classItem.id} className="keen-slider__slide">
             <div className="flex flex-col items-center bg-blue-300 p-4 rounded-lg shadow-md">
-              <figure className="w-full h-[250px] overflow-hidden rounded-lg">
+              <figure className="w-full h-[200px] md:h-[250px] overflow-hidden rounded-lg">
                 <Image
                   src={classItem.image}
                   alt={`${classItem.name} image`}
@@ -63,17 +63,17 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
           <button 
           onClick={() => instanceRef.current?.prev()} 
           aria-label="Previous Slide"
-          className=" absolute h-full w-[30px] bg-indigo-400 rounded-tl-md rounded-bl-md top-0 left-0 flex justify-center items-center text-2xl"
+          className=" absolute h-full w-[30px] bg-gray-700 rounded-tl-md rounded-bl-md top-0 left-0 flex justify-center items-center text-2xl"
           >
-          <FaChevronLeft className=" fill-blue-300"/>
+            <FaChevronLeft className=" fill-white"/>
           </button>
 
           <button 
           onClick={() => instanceRef.current?.next()} 
           aria-label="Next Slide"
-          className=" absolute h-full w-[30px] bg-indigo-400 rounded-tr-md rounded-br-md top-0 right-0 flex justify-center items-center text-2xl"
+          className=" absolute h-full w-[30px] bg-gray-700 rounded-tr-md rounded-br-md top-0 right-0 flex justify-center items-center text-2xl"
           >
-            <FaChevronRight className=" fill-blue-300"/>
+            <FaChevronRight className=" fill-white"/>
           </button>
         </Fragment>
       )}

@@ -80,19 +80,19 @@ export default function Home() {
       </div>
       
       {/* labels */}
-      <div className="w-full px-[32px]">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 lg:mb-8 text-center">How it work?</h1>
+      <div className="w-full px-[16px] md:px-[32px]">
+        <h1 className="text-3xl text-gray-700 md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 lg:mb-8 text-center">How it work?</h1>
         <InfiniteSlider/>
       </div>
       
       {/* screen */}
-      <div className=" w-full px-[32px]">
-        <div className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 my-10 rounded-md shadow-[0_3px_20px_3px_rgba(0,0,0,0.2)]"></div>
+      <div className=" w-full px-[16px] md:px-[32px] my-10 md:my-12">
+        <div className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 rounded md:rounded-md shadow-[0_3px_20px_3px_rgba(0,0,0,0.2)]"></div>
       </div>
 
       {/* classes */}
-      <div className="w-full px-[32px] my-10">
-        <h2 className="text-xl font-bold mb-6">Available Classes</h2>
+      <div className="w-full px-[16px] md:px-[32px] my-10 md:my-12">
+        <h2 className="text-3xl text-gray-700 md:text-4xl lg:text-5xl font-bold mb-8 md:mb-10 lg:mb-12 text-center">Available Classes</h2>
         <div className="w-full relative">
           {/* Keen Slider */}
           <Slider items={transformedClasses} />
@@ -100,8 +100,8 @@ export default function Home() {
       </div>
 
       {/* reviews */}
-      <div className="w-full px-[32px] my-10">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 lg:mb-10 text-center">What our students say?</h2>
+      <div className="w-full px-[16px] md:px-[32px] my-10 md:my-12">
+        <h2 className="text-3xl text-gray-700 md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 lg:mb-10 text-center">What our students say?</h2>
         <div className="w-full relative">
           <ReviewCards reviews={reviews} secondary={true} />
         </div>
