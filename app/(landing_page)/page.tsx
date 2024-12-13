@@ -81,13 +81,13 @@ export default function Home() {
       
       {/* labels */}
       <div className="w-full px-[32px]">
-        <h1 className="text-2xl font-bold mb-4">How is it work?</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center ">How it work?</h1>
         <InfiniteSlider/>
       </div>
       
       {/* screen */}
       <div className=" w-full px-[32px]">
-        <div className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 my-10 rounded-md shadow-[0_5px_15px_5px_rgba(0,0,0,0.2)]"></div>
+        <div className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 my-10 rounded-md shadow-[0_5px_15x_5px_rgba(0,0,0,0.2)]"></div>
       </div>
 
       {/* classes */}
