@@ -32,20 +32,20 @@ export default function InfiniteSlider() {
   }, []);
 
   return (
-    <div
-      ref={infiniteSliderRef}
-      className="w-full overflow-x-hidden flex flex-nowrap"
-    >
-      {/* Duplicate the slogans to create an infinite effect */}
-      {slogans.map((slogan) => (
-        <div
-          key={slogan.id}
-          className="font-bold text-lg text-blue-500 p-8 rounded-md inline-block whitespace-nowrap"
-        >
-          {slogan.slogan}
-        </div>
-      ))}
-
+    <div className="w-screen overflow-hidden">
+      <div
+        ref={infiniteSliderRef}
+        className="w-full overflow-x-hidden flex flex-nowrap"
+      >
+        {slogans.map((slogan) => (
+          <div
+            key={slogan.id}
+            className="relative font-bold text-lg bg-[#1EACEE] text-white p-8 inline-block whitespace-nowrap"
+          >
+            {slogan.slogan}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

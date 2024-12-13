@@ -78,21 +78,40 @@ export default function Home() {
           </div>
         </div>
       </div>
-      
+
       {/* labels */}
-      <div className="w-full px-[16px] md:px-[32px]">
-        <h1 className="text-3xl text-gray-700 md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 lg:mb-8 text-center">How it work?</h1>
-        <InfiniteSlider/>
+      <div className="w-full py-12 gap-y-6">
+        <div className="flex flex-col items-center justify-center mb-12">
+          <InfiniteSlider />
+        </div>
+        <div className="flex flex-col items-center justify-center">
+          <h1 className="text-2xl max-w-[500px] font-bold text-[#0084C7] md:text-3xl lg:text-4xl mb-4 text-center">
+            Are you prepared for BACII? JesJam - is the app for you!
+          </h1>
+          <p className="text-md text-center text-gray-500">
+            Flashcards, quizzes, potential BACII question, we have it all!
+          </p>
+        </div>
+
       </div>
-      
+
       {/* screen */}
-      <div className=" w-full px-[16px] md:px-[32px] my-10 md:my-12">
+      <div className=" w-full px-[16px] md:px-[32px] my-10 gap-y-6">
         <div className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 rounded md:rounded-md shadow-[0_3px_20px_3px_rgba(0,0,0,0.2)]"></div>
       </div>
 
       {/* classes */}
       <div className="w-full px-[16px] md:px-[32px] my-10 md:my-12">
-        <h2 className="text-3xl text-gray-700 md:text-4xl lg:text-5xl font-bold mb-8 md:mb-10 lg:mb-12 text-center">Available Classes</h2>
+        {/* Available Classes */}
+        <div className="flex flex-col items-center justify-center mb-12">
+          <h1 className="text-2xl max-w-[500px] font-bold text-[#0084C7] md:text-3xl lg:text-4xl mb-4 text-center">
+            We got collections of classes for you! 📚
+          </h1>
+          <p className="text-md text-center text-gray-500">
+            All questions you need to know for BACII are here!
+          </p>
+        </div>
+
         <div className="w-full relative">
           {/* Keen Slider */}
           <Slider items={transformedClasses} />
@@ -101,16 +120,27 @@ export default function Home() {
 
       {/* reviews */}
       <div className="w-full px-[16px] md:px-[32px] my-10 md:my-12">
-        <h2 className="text-3xl text-gray-700 md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 lg:mb-10 text-center">What our students say?</h2>
+        {/* Available Classes */}
+        <div className="flex flex-col items-center justify-center mb-12">
+          <h1 className="text-2xl max-w-[500px] font-bold text-[#0084C7] md:text-3xl lg:text-4xl mb-4 text-center">
+            What our students say?
+          </h1>
+          <span className="flex items-center justify-center">
+            <Image src="/images/mascot.svg" alt="jesjam-logo" width={80} height={80} />
+            <Image src="/images/mascot.svg" alt="jesjam-logo" width={80} height={80} />
+            <Image src="/images/mascot.svg" alt="jesjam-logo" width={80} height={80} />
+          </span>
+
+        </div>
         <div className="w-full relative">
           <ReviewCards reviews={reviews} secondary={true} />
         </div>
       </div>
 
       {/* recruit */}
-      <div className="w-full my-10 flex flex-col justify-center items-center gap-3 bg-blue-600 py-12 md:rounded-md">
+      <div className="w-screen flex flex-col justify-center items-center gap-3 bg-[#2980B9] py-12">
         <p className="font-bold text-lg text-white">Enter the next level of digital learning</p>
-        <Button className="text-blue-500">Start Learning Now!</Button>
+        <Button variant="sidebar" className="text-sky-700">Start Learning Now!</Button>
       </div>
     </div>
   );

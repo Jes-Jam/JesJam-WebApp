@@ -25,17 +25,17 @@ function ReviewCard({
   const ratingStars = [];
 
   for (let i = 0; i < 5; i++) {
-   i < review.rating ? ratingStars.push(<FaStar key={i} className="text-yellow-300 text-lg" />) : ratingStars.push(<FaRegStar key={i} className="text-gray-400" />);
+    i < review.rating ? ratingStars.push(<FaStar key={i} className="text-yellow-300 text-lg" />) : ratingStars.push(<FaRegStar key={i} className="text-gray-400" />);
   }
 
   return (
-      secondary 
-      ? 
-      <div className="p-4 rounded-lg flex flex-col justify-between items-center gap-3 text-blue-700">
+    secondary
+      ?
+      <div className="p-4 rounded-lg flex flex-col justify-between items-center gap-3 text-sky-600">
         <p className=" md:text-xl font-semibold md:font-bold">{review.comment}</p>
-        <a href="#" className="border-blue-700 border-2 px-4 py-1 rounded-sm md:rounded-lg">@{review.reviewer.toLocaleUpperCase()}</a>
-      </div> 
-      : 
+        <a href="#" className="border-sky-600 border-2 px-4 py-1 rounded-sm md:rounded-lg">@{review.reviewer.toLocaleUpperCase()}</a>
+      </div>
+      :
       <div className="p-4 rounded-lg bg-[#89cff3] flex flex-col justify-between gap-2">
         <div className="flex items-between flex-col gap-2">
           <p>{review.comment}</p>
@@ -52,11 +52,11 @@ function ReviewCard({
               className="object-cover w-[30px] h-[30px] rounded-full"
             />
           </div>
-        <div className="flex gap-1">{ratingStars}</div>
-        <p>{review.createdAt}</p>
+          <div className="flex gap-1">{ratingStars}</div>
+          <p>{review.createdAt}</p>
+        </div>
       </div>
-    </div>
-    
+
   );
 }
 
