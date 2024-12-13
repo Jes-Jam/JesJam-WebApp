@@ -10,7 +10,7 @@ import {
 import { Loader } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import Label from "@/components/ui/label";
+import InfiniteSlider from "../../components/ui/infiniteSlider";
 import Slider from "../../components/ui/slider";
 import ReviewCards from "@/components/ui/reviewCards";
 
@@ -80,23 +80,19 @@ export default function Home() {
       </div>
       
       {/* labels */}
-      <div className="w-full px-[32px]">
-        <h1 className="text-2xl font-bold mb-4">How is it work?</h1>
-        <div className="w-full flex justify-between flex-col md:flex-row gap-3 md: gap:0">
-          <Label className="bg-pink-400 ">Explore ton of classes</Label>
-          <Label className="bg-violet-400 ">Start enroll</Label>
-          <Label className="bg-yellow-400 ">Begin your journey</Label>
-        </div>
+      <div className="w-full px-[16px] md:px-[32px]">
+        <h1 className="text-3xl text-gray-700 md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 lg:mb-8 text-center">How it work?</h1>
+        <InfiniteSlider/>
       </div>
       
-      {/* video */}
-      <div className=" w-full px-[32px]">
-        <video className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 my-10 rounded-md" src=""></video>
+      {/* screen */}
+      <div className=" w-full px-[16px] md:px-[32px] my-10 md:my-12">
+        <div className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 rounded md:rounded-md shadow-[0_3px_20px_3px_rgba(0,0,0,0.2)]"></div>
       </div>
 
       {/* classes */}
-      <div className="w-full px-[32px] my-10">
-        <h2 className="text-xl font-bold mb-6">Available Classes</h2>
+      <div className="w-full px-[16px] md:px-[32px] my-10 md:my-12">
+        <h2 className="text-3xl text-gray-700 md:text-4xl lg:text-5xl font-bold mb-8 md:mb-10 lg:mb-12 text-center">Available Classes</h2>
         <div className="w-full relative">
           {/* Keen Slider */}
           <Slider items={transformedClasses} />
@@ -104,11 +100,17 @@ export default function Home() {
       </div>
 
       {/* reviews */}
-      <div className="w-full px-[32px] my-10">
-        <h2 className="text-xl font-bold mb-6">What our students say?</h2>
+      <div className="w-full px-[16px] md:px-[32px] my-10 md:my-12">
+        <h2 className="text-3xl text-gray-700 md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 lg:mb-10 text-center">What our students say?</h2>
         <div className="w-full relative">
-          <ReviewCards reviews={reviews} />
+          <ReviewCards reviews={reviews} secondary={true} />
         </div>
+      </div>
+
+      {/* recruit */}
+      <div className="w-full my-10 flex flex-col justify-center items-center gap-3 bg-blue-600 py-12 md:rounded-md">
+        <p className="font-bold text-lg text-white">Enter the next level of digital learning</p>
+        <Button className="text-blue-500">Start Learning Now!</Button>
       </div>
     </div>
   );

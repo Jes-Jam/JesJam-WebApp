@@ -2,7 +2,7 @@
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { useState, Fragment } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Image from "next/image";
 
 /**
@@ -17,9 +17,14 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
   const [loaded, setLoaded] = useState(false);
 
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
+    breakpoints: {
+      "(min-width: 1080px)": {
+        slides: { perView: 2, spacing: 10 }, // For screens >= 640px
+      },
+    },
     slides: {
-      perView: 2,
-      spacing: 15,
+      perView: 1, 
+      spacing: 5,
     },
     loop: true,
     slideChanged(s) {
@@ -31,12 +36,12 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
   });
 
   return (
-    <Fragment>
+    <div className="px-[32px]">
       <div ref={sliderRef} className="keen-slider">
         {items.map((classItem) => (
           <div key={classItem.id} className="keen-slider__slide">
-            <div className="flex flex-col items-center bg-gray-100 p-4 rounded-lg shadow-md h-[px]">
-              <figure className="w-full h-[250px] overflow-hidden rounded-lg">
+            <div className="flex flex-col items-center bg-blue-300 p-4 rounded-lg shadow-md">
+              <figure className="w-full h-[200px] md:h-[250px] overflow-hidden rounded-lg">
                 <Image
                   src={classItem.image}
                   alt={`${classItem.name} image`}
@@ -58,21 +63,21 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
           <button 
           onClick={() => instanceRef.current?.prev()} 
           aria-label="Previous Slide"
-          className=" absolute h-full w-[30px] bg-gray-300 opacity-50 rounded-tl-md rounded-bl-md top-0 left-0"
+          className=" absolute h-full w-[30px] bg-gray-700 rounded-tl-md rounded-bl-md top-0 left-0 flex justify-center items-center text-2xl"
           >
-          <ArrowLeft />
+            <FaChevronLeft className=" fill-white"/>
           </button>
 
           <button 
           onClick={() => instanceRef.current?.next()} 
           aria-label="Next Slide"
-          className=" absolute h-full w-[30px] bg-gray-300 opacity-40 rounded-tr-md rounded-br-md top-0 right-0"
+          className=" absolute h-full w-[30px] bg-gray-700 rounded-tr-md rounded-br-md top-0 right-0 flex justify-center items-center text-2xl"
           >
-            <ArrowRight />
+            <FaChevronRight className=" fill-white"/>
           </button>
         </Fragment>
       )}
-    </Fragment>
+    </div>
   )
 };
 
