@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import slogans from "../../dev-data/sloogans"; // Replace with your actual slogans data
 
-export default function App() {
+export default function InfiniteSlider() {
   // Use a ref to access the slider element
   const infiniteSliderRef = useRef<HTMLDivElement | null>(null);
 

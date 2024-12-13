@@ -2,7 +2,7 @@
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { useState, Fragment } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Image from "next/image";
 
 /**
@@ -36,11 +36,11 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
   });
 
   return (
-    <Fragment>
+    <div className="px-[30px]">
       <div ref={sliderRef} className="keen-slider">
         {items.map((classItem) => (
           <div key={classItem.id} className="keen-slider__slide">
-            <div className="flex flex-col items-center bg-gray-100 p-4 rounded-lg shadow-md h-[px]">
+            <div className="flex flex-col items-center bg-blue-300 p-4 rounded-lg shadow-md">
               <figure className="w-full h-[250px] overflow-hidden rounded-lg">
                 <Image
                   src={classItem.image}
@@ -63,21 +63,21 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
           <button 
           onClick={() => instanceRef.current?.prev()} 
           aria-label="Previous Slide"
-          className=" absolute h-full w-[30px] bg-gray-300 opacity-50 rounded-tl-md rounded-bl-md top-0 left-0"
+          className=" absolute h-full w-[30px] bg-indigo-400 rounded-tl-md rounded-bl-md top-0 left-0 flex justify-center items-center text-2xl"
           >
-          <ArrowLeft />
+          <FaChevronLeft className=" fill-blue-300"/>
           </button>
 
           <button 
           onClick={() => instanceRef.current?.next()} 
           aria-label="Next Slide"
-          className=" absolute h-full w-[30px] bg-gray-300 opacity-40 rounded-tr-md rounded-br-md top-0 right-0"
+          className=" absolute h-full w-[30px] bg-indigo-400 rounded-tr-md rounded-br-md top-0 right-0 flex justify-center items-center text-2xl"
           >
-            <ArrowRight />
+            <FaChevronRight className=" fill-blue-300"/>
           </button>
         </Fragment>
       )}
-    </Fragment>
+    </div>
   )
 };
 

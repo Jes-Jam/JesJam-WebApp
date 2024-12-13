@@ -81,13 +81,13 @@ export default function Home() {
       
       {/* labels */}
       <div className="w-full px-[32px]">
-        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center ">How it work?</h1>
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 lg:mb-8 text-center">How it work?</h1>
         <InfiniteSlider/>
       </div>
       
       {/* screen */}
       <div className=" w-full px-[32px]">
-        <div className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 my-10 rounded-md shadow-[0_5px_15x_5px_rgba(0,0,0,0.2)]"></div>
+        <div className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 my-10 rounded-md shadow-[0_3px_20px_3px_rgba(0,0,0,0.2)]"></div>
       </div>
 
       {/* classes */}
@@ -101,7 +101,7 @@ export default function Home() {
 
       {/* reviews */}
       <div className="w-full px-[32px] my-10">
-        <h2 className="text-xl font-bold mb-6">What our students say?</h2>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 lg:mb-10 text-center">What our students say?</h2>
         <div className="w-full relative">
           <ReviewCards reviews={reviews} secondary={true} />
         </div>
