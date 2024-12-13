@@ -6,6 +6,7 @@ import { challengeContent } from "@/database/schema";
 import { Header } from "./header";
 import { Card } from "@/components/flashcard/Card";
 import { ChallengeContent } from "./challenge-content";
+import { Footer } from "./footer";
 type Props = {
     initialLessonId: number;
     initialLessonChallenges: (typeof challenges.$inferSelect & {
@@ -26,17 +27,25 @@ export const LessonProgress = ({ initialLessonId,
     const [percentage, setPercentage] = useState(initialPercentage);
     const [patels, setPatels] = useState(initialPatels);
     const [challenges] = useState(initialLessonChallenges)
+    const [selectedOption, setSelectedOption] = useState<number | null>(null);
+    const [status, setStatus] = useState<"CORRECT" | "INCORRECT" | "UNANSWERED">("UNANSWERED");
     const [activeChallengeIndex, setActiveChallengeIndex] = useState(() => {
         const unansweredChallenge = challenges.find((challenge) => !challenge.completed)
         return unansweredChallenge ? challenges.indexOf(unansweredChallenge) : 0
     })
-
     const challenge = challenges[activeChallengeIndex]
 
     const title = challenge.type === "SELECT" ? challenge.question : challenge.question;
 
-    console.log(challenge.challengeContent)
+    const onSelect = (id: number) => {
+        if (status !== "UNANSWERED") return;
+        setSelectedOption(id)
+    }
 
+    const onContinue = () => {
+        if (status === "UNANSWERED") return;
+        setActiveChallengeIndex(activeChallengeIndex + 1)
+    }
 
     return (
         <>
@@ -59,17 +68,21 @@ export const LessonProgress = ({ initialLessonId,
                             {challenge.type === "SELECT" && (
                                 <ChallengeContent
                                     contents={challenge.challengeContent}
-                                    status="CORRECT"
-                                    selectedOption={null}
+                                    status={status}
+                                    selectedOption={selectedOption}
                                     disabled={false}
                                     type={challenge.type}
-                                    onSelect={() => { }}
+                                    onSelect={onSelect}
                                 />
                             )}
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer
+                status={status}
+                onCheck={onContinue}
+            />
         </>
     )
 }

@@ -48,7 +48,7 @@ export const Choice = ({ id,
                     selected && "bg-black/5",
                     status === "CORRECT" && selected && "border-b-green-500",
                     status === "INCORRECT" && selected && "border-b-red-500",
-                    status === "UNANSWERED" && selected && "border-b-sky-900",
+                    status === "UNANSWERED" && selected && "border-b-sky-400",
                     type === "CARD" && "lg:p-6 w-full h-full"
                 )}>
                 {imageSrc && imageSrc.startsWith('/') && (
