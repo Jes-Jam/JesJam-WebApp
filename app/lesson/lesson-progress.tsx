@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { challenges } from "@/database/schema";
 
 import { challengeContent } from "@/database/schema";
@@ -7,6 +7,8 @@ import { Header } from "./header";
 import { Card } from "@/components/flashcard/Card";
 import { ChallengeContent } from "./challenge-content";
 import { Footer } from "./footer";
+import { upsertChallengeProgress } from "@/actions/challenge-progress";
+import { toast } from "sonner";
 type Props = {
     initialLessonId: number;
     initialLessonChallenges: (typeof challenges.$inferSelect & {
@@ -24,6 +26,7 @@ export const LessonProgress = ({ initialLessonId,
     initialPatels,
     userSubscription
 }: Props) => {
+    const [pending, startTransition] = useTransition();
     const [percentage, setPercentage] = useState(initialPercentage);
     const [patels, setPatels] = useState(initialPatels);
     const [challenges] = useState(initialLessonChallenges)
@@ -34,21 +37,68 @@ export const LessonProgress = ({ initialLessonId,
         return unansweredChallenge ? challenges.indexOf(unansweredChallenge) : 0
     })
     const challenge = challenges[activeChallengeIndex]
+    const options = challenge && challenge.challengeContent
 
-    const title = challenge.type === "SELECT" ? challenge.question : challenge.question;
+    const onNext = () => {
+        setActiveChallengeIndex((current) => current + 1)
+    }
+
+    const onContinue = () => {
+        if (!selectedOption) return;
+
+        if (status === "INCORRECT") {
+            setStatus("UNANSWERED")
+            setSelectedOption(null)
+            return;
+        }
+
+        if (status === "CORRECT") {
+            onNext()
+            setStatus("UNANSWERED")
+            setSelectedOption(null)
+            return;
+        }
+
+        const correctOption = options.find((option) => option.correct)
+
+        if (!correctOption) return;
+
+        // If the selected option is the correct option, set the status to CORRECT
+        if (correctOption && correctOption?.id === selectedOption) {
+            console.log("Correct option selected")
+            startTransition(() => {
+                upsertChallengeProgress(challenge.id)
+                    .then((response) => {
+                        if (response?.error === "hearts") {
+                            console.error("Not enough hearts")
+                            return;
+                        }
+                        setStatus("CORRECT")
+                        setPercentage((prev) => prev + 100 / challenges.length)
+
+                        // If practice 
+                        if (initialPercentage === 100) {
+                            setPatels(Math.max(patels - 1, 5))
+                        }
+                    }).catch((error) => {
+                        toast.error("Error upserting challenge progress")
+                        console.error("Error upserting challenge progress", error)
+                    })
+            })
+        } else {
+            console.log("Incorrect option selected")
+        }
+    }
 
     const onSelect = (id: number) => {
         if (status !== "UNANSWERED") return;
         setSelectedOption(id)
     }
 
-    const onContinue = () => {
-        if (status === "UNANSWERED") return;
-        setActiveChallengeIndex(activeChallengeIndex + 1)
-    }
+    const title = challenge.type === "SELECT" ? challenge.question : challenge.question;
 
     return (
-        <>
+        <div className="min-h-screen flex flex-col">
             <Header
                 patels={patels}
                 percentage={percentage}
@@ -80,10 +130,11 @@ export const LessonProgress = ({ initialLessonId,
                 </div>
             </div>
             <Footer
+                disabled={!selectedOption || pending}
                 status={status}
                 onCheck={onContinue}
             />
-        </>
+        </div>
     )
 }
 

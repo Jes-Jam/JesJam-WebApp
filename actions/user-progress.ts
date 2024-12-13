@@ -17,7 +17,6 @@ export const upsertUserProgress = async (classId: number, isGuest: boolean = fal
         return handleGuestProgress(classId);
     }
 
-
     const { userId } = await auth();
     const user = await currentUser();
 
@@ -35,7 +34,7 @@ export const upsertUserProgress = async (classId: number, isGuest: boolean = fal
             userId,
             userName: user?.firstName || "User",
             activeClassId: classId,
-            patels: 0,
+            patels: 5,
             points: 0
         })
     } else {

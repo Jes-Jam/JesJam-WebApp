@@ -46,7 +46,7 @@ export const Choice = ({ id,
                 className={cn(
                     "h-full border-2 rounded-xl border-b-4 hover:bg-black/5 p-5 lg:p-6 cursor-pointer active:border-b-2",
                     selected && "bg-black/5",
-                    status === "CORRECT" && selected && "border-b-green-500",
+                    status === "CORRECT" && selected && "border-b-4 border-b-[#2880B9] border-[#ECEFFB]",
                     status === "INCORRECT" && selected && "border-b-red-500",
                     status === "UNANSWERED" && selected && "border-b-sky-400",
                     type === "CARD" && "lg:p-6 w-full h-full"
@@ -73,7 +73,7 @@ export const Choice = ({ id,
                     <p className={cn(
                         "text-neutral-600 text-sm lg:text-base",
                         selected && "text-sky-500",
-                        selected && status === "CORRECT" && "text-green-500",
+                        selected && status === "CORRECT" && "text-[#2880B9]",
                         selected && status === "INCORRECT" && "text-rose-500",
                     )}>
                         {text}

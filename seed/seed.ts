@@ -177,21 +177,21 @@ const main = async () => {
                 text: '១ ប្រភេទអង់ដូគ្រីន។',
                 imageSrc: '/mascot.svg',
                 correct: false,
-                audioSrc: '/placeholder.mp3',
-            },
-            {
-                challengeId: 3,
-                text: '៤ ប្រភេទអង់ដូគ្រីន។',
-                imageSrc: '/mascot.svg',
-                correct: true,
-                audioSrc: '/placeholder.mp3',
+                audioSrc: '/audio/c1o1.mp3',
             },
             {
                 challengeId: 3,
                 text: '២ ប្រភេទអង់ដូគ្រីន។',
                 imageSrc: '/mascot.svg',
                 correct: true,
-                audioSrc: '/placeholder.mp3',
+                audioSrc: '/audio/c1o1.mp3',
+            },
+            {
+                challengeId: 3,
+                text: '៥ ប្រភេទអង់ដូគ្រីន។',
+                imageSrc: '/mascot.svg',
+                correct: false,
+                audioSrc: '/audio/c1o1.mp3',
             },
         ])
 
