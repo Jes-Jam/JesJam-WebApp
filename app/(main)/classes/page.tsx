@@ -1,15 +1,16 @@
 // "use client"
 
 import List from "./list";
-import CustomClasses from "./custom-classes";
 
 import { getClasses, getUserProgress, getEnrollments } from "@/database/queries";
+import { getCustomClasses } from "@/database/classCrud";
 
 const ClassPage = async () => {
 
     const classes = await getClasses();
     const userProgress = await getUserProgress();
     const userEnrollments = await getEnrollments();
+    const customClasses = await getCustomClasses();
 
 
     return (
@@ -31,7 +32,7 @@ const ClassPage = async () => {
             <List classes={classes} activeClassId={userProgress?.activeClassId} userEnrollments={userEnrollments} />
             <h1 className="text-2xl font-bold text-sky-500 my-10">Your Custom Classes 👨‍🎓</h1>
             {/* List of custom classes */}
-            <CustomClasses />
+            <List classes={customClasses ?? []} activeClassId={userProgress?.activeClassId} userEnrollments={userEnrollments}/>
         </div >
     );
 }
