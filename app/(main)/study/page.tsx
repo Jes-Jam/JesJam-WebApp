@@ -1,7 +1,7 @@
-import StickyContainer from "@/components/main/StickyContainer";
-import StudyContainer from "@/components/main/StudyContainer";
+import StickyContainer from "@/components/main/sticky-container";
+import StudyContainer from "@/components/main/study-container";
 import Header from "./header";
-import StudentStates from "@/components/main/StudentStates";
+import StudentStates from "@/components/main/student-state";
 import {
     getUserProgress,
     getChapters,
@@ -9,7 +9,7 @@ import {
     getLessonPercentage
 } from "@/database/queries";
 import { redirect } from "next/navigation";
-import { Chapter } from "./Chapter";
+import { Chapter } from "./chapter";
 
 const StudyPage = async () => {
     const userProgress = await getUserProgress();

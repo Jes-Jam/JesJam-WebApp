@@ -195,6 +195,30 @@ const main = async () => {
             },
         ])
 
+        await db.insert(schema.challenges).values([
+            {
+                id: 4,
+                lessonId: 2,
+                type: "SELECT",
+                question: 'ដូចម្ដេចដែលហៅថាក្រពេញ?',
+                order: 1
+            },
+            {
+                id: 5,
+                lessonId: 2,
+                type: "SELECT",
+                question: 'ហេតុអ្វីបានជាអរម៉ូនបុិបទីតមិនអាចឆ្លងកាត់ភ្នាសកោសិកាបាន?',
+                order: 2
+            },
+            {
+                id: 6,
+                lessonId: 2,
+                type: "SELECT",
+                question: 'តើអុីប៉ូតាឡាមុសផលិតអរម៉ូនប៉ុន្មានប្រភេទ?',
+                order: 3
+            },
+        ])
+
 
         console.log("------------ Database seeded 🌱🌱 ------------")
 

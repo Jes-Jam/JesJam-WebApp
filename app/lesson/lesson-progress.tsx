@@ -4,7 +4,7 @@ import { challenges } from "@/database/schema";
 
 import { challengeContent } from "@/database/schema";
 import { Header } from "./header";
-import { Card } from "@/components/flashcard/Card";
+import { Card } from "@/components/flashcard/card";
 import { ChallengeContent } from "./challenge-content";
 import { Footer } from "./footer";
 import { upsertChallengeProgress } from "@/actions/challenge-progress";

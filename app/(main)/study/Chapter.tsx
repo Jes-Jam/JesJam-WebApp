@@ -1,7 +1,6 @@
 import { chapters, lessons } from "@/database/schema";
-import { ChapterHeader } from "./ChapterHeader";
-import { LessonStage } from "./LessonStage";
-import { div } from "framer-motion/client";
+import { ChapterHeader } from "./chapter-header";
+import { LessonStage } from "./lesson-stage";
 
 type Props = {
     id: number;

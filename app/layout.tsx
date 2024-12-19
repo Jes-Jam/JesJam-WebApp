@@ -3,7 +3,7 @@ import "./globals.css";
 import { Rubik } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
-import { ExitModal } from "@/components/modal/ExitModal";
+import { ExitModal } from "@/components/modal/exit-modal";
 
 const font = Rubik({
   subsets: ["latin"],
