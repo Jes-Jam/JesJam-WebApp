@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import header from "./header";
+import Header from "./header";
 
 function CreateClassPage() {
   const [name, setName] = React.useState("");
@@ -35,13 +36,11 @@ function CreateClassPage() {
 
   return (
     <div className="h-full w-[900px] mx-auto pt-10 sm:px-4 md:px-4 lg:px-0">
-      <h1 className="text-2xl font-bold text-sky-500">
-        Create Class
-      </h1>
+      <Header title="Create Class" />
       <form onSubmit={handleSubmit} className="mt-6 space-y-6">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-slate-700" htmlFor="class-name">
-            Name
+            Class Name
           </label>
           <input
             type="text"
