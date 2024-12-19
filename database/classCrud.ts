@@ -36,3 +36,20 @@ export const deleteClass = cache(async (classId: number) => {
 })
 
 export const getClassById = getClass;
+
+export const getCustomClasses = cache(async () => {
+  const { userId } = await auth();
+  if (!userId) {
+    return;
+  }
+  
+  const data = await db.query.classes.findMany({
+    where: eq(classes.ownerId, userId),
+    with: {
+      userProgress: true,
+      enrollments: true
+    }
+  });
+
+  return data;
+})
