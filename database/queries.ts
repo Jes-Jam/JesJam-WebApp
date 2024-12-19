@@ -6,9 +6,11 @@ import { eq } from "drizzle-orm";
 
 
 export const getClasses = cache(async () => {
-    const classes = await db.query.classes.findMany();
+    const classesList = await db.query.classes.findMany({
+        where: eq(classes.isPrivateClass, false)
+    });
     console.log("Classes", classes)
-    return classes
+    return classesList
 });
 
 export const getClassById = cache(async (classId: number) =>{
