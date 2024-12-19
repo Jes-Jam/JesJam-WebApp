@@ -9,6 +9,7 @@ import { ChallengeContent } from "./challenge-content";
 import { Footer } from "./footer";
 import { upsertChallengeProgress } from "@/actions/challenge-progress";
 import { toast } from "sonner";
+import { reducePetals } from "@/actions/user-progress";
 type Props = {
     initialLessonId: number;
     initialLessonChallenges: (typeof challenges.$inferSelect & {
@@ -20,7 +21,8 @@ type Props = {
     userSubscription: any;
 }
 
-export const LessonProgress = ({ initialLessonId,
+export const LessonProgress = ({
+    initialLessonId,
     initialLessonChallenges,
     initialPercentage,
     initialPatels,
@@ -86,9 +88,29 @@ export const LessonProgress = ({ initialLessonId,
                     })
             })
         } else {
-            console.log("Incorrect option selected")
+            startTransition(() => {
+                reducePetals(challenge.id)
+                    .then((response) => {
+                        if (response?.error === "patels") {
+                            // openHeartsModal();
+                            return
+                        }
+
+                        setStatus("INCORRECT");
+
+                        // incorrectControl.play();
+                        if (!response?.error) {
+                            setPatels((prev) => Math.max(prev - 1, 0));
+                        }
+                    })
+                    .catch((error) => {
+                        toast.error("Error reducing hearts")
+                        console.error("Error reducing hearts", error)
+                    })
+            })
         }
     }
+
 
     const onSelect = (id: number) => {
         if (status !== "UNANSWERED") return;

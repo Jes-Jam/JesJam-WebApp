@@ -1,7 +1,7 @@
 "use server"
 
 import { getClassById, getUserProgress } from "@/database/queries";
-import { classEnrollments, userProgress } from "@/database/schema";
+import { challengeProgress, challenges, classEnrollments, userProgress } from "@/database/schema";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import db from "@/database/drizzle";
 import { revalidatePath } from "next/cache";
@@ -63,4 +63,60 @@ export const upsertUserProgress = async (classId: number, isGuest: boolean = fal
     revalidatePath("/study")
     revalidatePath("/classes")
     redirect(`/study`)
+}
+
+// When user get the question wrong
+
+export const reducePetals = async (challengeId: number) => {
+    const { userId } = await auth();
+
+    if (!userId) return;
+
+
+    const existingUserProgress = await getUserProgress();
+
+    if (!existingUserProgress) {
+        throw new Error("User progress not found")
+    }
+
+    const existingChallengeProgress = await db.query.challengeProgress.findFirst({
+        where: and(
+            eq(challengeProgress.userId, userId),
+            eq(challengeProgress.challengeId, challengeId)
+        )
+    })
+
+    const isPractice = !!existingChallengeProgress;
+
+    if (isPractice) {
+        return { error: "practice" }
+    }
+
+    const challenge = await db.query.challenges.findFirst({
+        where: eq(challenges.id, challengeId)
+    })
+    
+    if (!challenge) {
+        throw new Error("Challenge not found")
+    }
+
+    const lessonId = challenge.lessonId;
+
+    if (!lessonId) {
+        throw new Error("Lesson ID not found")
+    }
+
+    if (existingUserProgress.patels === 0) {
+        return { error: "petals" }
+    }
+
+    await db.update(userProgress).set({
+        patels: Math.max(existingUserProgress.patels - 1, 0),
+    }).where(eq(userProgress.userId, userId))
+
+
+    revalidatePath("/study")
+    revalidatePath(`/study/${lessonId}`)
+    revalidatePath("/leaderboard")
+    revalidatePath("/explore")
 }

@@ -33,7 +33,9 @@ const StudentProgress = ({ activeCourse, petals, points, isPremium }: Props) => 
                         "Premium"
                         :
                         <div>
-                            <Image src="/images/daisy-streak/daisy-patels.svg" alt={activeCourse?.title ?? ""} width={55} height={55} className="object-contain" />
+                            <Image src={
+                                `/images/daisy-streak/daisy-${petals}.svg`
+                            } alt={activeCourse?.title ?? ""} width={55} height={55} className="object-contain" />
                         </div>
                     }
                     {petals}

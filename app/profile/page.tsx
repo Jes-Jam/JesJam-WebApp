@@ -1,6 +1,6 @@
-import { UserInfoCard } from "./UserInfoCard";
-import { ExamCountdown } from "./ExamCountdown";
-import { EnrolledCourses } from "./EnrolledCourses";
+import { UserInfoCard } from "./user-info";
+import { ExamCountdown } from "./exam-countdown";
+import { EnrolledCourses } from "./enroll-courses";
 import { getEnrollments, getUserProgress, } from "@/database/queries";
 import { redirect } from "next/navigation";
 
