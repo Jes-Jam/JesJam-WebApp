@@ -32,7 +32,7 @@ const ClassPage = async () => {
             <List classes={classes} activeClassId={userProgress?.activeClassId} userEnrollments={userEnrollments} />
             <h1 className="text-2xl font-bold text-sky-500 my-10">Your Custom Classes 👨‍🎓</h1>
             {/* List of custom classes */}
-            <List classes={customClasses ?? []} activeClassId={userProgress?.activeClassId} userEnrollments={userEnrollments}/>
+            <List classes={customClasses ?? []} activeClassId={userProgress?.activeClassId} userEnrollments={userEnrollments} isEdittable={true} />
         </div >
     );
 }

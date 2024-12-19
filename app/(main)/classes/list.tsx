@@ -14,9 +14,10 @@ type Props = {
     activeClassId?: typeof userProgress.$inferSelect["activeClassId"];
     userEnrollments?: typeof classEnrollments.$inferSelect[];
     isGuest?: boolean;
+    isEdittable?: boolean;
 }
 
-const List = ({ classes, activeClassId, userEnrollments, isGuest = false }: Props) => {
+const List = ({ classes, activeClassId, userEnrollments, isGuest = false, isEdittable }: Props) => {
     const router = useRouter();
     const [isPending, startTransition] = React.useTransition();
     const [updatingClassId, setUpdatingClassId] = React.useState<number | null>(null)
@@ -89,6 +90,7 @@ const List = ({ classes, activeClassId, userEnrollments, isGuest = false }: Prop
                 activeClassId={activeClassId}
                 setIsHoveringActive={setIsHoveringActive}
                 setIsHoveringEnrolled={setIsHoveringEnrolled}
+                isEdittable={isEdittable}
                 />
             ))}
         </div>
