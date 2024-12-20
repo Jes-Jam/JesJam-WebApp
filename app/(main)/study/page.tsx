@@ -2,12 +2,8 @@ import StickyContainer from "@/components/main/sticky-container";
 import StudyContainer from "@/components/main/study-container";
 import Header from "./header";
 import StudentStates from "@/components/main/student-state";
-import {
-    getUserProgress,
-    getChapters,
-    getCurrentLatestLesson,
-    getLessonPercentage
-} from "@/database/queries";
+import { CurrentClass } from "@/app/(main)/study/current-class";
+import { getUserProgress, getChapters, getCurrentLatestLesson, getLessonPercentage } from "@/database/queries";
 import { redirect } from "next/navigation";
 import { Chapter } from "./chapter";
 
@@ -55,6 +51,7 @@ const StudyPage = async () => {
                     petals={userProgress.patels}
                     points={userProgress.points}
                     isPremium={false} />
+                <CurrentClass classes={userProgress.activeClass} />
             </StickyContainer>
         </div>
     )
