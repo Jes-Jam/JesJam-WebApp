@@ -114,7 +114,7 @@ export const LessonProgress = ({
 
 
     // If there are no challenges, show the finish screen
-    if (!challenge) {
+    if (true || !challenge) {
         return (
             <FinishScreen
                 percentage={percentage}

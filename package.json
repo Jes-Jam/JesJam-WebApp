@@ -17,6 +17,8 @@
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@tsparticles/confetti": "^3.7.1",
+    "@tsparticles/react": "^3.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
@@ -36,6 +38,7 @@
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
+    "tsparticles": "^3.7.1",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
