@@ -9,6 +9,7 @@ import { eq, and } from "drizzle-orm";
 
 import { redirect } from "next/navigation";
 import { handleGuestProgress } from "./guest-progress";
+import { POINTS_TO_REFILL } from "@/app/profile/flower-store";
 
 // Insert or update user progress (When user open class for the first time)
     // In addition to that, it also creates an enrollment record for the user
@@ -119,4 +120,33 @@ export const reducePetals = async (challengeId: number) => {
     revalidatePath(`/study/${lessonId}`)
     revalidatePath("/leaderboard")
     revalidatePath("/explore")
+}
+
+
+// When user refill petals
+export const refillPetals = async () => {
+    const currentUserProgress = await getUserProgress();
+
+    if (!currentUserProgress) {
+        throw new Error("User progress not found");
+    }
+
+
+if (currentUserProgress.patels === 5) {
+        throw new Error("Petals is already full");
+    }
+
+    if (currentUserProgress.points < 10) {
+        throw new Error("Not enough points");
+    }
+
+    await db.update(userProgress).set({
+        patels: Math.min(currentUserProgress.patels + 1, 5),
+        points: currentUserProgress.points - 10,
+    }).where(eq(userProgress.userId, currentUserProgress.userId));
+
+
+    revalidatePath("/study");
+    revalidatePath("/profile");
+    revalidatePath("/leaderboard");
 }

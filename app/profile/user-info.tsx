@@ -3,9 +3,6 @@ import { getUserProgress } from "@/database/queries";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
-
-import { Flame } from "lucide-react";
-
 export const UserInfoCard = async () => {
     const userProgress = await getUserProgress();
 
