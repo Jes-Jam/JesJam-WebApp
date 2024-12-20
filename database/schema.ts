@@ -131,6 +131,7 @@ export const userProgress = pgTable('user_progress', {
     userId: text("user_id").primaryKey(),
     activeClassId: integer("active_class_id").references(() => classes.id, {onDelete: 'cascade', onUpdate: 'cascade'}),
     userName: text("user_name").notNull().default("User"),
+    userImageSrc: text("user_image_src").notNull().default("https://placehold.co/40x40"),
     patels: integer("patels").notNull().default(10), 
     points: integer("points").notNull().default(0),
 })

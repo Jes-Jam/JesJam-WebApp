@@ -230,3 +230,25 @@ export const getLessonPercentage = cache(async () => {
 
     return percentage;
 })
+
+// Get top students for leaderboard
+export const getTopStudents = cache(async () => {
+    const { userId } = await auth();
+
+    if(!userId) {
+        return;
+    }
+
+    const data = await db.query.userProgress.findMany({
+        orderBy: (userProgress, { desc }) => [desc(userProgress.points)],
+        limit: 10,
+        columns: {
+            userId: true,
+            userImageSrc: true,
+            userName: true,
+            points: true
+        }
+    })
+
+    return data;
+})
