@@ -6,6 +6,7 @@ import { challengeContent } from "@/database/schema";
 import { Header } from "./header";
 import { Card } from "@/components/flashcard/card";
 import { ChallengeContent } from "./challenge-content";
+import { FinishScreen } from "./(finish-screen)/finish-screen";
 import { Footer } from "./footer";
 import { upsertChallengeProgress } from "@/actions/challenge-progress";
 import { toast } from "sonner";
@@ -109,6 +110,18 @@ export const LessonProgress = ({
                     })
             })
         }
+    }
+
+
+    // If there are no challenges, show the finish screen
+    if (!challenge) {
+        return (
+            <FinishScreen
+                percentage={percentage}
+                patels={patels}
+                hasActiveSubscription={userSubscription ? true : false}
+            />
+        )
     }
 
 
