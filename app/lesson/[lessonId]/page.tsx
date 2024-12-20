@@ -1,11 +1,16 @@
 
 const { getLesson, getUserProgress } = await import("@/database/queries");
 import { redirect } from "next/navigation";
-import { LessonProgress } from "./lesson-progress";
-import { useEffect } from "react";
+import { LessonProgress } from "../lesson-progress";
 
-const LessonPage = async () => {
-    const lesson = await getLesson();
+type Props = {
+    params: {
+        lessonId: number;
+    }
+}
+
+const LessonPage = async ({ params }: Props) => {
+    const lesson = await getLesson(params.lessonId);
     const userProgress = await getUserProgress();
 
     if (!lesson || !userProgress) {
