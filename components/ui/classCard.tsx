@@ -86,7 +86,8 @@ function ClassCard({
                 background: "#fff",
                 boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
                 borderRadius: "4px",
-                zIndex: 10,
+                width: "120px",
+                zIndex: 110,
               }}
             >
               <ul
@@ -107,6 +108,21 @@ function ClassCard({
                     cursor: "pointer",
                     borderBottom: "1px solid #f0f0f0",
                   }}
+                  className=" hover:bg-slate-200 active:bg-slate-200 "
+                >
+                  Add chapter
+                </li>
+                <li
+                  onClick={() => {
+                    setShowMenu(false);
+                    // onEdit && onEdit();
+                  }}
+                  style={{
+                    padding: "8px 16px",
+                    cursor: "pointer",
+                    borderBottom: "1px solid #f0f0f0",
+                  }}
+                  className=" hover:bg-slate-200 active:bg-slate-200 "
                 >
                   Edit
                 </li>
@@ -116,6 +132,7 @@ function ClassCard({
                     // onDelete && onDelete();
                   }}
                   style={{ padding: "8px 16px", cursor: "pointer" }}
+                  className=" hover:bg-slate-200 active:bg-slate-200 "
                 >
                   Delete
                 </li>
