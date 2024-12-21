@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import header from "./header";
+import { Button } from "@/components/ui/button";
 import Header from "./header";
 
 function CreateClassPage() {
@@ -61,13 +61,13 @@ function CreateClassPage() {
         </div>
         
         <div className="flex justify-end">
-          <button
+          <Button
             type="submit"
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-sky-500 border border-sky-500 rounded-md shadow-sm hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-white"
+            variant="primary" className="mt-4"
             disabled={creatingClass}
           >
             {creatingClass ? "Creating Class..." : "Create Class"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>
