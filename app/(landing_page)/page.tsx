@@ -27,7 +27,9 @@ export default function Home() {
 
   return (
     <div className="flex items-center flex-col w-full text-gray-900">
-      <div className="flex-1 w-full flex flex-col lg:flex-row items-center justify-center p-4 gap-x-8 mt-[100px] my-[30px]">
+
+      {/* hero and auth */}
+      <div className="min-h-[calc(100vh-50px)] w-full flex flex-col lg:flex-row items-center justify-center p-4 gap-x-8">
         <div className="relative w-[240px] h-[240px] lg:w-[565px] lg:h-[400px] mb:8 lg:mb:0 ">
           <Image
             src="/images/landing_page_animation.svg"
@@ -78,6 +80,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {/* End hero and auth */}
 
       {/* labels */}
       <div className="w-full py-12 gap-y-6">
@@ -97,7 +100,7 @@ export default function Home() {
 
       {/* screen */}
       <div className=" w-full px-[16px] md:px-[32px] my-10 gap-y-6">
-        <div className=" w-full aspect-[16/9] lg:aspect-[8/3] bg-slate-200 rounded md:rounded-md shadow-[0_3px_20px_3px_rgba(0,0,0,0.2)]"></div>
+        <div className="w-full aspect-[16/9] lg:aspect-[16/10] bg-slate-100 rounded-lg md:rounded-xl shadow-[0_3px_15px_3px_rgba(0,0,0,0.08)] border border-slate-200/50"></div>
       </div>
 
       {/* classes */}

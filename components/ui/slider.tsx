@@ -19,12 +19,15 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     breakpoints: {
       "(min-width: 1080px)": {
-        slides: { perView: 2, spacing: 10 }, // For screens >= 640px
+        slides: { perView: 3, spacing: 24 },
+      },
+      "(min-width: 768px)": {
+        slides: { perView: 2, spacing: 24 },
       },
     },
     slides: {
-      perView: 1, 
-      spacing: 5,
+      perView: 1,
+      spacing: 16,
     },
     loop: true,
     slideChanged(s) {
@@ -36,23 +39,40 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
   });
 
   return (
-    <div className="px-[32px]">
+    <div className="relative px-4 md:px-12 py-8 group">
       <div ref={sliderRef} className="keen-slider">
         {items.map((classItem) => (
           <div key={classItem.id} className="keen-slider__slide">
-            <div className="flex flex-col items-center bg-blue-300 p-4 rounded-lg shadow-md">
-              <figure className="w-full h-[200px] md:h-[250px] overflow-hidden rounded-lg">
+            <div className="flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-sky-100 shadow-sm hover:shadow-md transition-all duration-300">
+              <figure className="relative w-full h-[200px] md:h-[250px] bg-sky-50">
                 <Image
-                  src={classItem.image}
+                  src={classItem.image || "/images/mascot.svg"}
                   alt={`${classItem.name} image`}
-                  width={200}
-                  height={200}
-                  className="object-cover w-full h-full hover:scale-105 transition duration-300"
+                  fill
+                  className="object-cover hover:scale-105 transition duration-300"
                 />
+                {/* Optional overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
               </figure>
-              <h3 className="text-lg font-semibold mt-4 capitalize">
-                {classItem.name}
-              </h3>
+
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="text-xl font-semibold text-sky-900 capitalize">
+                  {classItem.name}
+                </h3>
+                <p className="mt-2 text-sky-600/80 text-sm">
+                  Learn everything about {classItem.name.toLowerCase()}
+                </p>
+
+                {/* Optional stats or metadata */}
+                <div className="mt-4 pt-4 border-t border-sky-100 flex items-center justify-between">
+                  <span className="text-sm text-sky-600">
+                    4.8 ⭐️ (127 reviews)
+                  </span>
+                  <span className="text-sm font-medium text-sky-700">
+                    12 lessons
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         ))}
@@ -60,25 +80,41 @@ const Slider = ({ items }: { items: Array<{ id: string, name: string, image: str
 
       {loaded && instanceRef.current && (
         <Fragment>
-          <button 
-          onClick={() => instanceRef.current?.prev()} 
-          aria-label="Previous Slide"
-          className=" absolute h-full w-[30px] bg-gray-700 rounded-tl-md rounded-bl-md top-0 left-0 flex justify-center items-center text-2xl"
+          {/* Navigation Buttons */}
+          <button
+            onClick={() => instanceRef.current?.prev()}
+            aria-label="Previous Slide"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg border border-sky-100 flex items-center justify-center
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-sky-50"
           >
-            <FaChevronLeft className=" fill-white"/>
+            <FaChevronLeft className="w-4 h-4 text-sky-600" />
           </button>
 
-          <button 
-          onClick={() => instanceRef.current?.next()} 
-          aria-label="Next Slide"
-          className=" absolute h-full w-[30px] bg-gray-700 rounded-tr-md rounded-br-md top-0 right-0 flex justify-center items-center text-2xl"
+          <button
+            onClick={() => instanceRef.current?.next()}
+            aria-label="Next Slide"
+            className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg border border-sky-100 flex items-center justify-center
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-sky-50"
           >
-            <FaChevronRight className=" fill-white"/>
+            <FaChevronRight className="w-4 h-4 text-sky-600" />
           </button>
+
+          {/* Optional: Dots indicator */}
+          <div className="flex justify-center gap-2 mt-4">
+            {[...Array(instanceRef.current.track.details.slides.length)].map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => instanceRef.current?.moveToIdx(idx)}
+                className={`w-2 h-2 rounded-full transition-all ${currentSlide === idx ? 'bg-sky-600 w-4' : 'bg-sky-200'
+                  }`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
         </Fragment>
       )}
     </div>
-  )
+  );
 };
 
 export default Slider;
