@@ -37,6 +37,14 @@ function CreateClassPage() {
   return (
     <div className="h-full w-[900px] mx-auto pt-10 sm:px-4 md:px-4 lg:px-0">
       <Header title="Create Class" />
+      <div className=" text-center mt-5 text-slate-500">
+      <p>
+        The class will be created as a private class. Only you can see it.
+      </p>
+      <p>
+        you can ask for approval to make the class appears in public later.
+      </p>
+      </div>
       <form onSubmit={handleSubmit} className="mt-6 space-y-6">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-slate-700" htmlFor="class-name">
