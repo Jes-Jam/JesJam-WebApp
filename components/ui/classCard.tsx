@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useTransition } from "react";
 import { classes, userProgress } from "@/database/schema";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import Image from "next/image";
+
+import { deleteClass } from "@/database/classCrud";
 
 type ClassCardProps = {
   currentClass: typeof classes.$inferSelect;
@@ -35,8 +37,19 @@ function ClassCard({
   
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [isTransitionPending , startTransition] = useTransition();
+
 
   const toggleMenu = () => setShowMenu((prev) => !prev);
+
+  const handleDelete = () => {
+
+    startTransition(() => {
+      deleteClass(currentClass.id)
+        .catch((err) => console.log(err))
+        .finally(() => setShowMenu(false));
+    });
+  };
 
   const handleClickOutside = (event: MouseEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -77,7 +90,7 @@ function ClassCard({
           </button>
 
           {/* Dropdown menu */}
-          {showMenu && (
+          {showMenu && !isTransitionPending && (
             <div
               style={{
                 position: "absolute",
@@ -129,7 +142,7 @@ function ClassCard({
                 <li
                   onClick={() => {
                     setShowMenu(false);
-                    // onDelete && onDelete();
+                    handleDelete()
                   }}
                   style={{ padding: "8px 16px", cursor: "pointer" }}
                   className=" hover:bg-slate-200 active:bg-slate-200 "

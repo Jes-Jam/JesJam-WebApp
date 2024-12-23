@@ -38,6 +38,8 @@ export const upadteClass = cache(async (classId: number, title: string) => {
 
 export const deleteClass = cache(async (classId: number) => {
   await db.delete(classes).where(eq(classes.id, classId));
+
+  revalidatePath("/classes");
 })
 
 export const getClassById = getClass;
