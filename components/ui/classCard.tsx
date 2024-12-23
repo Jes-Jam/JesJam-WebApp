@@ -104,7 +104,7 @@ function ClassCard({
                 background: "#fff",
                 boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
                 borderRadius: "4px",
-                width: "120px",
+                width: "130px",
                 zIndex: 110,
               }}
             >
@@ -119,7 +119,20 @@ function ClassCard({
                 <li
                   onClick={() => {
                     setShowMenu(false);
-                    // onEdit && onEdit();
+                    onClick(currentClass.id);
+                  }}
+                  style={{
+                    padding: "8px 16px",
+                    cursor: "pointer",
+                    borderBottom: "1px solid #f0f0f0",
+                  }}
+                  className=" hover:bg-slate-200 active:bg-slate-200 "
+                >
+                  Start Learning
+                </li>
+                <li
+                  onClick={() => {
+                    setShowMenu(false);
                   }}
                   style={{
                     padding: "8px 16px",

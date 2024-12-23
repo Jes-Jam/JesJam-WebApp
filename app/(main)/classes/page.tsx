@@ -49,6 +49,7 @@ const ClassPage = async () => {
             classes={customClasses}
             activeClassId={userProgress?.activeClassId}
             userEnrollments={userEnrollments}
+            isEdittable={true}
           />
         </div>
       ) : (
