@@ -4,10 +4,13 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Header from "./header";
+import { createClass } from "@/database/classCrud";
+
 
 function CreateClassPage() {
   const [name, setName] = React.useState("");
   const [creatingClass, setCreatingClass] = React.useState(false);
+  const [isPending, startTransition] = React.useTransition();
 
   const router = useRouter();
 
@@ -15,23 +18,13 @@ function CreateClassPage() {
     e.preventDefault();
     setCreatingClass(true);
 
-    try {
-      const response = await fetch("/api/classes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: name}),
-      });
+    if (isPending) return;
 
-      if (!response.ok) {
-        throw new Error("Failed to create class");
-      }
-
-      router.push("/classes"); // Redirect after success
-    } catch (error) {
-      console.error("Error creating class:", error);
-    } finally {
-      setCreatingClass(false);
-    }
+    startTransition (() => {
+      createClass(name)
+        .then(() => router.push("/classes"))
+        .finally(() => setCreatingClass(false));
+    })
   };
 
   return (

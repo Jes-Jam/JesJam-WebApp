@@ -1,9 +1,12 @@
+"use server"
+
 import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
 import { classes } from "./schema";
 import { eq } from "drizzle-orm";
 import { getClassById as getClass } from "./queries";
+import { revalidatePath } from "next/cache";
 
 export const createClass = cache(async (title: string) => {
   const { userId } = await auth();
@@ -18,6 +21,8 @@ export const createClass = cache(async (title: string) => {
     ownerId: userId,
     isPrivateClass: true
   });
+
+  revalidatePath("/classes");
 })
 
 export const upadteClass = cache(async (classId: number, title: string) => {  
