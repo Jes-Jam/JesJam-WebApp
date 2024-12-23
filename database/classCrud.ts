@@ -28,8 +28,17 @@ export const updateClass = cache(async (classId: number, title: string) => {
   const { userId } = await auth();
 
   if (!userId) {
-    return;
+    return new Error("you have unauthorized to update this class");
   }
+
+  const data = await db.query.classes.findFirst({
+    where: and(eq(classes.ownerId, userId), eq(classes.id, classId))
+  });
+
+  if (!data) {
+    return new Error("Class not found or unauthorized");
+  }
+
   await db.update(classes).set({
     title
   }).where(eq(classes.id, classId));
@@ -46,15 +55,19 @@ export const deleteClass = cache(async (classId: number) => {
 export const getClassById = cache(async (classId: number) => {
   const { userId } = await auth();
 
-  if (!userId) return;
+  if (!userId) throw new Error("Unauthorized");
+
+  const findingClass = await db.query.classes.findFirst({
+    where: eq(classes.id, classId),
+  });
+
+  if (!findingClass) throw new Error("Class not found");
 
   const data = await db.query.classes.findFirst({
     where: and(eq(classes.ownerId, userId), eq(classes.id, classId)),
-    with: {
-      userProgress: true,
-      enrollments: true
-    }
   });
+
+  if (!data) throw new Error("Unauthorized");
 
   return data;
 });
@@ -62,7 +75,7 @@ export const getClassById = cache(async (classId: number) => {
 export const getCustomClasses = cache(async () => {
   const { userId } = await auth();
   if (!userId) {
-    return;
+    throw new Error("Unauthorized");
   }
   
   const data = await db.query.classes.findMany({
