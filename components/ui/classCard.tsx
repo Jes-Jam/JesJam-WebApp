@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { deleteClass } from "@/database/classCrud";
 
@@ -38,7 +39,7 @@ function ClassCard({
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const [isTransitionPending , startTransition] = useTransition();
-
+  const router = useRouter();
 
   const toggleMenu = () => setShowMenu((prev) => !prev);
 
@@ -49,6 +50,10 @@ function ClassCard({
         .catch((err) => console.log(err))
         .finally(() => setShowMenu(false));
     });
+  };
+
+  const handleEdit = () => {
+    router.push(`/classes/edit/${currentClass.id}`);
   };
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -128,7 +133,7 @@ function ClassCard({
                 <li
                   onClick={() => {
                     setShowMenu(false);
-                    // onEdit && onEdit();
+                    handleEdit();
                   }}
                   style={{
                     padding: "8px 16px",

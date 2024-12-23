@@ -4,8 +4,7 @@ import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
 import { classes } from "./schema";
-import { eq } from "drizzle-orm";
-import { getClassById as getClass } from "./queries";
+import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export const createClass = cache(async (title: string) => {
@@ -25,7 +24,7 @@ export const createClass = cache(async (title: string) => {
   revalidatePath("/classes");
 })
 
-export const upadteClass = cache(async (classId: number, title: string) => {  
+export const updateClass = cache(async (classId: number, title: string) => {  
   const { userId } = await auth();
 
   if (!userId) {
@@ -34,6 +33,8 @@ export const upadteClass = cache(async (classId: number, title: string) => {
   await db.update(classes).set({
     title
   }).where(eq(classes.id, classId));
+
+  revalidatePath("/classes");
 })
 
 export const deleteClass = cache(async (classId: number) => {
@@ -42,7 +43,21 @@ export const deleteClass = cache(async (classId: number) => {
   revalidatePath("/classes");
 })
 
-export const getClassById = getClass;
+export const getClassById = cache(async (classId: number) => {
+  const { userId } = await auth();
+
+  if (!userId) return;
+
+  const data = await db.query.classes.findFirst({
+    where: and(eq(classes.ownerId, userId), eq(classes.id, classId)),
+    with: {
+      userProgress: true,
+      enrollments: true
+    }
+  });
+
+  return data;
+});
 
 export const getCustomClasses = cache(async () => {
   const { userId } = await auth();
