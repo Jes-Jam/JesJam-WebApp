@@ -76,7 +76,7 @@ const List = ({ classes, activeClassId, userEnrollments, isGuest = false, isEdit
     // }
 
     return (
-        <div className="pt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="pt-6 grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
             {classes.map((currentClass, index) => (
                 <ClassCard 
                 key={index} 
