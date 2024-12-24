@@ -53,7 +53,7 @@ function ClassCard({
   };
 
   const handleEdit = () => {
-    router.push(`/classes/edit/${currentClass.id}`);
+    router.push(`/classes/${currentClass.id}/edit`);
   };
 
   const handleClickOutside = (event: MouseEvent) => {

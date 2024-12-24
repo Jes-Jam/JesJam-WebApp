@@ -8,8 +8,8 @@ import { updateClass, getClassById } from "@/database/classCrud";
 
 
 
-function EditClassPage({ params }: { params: { id: number } }) {
-  const { id } = params;
+function EditClassPage({ params }: { params: { classId: number } }) {
+  const { classId: id } = params;
   const [isError, setIsError] = React.useState<string | null>(null);
   const [name, setName] = React.useState<string>("");
   
