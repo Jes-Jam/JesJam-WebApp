@@ -22,7 +22,7 @@ export const createChapters = cache(async (classId: number, newChapter: Array<{ 
     where: and(eq(classes.id, classId), eq(classes.ownerId, userId))
   });
 
-  if (!ownedMutatingClass) throw new Error("Unauthorized");
+  if (!ownedMutatingClass) throw new Error("You have no permission to create chapters for this class");
 
   await Promise.all(newChapter.map(async (chapter, index) => {
     await db.insert(chapters).values({
@@ -52,7 +52,7 @@ export const updateChapters = cache(async (classId: number, updatedChapters: Arr
     where: and(eq(classes.id, classId), eq(classes.ownerId, userId))  
   });
 
-  if (!ownedMutatingClass) throw new Error("Unauthorized");
+  if (!ownedMutatingClass) throw new Error("You have no permission to update chapters for this class");
 
   const existingChapters = await db.query.chapters.findMany({
     where: eq(chapters.classId, classId)
@@ -114,14 +114,15 @@ export const getChapters = cache(async (classId: number) => {
     where: and(eq(classes.id, classId), eq(classes.ownerId, userId))
   });
 
-  if (!ownedClass) throw new Error("Unauthorized");
+  if (!ownedClass) throw new Error("You have no permission to view chapters for this class");
 
   const returnChapters = await db.query.chapters.findMany({
     where: eq(chapters.classId, classId),
-    orderBy: {
-      order: "asc",
-    }
+    // orderBy: {
+    //   order: "asc",
+    // }
   });
+  
 
   return returnChapters;
 })

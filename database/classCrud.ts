@@ -28,7 +28,7 @@ export const updateClass = cache(async (classId: number, title: string) => {
   const { userId } = await auth();
 
   if (!userId) {
-    return new Error("you have unauthorized to update this class");
+    return new Error("Unauthorized");
   }
 
   const data = await db.query.classes.findFirst({
@@ -36,7 +36,7 @@ export const updateClass = cache(async (classId: number, title: string) => {
   });
 
   if (!data) {
-    return new Error("Class not found or unauthorized");
+    return new Error("You have no permission to update this class");
   }
 
   await db.update(classes).set({
@@ -67,7 +67,7 @@ export const getClassById = cache(async (classId: number) => {
     where: and(eq(classes.ownerId, userId), eq(classes.id, classId)),
   });
 
-  if (!data) throw new Error("Unauthorized");
+  if (!data) throw new Error("You have no permission to update this class");
 
   return data;
 });
