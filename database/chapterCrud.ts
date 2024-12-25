@@ -6,7 +6,6 @@ import { chapters, classes } from "./schema";
 import { eq, and, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
-import { a } from "framer-motion/client";
 
 export const createChapters = cache(async (classId: number, newChapter: Array<{ title: string, description: string }>) => {
   const { userId } = await auth();
@@ -97,3 +96,32 @@ export const updateChapters = cache(async (classId: number, updatedChapters: Arr
 
   revalidatePath(`/classes/${classId}/chapters`);
 });
+
+
+export const getChapters = cache(async (classId: number) => {
+
+  const { userId } = await auth();
+
+  if (!userId) throw new Error("unauthorized");
+
+  const currentClass = await db.query.classes.findFirst({
+    where: eq(classes.id, classId)
+  });
+
+  if (!currentClass) throw new Error("Class not found");
+
+  const ownedClass = await db.query.classes.findFirst({
+    where: and(eq(classes.id, classId), eq(classes.ownerId, userId))
+  });
+
+  if (!ownedClass) throw new Error("Unauthorized");
+
+  const returnChapters = await db.query.chapters.findMany({
+    where: eq(chapters.classId, classId),
+    orderBy: {
+      order: "asc",
+    }
+  });
+
+  return returnChapters;
+})
