@@ -6,7 +6,7 @@ import { classes } from "@/database/schema";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { getClassById } from "@/database/classCrud";
-import { createChapters } from "@/database/chapterCrud";
+import { createChapters, hasChapters } from "@/database/chapterCrud";
 import Loading from "./loading";
 
 const CreateChapterPage = ({ params }: { params: { classId: number } }) => {
@@ -18,6 +18,21 @@ const CreateChapterPage = ({ params }: { params: { classId: number } }) => {
   const [chapters, setChapters] = useState([
     { title: "", description: "", errors: {title: "", description: ""} },
   ]);
+
+  useEffect(() => {
+    const checkChapters = async () => {
+      try {
+        const isHasChapters = await hasChapters(classId);
+        if (isHasChapters) {
+          router.push(`/classes/${classId}/chapters/edit`);
+        }
+      } catch (err) {
+        console.error("Error checking chapters:", err);
+      }
+    };
+  
+    checkChapters();
+  }, [classId, router]);
 
   useEffect(() => {
     getClassById(classId)

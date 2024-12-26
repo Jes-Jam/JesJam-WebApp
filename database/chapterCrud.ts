@@ -118,9 +118,9 @@ export const getChapters = cache(async (classId: number) => {
 
   const returnChapters = await db.query.chapters.findMany({
     where: eq(chapters.classId, classId),
-    // orderBy: {
-    //   order: "asc",
-    // }
+    with: {
+      class: true
+    }
   });
   
 
