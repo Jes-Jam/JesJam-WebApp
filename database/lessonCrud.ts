@@ -88,3 +88,13 @@ export const hasLessons = cache(async (classId: number, chapterId: number) => {
 
   return returnLessons.length > 0;
 });
+
+export const getLessonByChapterId = cache(async (classId: number, chapterId: number, lessonId: number) => {
+  await getChapter(classId, chapterId);
+
+  const lesson = await db.query.lessons.findFirst({
+    where: and(eq(lessons.chapterId, chapterId), eq(lessons.id, lessonId))
+  });
+
+  return lesson;
+});
