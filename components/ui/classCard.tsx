@@ -138,6 +138,20 @@ type ClassCardProps = {
                 >
                   Start Learning
                 </li>
+                <li
+                  onClick={() => {
+                    setShowMenu(false);
+                    router.push(`/classes/${currentClass.id}/chapters`);
+                  }}
+                  style={{
+                    padding: "8px 16px",
+                    cursor: "pointer",
+                    borderBottom: "1px solid #f0f0f0",
+                  }}
+                  className=" hover:bg-slate-200 active:bg-slate-200 "
+                >
+                  View chapters
+                </li>
                 {
                   !alreadyHasChapters ? 
                     <li
