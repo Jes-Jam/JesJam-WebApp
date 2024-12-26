@@ -158,7 +158,7 @@ type ClassCardProps = {
                     <li
                       onClick={() => {
                         setShowMenu(false);
-                        router.push(`/classes/${currentClass.id}/chapters/Edit`);
+                        router.push(`/classes/${currentClass.id}/chapters/edit`);
                       }}
                       style={{
                         padding: "8px 16px",

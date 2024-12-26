@@ -58,14 +58,12 @@ const CreateChapterPage = ({ params }: { params: { classId: number } }) => {
     errors: { title: string; description: string };
   }) => {
     const error = { title: "", description: "" };
-    if (chapter.title.trim() === "") error.title = "Title is required";
-    if (chapter.description.trim() === "") error.description = "Description is required";
-
-    if (chapter.title.length > 100) error.title = "Title is too long ()";
-    if (chapter.description.length > 500) error.description = "Description is too long";
-
+    if (!chapter.title.trim()) error.title = "Title is required";
+    if (!chapter.description.trim()) error.description = "Description is required";
+    if (chapter.title.length > 100) error.title = "Title is too long (must be less than 100 characters)";
+    if (chapter.description.length > 500) error.description = "Description is too long (must be less than 500 characters)";
     return error;
-  };
+  };  
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent) => {
     e.preventDefault();
