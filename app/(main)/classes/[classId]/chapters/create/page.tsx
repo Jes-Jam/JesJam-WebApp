@@ -14,6 +14,7 @@ const CreateChapterPage = ({ params }: { params: { classId: number } }) => {
   const [ownedClass, setOwnedClass] = useState<typeof classes.$inferSelect | null>(null);
   const [error, setError] = useState(null);
   const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const [chapters, setChapters] = useState([
     { title: "", description: "", errors: {title: "", description: ""} },
@@ -95,17 +96,20 @@ const CreateChapterPage = ({ params }: { params: { classId: number } }) => {
     if (hasError) {
       setFormError("Please fill the form correctly");
       return;
-    }
-    else {
-      createChapters(classId, updatedChapters)
-        .then(() => {
-          router.push(`/classes/${classId}/chapters`);
-        })
-        .catch((err) => {
-          setFormError(err.message);
-        });
-    }
+    };
 
+    setIsSubmitting(true);
+
+    createChapters(classId, updatedChapters)
+      .then(() => {
+        router.push(`/classes/${classId}/chapters`);
+      })
+      .catch((err) => {
+        setFormError(err.message);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   return (
@@ -208,7 +212,7 @@ const CreateChapterPage = ({ params }: { params: { classId: number } }) => {
                 >
                   Add chapter
                 </Button>
-                <Button variant="primary" onClick={handleSubmit}>Submit</Button>
+                <Button variant="primary" disabled={isSubmitting} onClick={handleSubmit}>Submit</Button>
               </div>
             </form>
           </>

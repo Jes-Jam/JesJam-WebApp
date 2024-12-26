@@ -133,4 +133,34 @@ export const hasChapters = cache(async (classId: number) => {
   });
 
   return classChapters.length > 0;
-})
+});
+
+export const getChapter = cache(async (classId: number, chapterId: number) => {
+  const { userId } = await auth();
+
+  if (!userId) throw new Error("unauthorized");  
+
+  const currentClass = await db.query.classes.findFirst({
+    where: eq(classes.id, classId)
+  });
+
+  if (!currentClass) throw new Error("Class not found");
+
+  const ownedClass = await db.query.classes.findFirst({
+    where: and(eq(classes.id, classId), eq(classes.ownerId, userId))
+  });
+
+  if (!ownedClass) throw new Error("You have no permission to view chapters for this class");
+
+  const chapter = await db.query.chapters.findFirst({ 
+    where: and(eq(chapters.classId, classId), eq(chapters.id, chapterId)),
+    with: {
+      class: true,
+      lessons: true
+    }
+  });
+
+  if (!chapter) throw new Error("Chapter not found");
+
+  return chapter;
+});

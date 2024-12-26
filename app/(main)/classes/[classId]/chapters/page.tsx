@@ -33,8 +33,8 @@ export default async function ClassPage({ params }: { params: { classId: string 
   return (
     <div className="flex flex-col gap-4 w-full max-w-[900px] mx-auto mt-10">
       <Header title="Chapters" />
-      <div className="flex justify-between items-between my-6">
-        <h1 className="text-3xl font-bold">{className}</h1>
+      <div className="flex justify-between items-center my-6 border border-blue-200 p-4 rounded-sm">
+        <h1 className="text-xl font-semibold text-blue-400">{className}</h1>
         <div className="flex gap-4">
           <Link href={`/classes/${classId}/chapters/edit`}>
             <Button variant="secondary">Add or update chapters</Button>
@@ -44,8 +44,8 @@ export default async function ClassPage({ params }: { params: { classId: string 
 
       {!error && !chapters?.length  &&
         <div className="text-center mt-10 text-gray-500">
-          <p>No chapters available for this class yet.</p>
-          <Link href={`/classes/${classId}/chapters/edit`}>
+          <p className="mb-4">No chapters available for this class yet.</p>
+          <Link href={`/classes/${classId}/chapters/create`}>
             <Button variant="secondary">Add Chapters</Button>
           </Link>
         </div>
@@ -54,7 +54,7 @@ export default async function ClassPage({ params }: { params: { classId: string 
       {!error && chapters?.length > 0 && chapters?.map((chapter) => (
         <Link key={chapter.id} href={`/classes/${classId}/chapters/${chapter.id}`}>
           <div className="block p-4 border-2 border-gray-300 rounded-lg hover:border-blue-200 hover:shadow transition duration-300 ease-in-out">
-            <h2 className="text-xl font-bold">{chapter.title}</h2>
+            <h2 className="text-xl font-semibold pb-3">{chapter.title}</h2>
             <p className="text-gray-500">{chapter.description}</p>
           </div>
         </Link>
