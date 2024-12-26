@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { hasChapters } from "@/database/chapterCrud";
 
 import { deleteClass } from "@/database/classCrud";
 
@@ -22,7 +23,7 @@ type ClassCardProps = {
   isEdittable?: boolean;
 };
 
-function ClassCard({
+ function ClassCard({
   currentClass,
   isPending,
   updatingClassId,
@@ -40,6 +41,7 @@ function ClassCard({
   const menuRef = useRef<HTMLDivElement>(null);
   const [isTransitionPending , startTransition] = useTransition();
   const router = useRouter();
+  const [alreadyHasChapters, setAlreadyHasChapters] = useState(false);
 
   const toggleMenu = () => setShowMenu((prev) => !prev);
 
@@ -75,6 +77,12 @@ function ClassCard({
     };
   }, [showMenu]);
 
+  useEffect(() => {
+    hasChapters(currentClass.id).then((res) => {
+      setAlreadyHasChapters(res);
+    });
+  }, [currentClass.id]);
+
   return (
     <div className="relative">
       {/* Dots menu appears when editable is true */}
@@ -104,7 +112,7 @@ function ClassCard({
                 background: "#fff",
                 boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
                 borderRadius: "4px",
-                width: "130px",
+                width: "150px",
                 zIndex: 110,
               }}
             >
@@ -130,19 +138,39 @@ function ClassCard({
                 >
                   Start Learning
                 </li>
-                <li
-                  onClick={() => {
-                    setShowMenu(false);
-                  }}
-                  style={{
-                    padding: "8px 16px",
-                    cursor: "pointer",
-                    borderBottom: "1px solid #f0f0f0",
-                  }}
-                  className=" hover:bg-slate-200 active:bg-slate-200 "
-                >
-                  Add chapter
-                </li>
+                {
+                  !alreadyHasChapters ? 
+                    <li
+                      onClick={() => {
+                        setShowMenu(false);
+                        router.push(`/classes/${currentClass.id}/chapters/create`);
+                      }}
+                      style={{
+                        padding: "8px 16px",
+                        cursor: "pointer",
+                        borderBottom: "1px solid #f0f0f0",
+                      }}
+                      className=" hover:bg-slate-200 active:bg-slate-200 "
+                    >
+                      Add chapters
+                    </li>
+                  :
+                    <li
+                      onClick={() => {
+                        setShowMenu(false);
+                        router.push(`/classes/${currentClass.id}/chapters/Edit`);
+                      }}
+                      style={{
+                        padding: "8px 16px",
+                        cursor: "pointer",
+                        borderBottom: "1px solid #f0f0f0",
+                      }}
+                      className=" hover:bg-slate-200 active:bg-slate-200 "
+                    >
+                      Edit chapters
+                    </li>
+
+                }
                 <li
                   onClick={() => {
                     setShowMenu(false);
@@ -155,7 +183,7 @@ function ClassCard({
                   }}
                   className=" hover:bg-slate-200 active:bg-slate-200 "
                 >
-                  Edit
+                  Edit class
                 </li>
                 <li
                   onClick={() => {
@@ -165,7 +193,7 @@ function ClassCard({
                   style={{ padding: "8px 16px", cursor: "pointer" }}
                   className=" hover:bg-slate-200 active:bg-slate-200 "
                 >
-                  Delete
+                  Delete class
                 </li>
               </ul>
             </div>

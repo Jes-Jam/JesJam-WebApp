@@ -126,3 +126,11 @@ export const getChapters = cache(async (classId: number) => {
 
   return returnChapters;
 })
+
+export const hasChapters = cache(async (classId: number) => {
+  const classChapters = await db.query.chapters.findMany({
+    where: eq(chapters.classId, classId)
+  });
+
+  return classChapters.length > 0;
+})
