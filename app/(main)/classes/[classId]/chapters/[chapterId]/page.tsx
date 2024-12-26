@@ -37,7 +37,7 @@ export default async function ClassPage({ params }: { params: { classId: string,
       {!error && !chapter?.lessons?.length  &&
         <div className="text-center mt-10 text-gray-500">
           <p className="mb-4">No lessons available for this class yet.</p>
-          <Link href={`/classes/${classId}/chapters/${chapterId}/create`}>
+          <Link href={`/classes/${classId}/chapters/${chapterId}/lessons/create`}>
             <Button variant="secondary">Add lessons</Button>
           </Link>
         </div>

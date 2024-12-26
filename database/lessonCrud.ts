@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import { cache } from "react";
 import { getChapter } from "./chapterCrud";
 
-export const ceatelessson = cache(async (classId: number, chapterId: number, newLessons: Array<{ title: string, description: string }>) => {
+export const createLessons = cache(async (classId: number, chapterId: number, newLessons: Array<{ title: string, description: string }>) => {
 
   await getChapter(classId, chapterId);
 
@@ -77,4 +77,14 @@ export const getLessons = cache(async (classId: number, chapterId: number) => {
   });
 
   return returnLessons;
+});
+
+export const hasLessons = cache(async (classId: number, chapterId: number) => {
+  await getChapter(classId, chapterId);
+
+  const returnLessons = await db.query.lessons.findMany({
+    where: eq(lessons.chapterId, chapterId),
+  });
+
+  return returnLessons.length > 0;
 });

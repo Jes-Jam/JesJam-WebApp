@@ -6,6 +6,7 @@ import { chapters, classes } from "./schema";
 import { eq, and, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
+import { getClassById } from "./queries";
 
 export const createChapters = cache(async (classId: number, newChapter: Array<{ title: string, description: string }>) => {
   const { userId } = await auth();
@@ -164,3 +165,18 @@ export const getChapter = cache(async (classId: number, chapterId: number) => {
 
   return chapter;
 });
+
+export const getChapterById = cache(async (classId: number,chapterId: number) => {
+  await getClassById(classId);
+
+  const chapter = await db.query.chapters.findFirst({
+    where: eq(chapters.id, chapterId),
+    with: {
+      class: true
+    }
+  }); 
+
+  if (!chapter) throw new Error("Chapter not found");
+
+  return chapter;
+})
