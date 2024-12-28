@@ -4,16 +4,13 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 type Props = {
-    title: string,
-    path: string,
+    title: string
 }
 
-const Header = ({ title, path }: Props) => {
-    
-
+const Header = ({ title }: Props) => {
     return (
         <div className="top-0 flex ml-3 items-center justify-between ">
-            <Link href={path}>
+            <Link href="/classes">
                 <Button variant="ghost" size="lg">
                     <ArrowLeft className="h-6 w-6 stroke-2 text-sky-500" />
                 </Button>

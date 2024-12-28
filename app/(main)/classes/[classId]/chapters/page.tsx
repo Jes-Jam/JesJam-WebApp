@@ -34,7 +34,7 @@ export default async function ClassPage({ params }: { params: { classId: string 
     <div className="flex flex-col gap-4 w-full max-w-[900px] mx-auto mt-10">
       <Header title="Chapters" />
       <div className="flex justify-between items-center my-6 border border-blue-200 p-4 rounded-sm">
-        <h1 className="text-xl font-semibold text-blue-400">{className}</h1>
+        <h1 className="text-xl font-semibold text-blue-400">{`${className} > Chapters`}</h1>
         <div className="flex gap-4">
           <Link href={`/classes/${classId}/chapters/edit`}>
             <Button variant="secondary">Add or update chapters</Button>
@@ -52,7 +52,7 @@ export default async function ClassPage({ params }: { params: { classId: string 
       }
 
       {!error && chapters?.length > 0 && chapters?.map((chapter) => (
-        <Link key={chapter.id} href={`/classes/${classId}/chapters/${chapter.id}`}>
+        <Link key={chapter.id} href={`/classes/${classId}/chapters/${chapter.id}/lessons`}>
           <div className="block p-4 border-2 border-gray-300 rounded-lg hover:border-blue-200 hover:shadow transition duration-300 ease-in-out">
             <h2 className="text-xl font-semibold pb-3">{chapter.title}</h2>
             <p className="text-gray-500">{chapter.description}</p>
