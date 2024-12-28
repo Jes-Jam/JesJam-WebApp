@@ -54,7 +54,7 @@ export default async function LessonsPage({
         lessons?.map((lesson) => (
           <Link
             key={lesson.id}
-            href={`/classes/${classId}/chapters/${chapterId}/lessons/${lesson.id}`}
+            href={`/classes/${classId}/chapters/${chapterId}/lessons/${lesson.id}/challenges`}
           >
             <div className="block p-4 border-2 border-gray-300 rounded-lg hover:border-blue-200 hover:shadow transition duration-300 ease-in-out">
               <h2 className="text-xl font-semibold pb-3">{lesson.title}</h2>

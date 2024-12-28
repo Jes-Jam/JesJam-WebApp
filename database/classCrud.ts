@@ -67,7 +67,7 @@ export const getClassById = cache(async (classId: number) => {
     where: and(eq(classes.ownerId, userId), eq(classes.id, classId)),
   });
 
-  if (!data) throw new Error("You have no permission to update this class");
+  if (!data) throw new Error("You have no permission to update this class properties");
 
   return data;
 });

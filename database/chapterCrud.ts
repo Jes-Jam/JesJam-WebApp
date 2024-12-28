@@ -6,7 +6,7 @@ import { chapters, classes } from "./schema";
 import { eq, and, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
-import { getClassById } from "./queries";
+import { getClassById } from "./classCrud";
 
 export const createChapters = cache(async (classId: number, newChapter: Array<{ title: string, description: string }>) => {
   const { userId } = await auth();
