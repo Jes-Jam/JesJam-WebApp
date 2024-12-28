@@ -28,7 +28,7 @@ const CreateChapterPage = ({ params }: { params: { classId: number } }) => {
           router.push(`/classes/${classId}/chapters/edit`);
         }
       } catch (err) {
-        console.error("Error checking chapters:", err);
+        setError(err?.message);
       }
     };
   

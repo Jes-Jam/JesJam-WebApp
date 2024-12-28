@@ -1,13 +1,16 @@
+'use server'
+
 import { getLessonByChapterId } from "./lessonCrud";
 import { cache } from "react";
 import db from "./drizzle";
 import { challenges } from "./schema";
 import { eq } from "drizzle-orm";
 
-export const createChallenges = cache(async(classId: number, chapterId: number, lessonId: number, newChallenges: Array<{ type: string, question: string }>) => {
+export const createChallenges = cache(async(classId: number, chapterId: number, lessonId: number, newChallenges: Array<{ type: string, question: string, error: { type: string, question: string } }>) => {
   await getLessonByChapterId(classId, chapterId, lessonId);
 
   await Promise.all(newChallenges.map(async (challenge, index) => {
+    console.log(challenge)
     await db.insert(challenges).values({
       lessonId,
       type: challenge.type,

@@ -28,7 +28,7 @@ const CreateLessonPage = ({ params }: { params: { classId: number; chapterId: nu
           router.push(`/classes/${classId}/chapters/${chapterId}/lessons/edit`);
         }
       } catch (err) {
-        console.error("Error checking lessons:", err);
+        setError(err?.message);
       }
     };
 

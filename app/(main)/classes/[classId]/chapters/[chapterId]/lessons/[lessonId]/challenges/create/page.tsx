@@ -2,96 +2,107 @@
 
 import Header from "./header";
 import { useEffect, useState } from "react";
-import { chapters } from "@/database/schema";
+import { lessons } from "@/database/schema";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { getChapterById } from "@/database/chapterCrud";
-import { createLessons, hasLessons } from "@/database/lessonCrud";
+import { getLessons } from "@/database/lessonCrud";
+import { createChallenges, hasChallenges } from "@/database/challengeCrud";
 import Loading from "./loading";
 
-const CreateLessonPage = ({ params }: { params: { classId: number; chapterId: number } }) => {
-  const { classId, chapterId } = params;
-  const [ownedChapter, setOwnedChapter] = useState<typeof chapters.$inferSelect | null>(null);
+const CreateChallengePage = ({
+  params,
+}: {
+  params: { classId: number; chapterId: number; lessonId: number };
+}) => {
+  const { classId, chapterId, lessonId } = params;
+  const [ownedLesson, setOwnedLesson] = useState<typeof lessons.$inferSelect | null>(null);
   const [error, setError] = useState(null);
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const [lessons, setLessons] = useState([
-    { title: "", description: "", errors: { title: "", description: "" } },
+  const [challenges, setChallenges] = useState([
+    { type: "", question: "", errors: { type: "", question: "" } },
   ]);
 
   useEffect(() => {
-    const checkLessons = async () => {
+    const checkChallenges = async () => {
       try {
-        const isHasLessons = await hasLessons(classId, chapterId);
-        if (isHasLessons) {
-          router.push(`/classes/${classId}/chapters/${chapterId}/lessons/edit`);
+        const isHasChallenges = await hasChallenges(classId, chapterId, lessonId);
+        if (isHasChallenges) {
+          router.push(`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges/edit`);
         }
       } catch (err) {
-        console.error("Error checking lessons:", err);
+        setError(err?.message);
       }
     };
 
-    checkLessons();
-  }, [chapterId, router]);
+    checkChallenges();
+  }, [lessonId, router]);
 
   useEffect(() => {
-    getChapterById(classId,chapterId)
-      .then((chapterData) => {
-        if (chapterData) {
-          setOwnedChapter(chapterData);
+    getLessons(classId, chapterId)
+      .then((lessonData) => {
+        if (lessonData) {
+          setOwnedLesson(lessonData);
         }
       })
       .catch((err) => {
         setError(err.message);
       });
-  }, [chapterId]);
+  }, [lessonId]);
 
-  const handleAddLesson = () => {
-    setLessons([...lessons, { title: "", description: "", errors: { title: "", description: "" } }]);
+  const handleAddChallenge = () => {
+    setChallenges([
+      ...challenges,
+      { type: "", question: "", errors: { type: "", question: "" } },
+    ]);
     setTimeout(() => {
-      const lastLesson = document.getElementById(`add-lesson-button`);
-      lastLesson?.scrollIntoView({ behavior: "smooth" });
+      const lastChallenge = document.getElementById(`add-challenge-button`);
+      lastChallenge?.scrollIntoView({ behavior: "smooth" });
     }, 0);
   };
 
-  const handleRemoveLesson = (index: number) => {
-    const newLessons = [...lessons];
-    newLessons.splice(index, 1);
-    setLessons(newLessons);
+  const handleRemoveChallenge = (index: number) => {
+    const newChallenges = [...challenges];
+    newChallenges.splice(index, 1);
+    setChallenges(newChallenges);
   };
 
   const handleInputChange = (index: number, field: string, value: string) => {
-    const updatedLessons = [...lessons];
-    updatedLessons[index][field] = value;
-    updatedLessons[index].errors[field] = '';
-    setLessons(updatedLessons);
+    const updatedChallenges = [...challenges];
+    updatedChallenges[index][field] = value;
+    updatedChallenges[index].errors[field] = "";
+    setChallenges(updatedChallenges);
   };
 
-  const validateLesson = (lesson: {
-    title: string;
-    description: string;
-    errors: { title: string; description: string };
+  const validateChallenge = (challenge: {
+    type: string;
+    question: string;
+    errors: { type: string; question: string };
   }) => {
-    const error = { title: "", description: "" };
-    if (!lesson.title.trim()) error.title = "Title is required";
-    if (!lesson.description.trim()) error.description = "Description is required";
-    if (lesson.title.length > 100) error.title = "Title is too long (must be less than 100 characters)";
-    if (lesson.description.length > 500) error.description = "Description is too long (must be less than 500 characters)";
+    const error = { type: "", question: "" };
+    if (!challenge.type.trim()) error.type = "type is required";
+    if (!challenge.question.trim()) error.question = "question is required";
+
+    if (challenge.question.length > 200)
+      error.question = "question is too long (must be less than 200 characters)";
     return error;
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent) => {
     e.preventDefault();
 
-    const updatedLessons = lessons.map((lesson) => ({
-      ...lesson,
-      errors: validateLesson(lesson),
+    const updatedChallenges = challenges.map((challenge) => ({
+      ...challenge,
+      errors: validateChallenge(challenge),
     }));
 
-    setLessons(updatedLessons);
+    setChallenges(updatedChallenges);
 
-    const hasError = updatedLessons.some((lesson) => lesson.errors.title || lesson.errors.description);
+    const hasError = updatedChallenges.some(
+      (challenge) => challenge.errors.type || challenge.errors.question
+    );
+    alert(JSON.stringify(challenges))
 
     if (hasError) {
       setFormError("Please fill the form correctly");
@@ -100,9 +111,9 @@ const CreateLessonPage = ({ params }: { params: { classId: number; chapterId: nu
 
     setIsSubmitting(true);
 
-    createLessons(classId, chapterId, updatedLessons)
+    createChallenges(classId, chapterId, lessonId, updatedChallenges)
       .then(() => {
-        router.push(`/classes/${classId}/chapters/${chapterId}/lessons`);
+        router.push(`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges`);
       })
       .catch((err) => {
         setFormError(err.message);
@@ -115,85 +126,84 @@ const CreateLessonPage = ({ params }: { params: { classId: number; chapterId: nu
 
   return (
     <div className="h-full w-[900px] mx-auto pt-10 sm:px-4 md:px-4 lg:px-0">
-      <Header path={`/classes/${classId}/chapters/${chapterId}`} title="Create Lessons" />
+      <Header
+        path={`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}`}
+        title="Create Challenges"
+      />
       {!error ? (
-        !ownedChapter ? (
+        !ownedLesson ? (
           <Loading />
         ) : (
           <>
-            <div className=" text-center mt-5 text-slate-500">
-              <p>
-                You can create lessons for your chapter by filling the form below.
-              </p>
-              <p>You can only create at most 50 lessons for each chapter.</p>
+            <div className="text-center mt-5 text-slate-500">
+              <p>You can create challenges for your lesson by filling the form below.</p>
+              <p>You can only create at most 50 challenges for each lesson.</p>
             </div>
-            <form
-              onSubmit={handleSubmit}
-              className="mt-6 space-y-6 w-full pb-[100px]"
-            >
-              {lessons.map((lesson, index) => (
+            <form onSubmit={handleSubmit} className="mt-6 space-y-6 w-full pb-[100px]">
+              {challenges.map((challenge, index) => (
                 <div
-                  className=" w-full border-blue-300 border-b-2 rounded-sm p-4"
+                  className="w-full border-blue-300 border-b-2 rounded-sm p-4"
                   key={index}
-                  id={`lesson-${index + 1}`}
+                  id={`challenge-${index + 1}`}
                 >
                   <h3 className="text-lg font-semibold text-slate-700">
-                    Lesson {index + 1}
+                    Challenge {index + 1}
                   </h3>
                   <div className="space-y-2">
                     <label
                       className="block text-sm mt-2 font-medium text-slate-700"
-                      htmlFor={`lesson-title-${index}`}
+                      htmlFor={`challenge-type-${index}`}
                     >
-                      Title
+                      Type
                     </label>
 
-                    {lesson.errors.title && (
-                      <p className="text-red-500 text-md">
-                        *{lesson.errors.title}
-                      </p>
+                    {challenge.errors.type && (
+                      <p className="text-red-500 text-md">*{challenge.errors.type}</p>
                     )}
 
-                    <input
-                      type="text"
-                      id={`lesson-title-${index}`}
+                    <select
+                      id={`challenge-type-${index}`}
                       className="block w-full px-4 py-2 text-slate-700 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-sky-500 focus:border-sky-500"
-                      placeholder="Enter lesson title"
-                      value={lesson.title}
-                      onChange={(e) => handleInputChange(index, "title", e.target.value)}
-                    />
+                      value={challenge.type}
+
+                      onChange={(e) => handleInputChange(index, "type", e.target.value)}
+                    >
+                      <option value="">Choose a challenge type</option>
+                      <option value="SELECT">Select</option>
+                      <option value="CARD">Card</option>
+                      <option value="FILL_IN_THE_BLANK">Fill in the Blank</option>
+                    </select>
                   </div>
+
                   <div className="space-y-2">
                     <label
                       className="block text-sm mt-2 font-medium text-slate-700"
-                      htmlFor={`lesson-description-${index}`}
+                      htmlFor={`challenge-question-${index}`}
                     >
-                      Description
+                      question
                     </label>
 
-                    {lesson.errors.description && (
-                      <p className="text-red-500 text-md">
-                        * {lesson.errors.description}
-                      </p>
+                    {challenge.errors.question && (
+                      <p className="text-red-500 text-md">* {challenge.errors.question}</p>
                     )}
 
                     <input
                       type="text"
-                      id={`lesson-description-${index}`}
+                      id={`challenge-question-${index}`}
                       className="block w-full px-4 py-2 text-slate-700 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-sky-500 focus:border-sky-500"
-                      placeholder="Enter lesson description"
-                      value={lesson.description}
-                      onChange={(e) => handleInputChange(index, "description", e.target.value)}
+                      placeholder="Enter challenge question"
+                      value={challenge.question}
+                      onChange={(e) => handleInputChange(index, "question", e.target.value)}
                     />
                   </div>
 
                   <Button
                     variant="destructive"
-                    disabled={lessons.length <= 1}
+                    disabled={challenges.length <= 1}
                     className="mt-4"
-                    onClick={() => handleRemoveLesson(index)}
+                    onClick={() => handleRemoveChallenge(index)}
                   >
-                    Remove Lesson
+                    Remove Challenge
                   </Button>
                 </div>
               ))}
@@ -204,15 +214,17 @@ const CreateLessonPage = ({ params }: { params: { classId: number; chapterId: nu
 
               <div className="flex justify-between w-full px-4">
                 <Button
-                  id="add-lesson-button"
+                  id="add-challenge-button"
                   variant="secondary"
-                  onClick={handleAddLesson}
+                  onClick={handleAddChallenge}
                   type="button"
-                  disabled={lessons.length >= 50}
+                  disabled={challenges.length >= 50}
                 >
-                  Add Lesson
+                  Add Challenge
                 </Button>
-                <Button variant="primary" disabled={isSubmitting} onClick={handleSubmit}>Submit</Button>
+                <Button variant="primary" disabled={isSubmitting} onClick={handleSubmit}>
+                  Submit
+                </Button>
               </div>
             </form>
           </>
@@ -223,7 +235,8 @@ const CreateLessonPage = ({ params }: { params: { classId: number; chapterId: nu
         </div>
       )}
     </div>
+
   );
 };
 
-export default CreateLessonPage;
+export default CreateChallengePage;
