@@ -11,6 +11,7 @@ const UpdateLessonPage = ({ params }: { params: { classId: number; chapterId: nu
   const { classId, chapterId } = params;
   const [error, setError] = useState(null);
   const [formError, setFormError] = useState("");
+  const [isFetching, setIsFetching] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const [lessons, setLessons] = useState<
@@ -33,7 +34,10 @@ const UpdateLessonPage = ({ params }: { params: { classId: number; chapterId: nu
       })
       .catch((err) => {
         setError(err.message);
-      });
+      })
+      .finally(() => {
+        setIsFetching(false);
+      })
   }, [classId, chapterId]);
 
   const handleAddLesson = () => {
@@ -125,9 +129,9 @@ const UpdateLessonPage = ({ params }: { params: { classId: number; chapterId: nu
         </div>
       )}
 
-      {lessons.length === 0 && !error && <Loading />}
+      {isFetching && !error && <Loading />}
 
-      {lessons.length > 0 && (
+      {lessons.length >= 0 && !error && !isFetching && (
         <form onSubmit={handleSubmit} className="mt-6 space-y-6 w-full pb-[100px]">
           {lessons.map((lesson, index) => (
             <div
@@ -187,7 +191,7 @@ const UpdateLessonPage = ({ params }: { params: { classId: number; chapterId: nu
               <Button
                 id={`remove-lesson-button-${index}`}
                 variant="destructive"
-                disabled={lessons.length <= 1}
+                // disabled={lessons.length <= 1}
                 className="mt-4"
                 onClick={() => handleRemoveLesson(index)}
               >

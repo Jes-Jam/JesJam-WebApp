@@ -1,5 +1,7 @@
 import { getLessons } from "@/database/lessonCrud";
-import { lessons as Lessons } from "@/database/schema";
+import { getClassById } from "@/database/classCrud";
+import { getChapterById } from "@/database/chapterCrud";
+import { lessons as Lessons, chapters as Chapters, classes as Classes } from "@/database/schema";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Header from "./header";
@@ -13,26 +15,24 @@ export default async function LessonsPage({
 }) {
   const { classId, chapterId } = params;
   let error = "";
-  let lessons: typeof Lessons.$inferSelect[] | undefined;
-  let className: string | undefined;
-  let chapterName: string | undefined;
+  let lessons: typeof Lessons.$inferSelect[] | [];
+  let className: typeof Classes.$inferSelect ;
+  let chapterName: typeof Chapters.$inferSelect ;
 
   try {
     lessons = await getLessons(Number(classId), Number(chapterId));
+    className = await getClassById(Number(classId));
+    chapterName = await getChapterById(Number(classId), Number(chapterId));
   } catch (err: any) {
     error = err.message || "An unexpected error occurred.";
   }
 
-  if (lessons?.length) {
-    chapterName = lessons[0]?.chapter?.title || "Unknown Chapter";
-    className = lessons[0]?.chapter?.class?.title || "Unknown class";
-  }
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-[900px] mx-auto mt-10">
       <Header title="Lessons" />
       <div className="flex justify-between items-center my-6 border border-blue-200 p-4 rounded-sm">
-        <h1 className="text-xl font-semibold text-blue-400">{`${className} > ${chapterName} > Lessons`}</h1>
+        <h1 className="text-xl font-semibold text-blue-400">{`${className?.title} > ${chapterName?.title} > Lessons`}</h1>
         <div className="flex gap-4">
           <Link href={`/classes/${classId}/chapters/${chapterId}/lessons/edit`}>
             <Button variant="secondary">Add or update lessons</Button>

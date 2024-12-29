@@ -74,13 +74,6 @@ export const getLessons = cache(async (classId: number, chapterId: number) => {
 
   const returnLessons = await db.query.lessons.findMany({
     where: eq(lessons.chapterId, chapterId),
-    with: {
-      chapter: {
-        with: {
-          class: true
-        }
-      }
-    }
   });
 
   return returnLessons;
