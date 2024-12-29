@@ -5,6 +5,7 @@ import { cache } from "react";
 import db from "./drizzle";
 import { challenges } from "./schema";
 import { eq, asc } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export const createChallenges = cache(async(classId: number, chapterId: number, lessonId: number, newChallenges: Array<{ type: string, question: string, error: { type: string, question: string } }>) => {
   await getLessonById(classId, chapterId, lessonId);
@@ -18,6 +19,8 @@ export const createChallenges = cache(async(classId: number, chapterId: number, 
       order: index + 1
     });
   }));
+
+  revalidatePath(`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges`);
 });
 
 export const updateChallenges = cache(async (classId: number, chapterId: number, lessonId: number, updatedChallenges: Array<{ id: number, type: string, question: string }>) => {
@@ -60,6 +63,8 @@ export const updateChallenges = cache(async (classId: number, chapterId: number,
       });
     }
   }))
+
+  revalidatePath(`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges`);
 })
 
 export const getChallenges = cache(async (classID: number, chapterId: number, lessonId: number ) => {
