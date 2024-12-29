@@ -4,7 +4,7 @@ import { getLessonByChapterId } from "./lessonCrud";
 import { cache } from "react";
 import db from "./drizzle";
 import { challenges } from "./schema";
-import { eq } from "drizzle-orm";
+import { eq, asc } from "drizzle-orm";
 
 export const createChallenges = cache(async(classId: number, chapterId: number, lessonId: number, newChallenges: Array<{ type: string, question: string, error: { type: string, question: string } }>) => {
   await getLessonByChapterId(classId, chapterId, lessonId);
@@ -77,7 +77,8 @@ export const getChallenges = cache(async (classID: number, chapterId: number, le
           }
         }
       }
-    }
+    },
+    orderBy: [asc(challenges.order)]
   })
 
   return returnChallenges
