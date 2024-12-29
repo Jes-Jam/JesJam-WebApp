@@ -29,7 +29,7 @@ const CreateChallengePage = ({
       try {
         const ishasChallengeContents = await hasChallengeContents(classId, chapterId, lessonId, challengeId);
         if (ishasChallengeContents) {
-          router.push(`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challengesContents/edit`);
+          router.push(`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges/${challengeId}/content/edit`);
         }
       } catch (err) {
         setError(err?.message || "An error occurred");

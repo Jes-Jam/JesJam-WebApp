@@ -126,7 +126,7 @@ const CreateChallengePage = ({
 
     createChallengeContents(classId, chapterId, lessonId, challengeId, updatedChallengesContents)
       .then(() => {
-        router.push(`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challengesContents`);
+        router.push(`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges/${challengeId}`);
       })
       .catch((err) => {
         setFormError(err.message);

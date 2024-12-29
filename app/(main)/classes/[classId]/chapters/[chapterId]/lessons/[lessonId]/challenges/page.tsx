@@ -60,14 +60,19 @@ export default async function ChallengesPage({
       {!error &&
         challenges?.length > 0 &&
         challenges?.map((challenge) => (
-          <div
+          <Link
             key={challenge.id}
-            className="block p-4 border-2 border-gray-300 rounded-lg hover:border-blue-200 hover:shadow transition duration-300 ease-in-out"
+            href={`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges/${challenge.id}/content`}
           >
-            <h2 className="text-xl font-semibold pb-3">{challenge.question}</h2>
-            <p className="text-gray-500 truncate">Type: {challenge.type}</p>
-          </div>
-        ))}
+            <div
+              className="block p-4 border-2 border-gray-300 rounded-lg hover:border-blue-200 hover:shadow transition duration-300 ease-in-out"
+            >
+              <h2 className="text-xl font-semibold pb-3">{challenge.question}</h2>
+              <p className="text-gray-500 truncate">Type: {challenge.type}</p>
+            </div>
+          </Link>
+        ))
+      }
 
       {error && (
         <div className="h-full flex items-center justify-center">

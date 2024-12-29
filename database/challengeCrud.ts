@@ -72,17 +72,6 @@ export const getChallenges = cache(async (classID: number, chapterId: number, le
 
   const returnChallenges = await db.query.challenges.findMany({
     where: eq(challenges.lessonId, lessonId),
-    with: {
-      lesson: {
-        with: {
-          chapter: {
-            with: {
-              class: true
-            }
-          }
-        }
-      }
-    },
     orderBy: [asc(challenges.order)]
   })
 
