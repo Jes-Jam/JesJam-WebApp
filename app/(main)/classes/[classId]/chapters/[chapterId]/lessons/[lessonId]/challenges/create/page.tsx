@@ -102,7 +102,6 @@ const CreateChallengePage = ({
     const hasError = updatedChallenges.some(
       (challenge) => challenge.errors.type || challenge.errors.question
     );
-    alert(JSON.stringify(challenges))
 
     if (hasError) {
       setFormError("Please fill the form correctly");

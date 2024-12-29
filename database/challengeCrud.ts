@@ -1,13 +1,13 @@
 'use server'
 
-import { getLessonByChapterId } from "./lessonCrud";
+import { getLessonById } from "./lessonCrud";
 import { cache } from "react";
 import db from "./drizzle";
 import { challenges } from "./schema";
 import { eq, asc } from "drizzle-orm";
 
 export const createChallenges = cache(async(classId: number, chapterId: number, lessonId: number, newChallenges: Array<{ type: string, question: string, error: { type: string, question: string } }>) => {
-  await getLessonByChapterId(classId, chapterId, lessonId);
+  await getLessonById(classId, chapterId, lessonId);
 
   await Promise.all(newChallenges.map(async (challenge, index) => {
     console.log(challenge)
@@ -21,7 +21,7 @@ export const createChallenges = cache(async(classId: number, chapterId: number, 
 });
 
 export const updateChallenges = cache(async (classId: number, chapterId: number, lessonId: number, updatedChallenges: Array<{ id: number, type: string, question: string }>) => {
-  await getLessonByChapterId(classId, chapterId, lessonId);
+  await getLessonById(classId, chapterId, lessonId);
 
   const existingChallenges = await db.query.challenges.findMany({
     where: eq(challenges.lessonId, lessonId)
@@ -63,7 +63,7 @@ export const updateChallenges = cache(async (classId: number, chapterId: number,
 })
 
 export const getChallenges = cache(async (classID: number, chapterId: number, lessonId: number ) => {
-  await getLessonByChapterId(classID, chapterId, lessonId);
+  await getLessonById(classID, chapterId, lessonId);
 
   const returnChallenges = await db.query.challenges.findMany({
     where: eq(challenges.lessonId, lessonId),
@@ -85,7 +85,7 @@ export const getChallenges = cache(async (classID: number, chapterId: number, le
 })
 
 export const hasChallenges = cache(async (classId: number, chapterId: number, lessonId: number) => {
-  await getLessonByChapterId(classId, chapterId, lessonId);
+  await getLessonById(classId, chapterId, lessonId);
 
   const   returnChallenges = await db.query.challenges.findMany({
     where: eq(challenges.lessonId, lessonId)
@@ -95,7 +95,7 @@ export const hasChallenges = cache(async (classId: number, chapterId: number, le
 });
 
 export const getChallengeById = cache(async (classId: number, chapterId: number, lessonId: number, challengeId: number) => {
-  await getLessonByChapterId(classId, chapterId, lessonId);
+  await getLessonById(classId, chapterId, lessonId);
 
   const challenge = await db.query.challenges.findFirst({
     where: eq(challenges.id, challengeId)

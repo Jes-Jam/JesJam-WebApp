@@ -32,7 +32,7 @@ export default async function LessonsPage({
     <div className="flex flex-col gap-4 w-full max-w-[900px] mx-auto mt-10">
       <Header title="Lessons" />
       <div className="flex justify-between items-center my-6 border border-blue-200 p-4 rounded-sm">
-        <h1 className="text-xl font-semibold text-blue-400">{`${className?.title} > ${chapterName?.title} > Lessons`}</h1>
+        <h1 className="text-xl font-semibold text-blue-400">{`${className?.title} -> chapter${chapterName?.order} -> Lessons`}</h1>
         <div className="flex gap-4">
           <Link href={`/classes/${classId}/chapters/${chapterId}/lessons/edit`}>
             <Button variant="secondary">Add or update lessons</Button>
