@@ -1,4 +1,4 @@
-import { getChallengeContents } from "@/database/challengContentCrud";
+import { getChallengeContents } from "@/database/challengeContentCrud";
 import { getLessonById } from "@/database/lessonCrud";
 import { getClassById } from "@/database/classCrud";
 import { getChapterById } from "@/database/chapterCrud";
@@ -15,7 +15,12 @@ import Header from "./header";
 export default async function ChallengeContentPage({
   params,
 }: {
-  params: { classId: string; chapterId: string; lessonId: string; challengeId: string };
+  params: {
+    classId: string;
+    chapterId: string;
+    lessonId: string;
+    challengeId: string;
+  };
 }) {
   const { classId, chapterId, lessonId, challengeId } = params;
 
@@ -27,10 +32,19 @@ export default async function ChallengeContentPage({
 
   try {
     // Fetching challenge content and related data
-    challengeContent = await getChallengeContents(Number(classId), Number(chapterId), Number(lessonId), Number(challengeId));
+    challengeContent = await getChallengeContents(
+      Number(classId),
+      Number(chapterId),
+      Number(lessonId),
+      Number(challengeId)
+    );
     className = await getClassById(Number(classId));
     chapterName = await getChapterById(Number(classId), Number(chapterId));
-    lessonName = await getLessonById(Number(classId), Number(chapterId), Number(lessonId));
+    lessonName = await getLessonById(
+      Number(classId),
+      Number(chapterId),
+      Number(lessonId)
+    );
   } catch (err: any) {
     error = err.message || "An unexpected error occurred.";
   }
@@ -45,7 +59,9 @@ export default async function ChallengeContentPage({
           {`${className?.title} -> chapter${chapterName?.order} -> lesson${lessonName?.order} -> Challenge${challengeId} -> Contents`}
         </h1>
         <div className="flex gap-4">
-          <Link href={`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges/${challengeId}/content/edit`}>
+          <Link
+            href={`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges/${challengeId}/content/edit`}
+          >
             <Button variant="secondary">Edit Challenge Content</Button>
           </Link>
         </div>
@@ -59,23 +75,23 @@ export default async function ChallengeContentPage({
       )}
 
       {/* Show the challenge content if it exists */}
-      {challengeContent && (
+      {challengeContent &&
         challengeContent?.map((challenge) => (
-          
-          <div
-            className="block p-4 border-2 border-gray-300 rounded-lg hover:border-blue-200 hover:shadow transition duration-300 ease-in-out"
-          >
-            <h2 className="text-xl font-semibold pb-3">Type: {challenge.correct ? "Correct" : "Incorrect"}</h2>
+          <div className="block p-4 border-2 border-gray-300 rounded-lg hover:border-blue-200 hover:shadow transition duration-300 ease-in-out">
+            <h2 className="text-xl font-semibold pb-3">
+              Type: {challenge.correct ? "Correct" : "Incorrect"}
+            </h2>
             <p className="text-gray-500 truncate">text: {challenge.text}</p>
           </div>
-        ))
-      )}
+        ))}
 
       {/* If no challenge content exists */}
       {!error && !challengeContent && (
         <div className="text-center mt-10 text-gray-500">
           <p className="mb-4">No content available for this challenge.</p>
-          <Link href={`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges/${challengeId}/content/create`}>
+          <Link
+            href={`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges/${challengeId}/content/create`}
+          >
             <Button variant="secondary">Add Content</Button>
           </Link>
         </div>

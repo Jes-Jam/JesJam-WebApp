@@ -6,7 +6,7 @@ import { challengeContent as ChallengesContents } from "@/database/schema";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { getChallenges } from "@/database/challengeCrud";
-import { createChallengeContents, hasChallengeContents } from "@/database/challengContentCrud";
+import { createChallengeContents, hasChallengeContents } from "@/database/challengeContentCrud";
 import Loading from "./loading";
 
 const CreateChallengePage = ({
@@ -29,7 +29,7 @@ const CreateChallengePage = ({
       try {
         const ishasChallengeContents = await hasChallengeContents(classId, chapterId, lessonId, challengeId);
         if (ishasChallengeContents) {
-          router.push(`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challengesContents/edit`);
+          router.push(`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges/${challengeId}/content/edit`);
         }
       } catch (err) {
         setError(err?.message);
@@ -119,6 +119,13 @@ const CreateChallengePage = ({
 
     if (noCorrectContent) {
       setFormError("Please add at least one correct content");
+      return;
+    }
+
+    const noIncorrectContent = updatedChallengesContents.every((content) => !content.correct);
+
+    if (noIncorrectContent) {
+      setFormError("Please add at least one incorrect content");
       return;
     }
 

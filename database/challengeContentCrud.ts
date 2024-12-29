@@ -7,25 +7,25 @@ import { challengeContent } from "./schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-export const createChallengeContents = cache(async( classId: number, chapterId: number, lessonId: number, challenngeId: number, newChallengeContents: Array<{ text: string, correct: boolean }>) => {
-  await	getChallengeById(classId, chapterId, lessonId, challenngeId);
+export const createChallengeContents = cache(async( classId: number, chapterId: number, lessonId: number, challengeId: number, newChallengeContents: Array<{ text: string, correct: boolean }>) => {
+  await	getChallengeById(classId, chapterId, lessonId, challengeId);
 
   await Promise.all(newChallengeContents.map(async (content) => {
     await db.insert(challengeContent).values({
-      challengeId: challenngeId,
+      challengeId: challengeId,
       text: content.text,
       correct: content.correct,
-      imgeSrc: '/mascot.svg',
+      imageSrc: '/mascot.svg',
       audioSrc: 'audio/c10o1.mp3'
     })
   }));
 });
 
-export const updateChallengeContents = cache(async( classId: number, chapterId: number, lessonId: number, challenngeId: number, updatedChallengeContents: Array<{id: number, text: string, correct: boolean }>) => {
-  await getChallengeById(classId, chapterId, lessonId, challenngeId);
+export const updateChallengeContents = cache(async( classId: number, chapterId: number, lessonId: number, challengeId: number, updatedChallengeContents: Array<{id: number, text: string, correct: boolean }>) => {
+  await getChallengeById(classId, chapterId, lessonId, challengeId);
 
   const existingContents = await db.query.challengeContent.findMany({
-    where: eq(challengeContent.id, challenngeId)
+    where: eq(challengeContent.challengeId, challengeId)
   });
 
   const existingContentsIds = existingContents
@@ -54,16 +54,16 @@ export const updateChallengeContents = cache(async( classId: number, chapterId: 
     }
     else {
       await db.insert(challengeContent).values({
-        challengeId: challenngeId,
+        challengeId: challengeId,
         text: content.text,
         correct: content.correct,
-        imgeSrc: '/mascot.svg',
+        imageSrc: '/mascot.svg', // corrected spelling here
         audioSrc: 'audio/c10o1.mp3'
-      })
+      });
     }
   }));
 
-  revalidatePath(`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges/${challenngeId}`);
+  revalidatePath(`/classes/${classId}/chapters/${chapterId}/lessons/${lessonId}/challenges/${challengeId}`);
 });
 
 export const deleteAllChallengeContent = cache(async(classId: number, chapterId: number, lessonId: number, challengeId: number) => {
@@ -92,13 +92,3 @@ export const hasChallengeContents = cache(async(classId: number, chapterId: numb
 
   return challengeContents.length > 0;  
 });
-
-export const getChallenges = cache(async (classID: number, chapterId: number, lessonId: number ) => {
-  await getLessonById(classID, chapterId, lessonId);
-
-  const returnChallenges = await db.query.challenges.findMany({
-    where: eq(challenges.lessonId, lessonId),
-    });
-
-  return returnChallenges
-})
