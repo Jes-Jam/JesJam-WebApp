@@ -1,3 +1,5 @@
+'use server'
+
 import db from "./drizzle"
 import { cache } from "react";
 import { getChallengeById } from "./challengeCrud";
@@ -79,4 +81,24 @@ export const getChallengeContents = cache(async(classId: number, chapterId: numb
   });
 
   return challengeContents
+});
+
+export const hasChallengeContents = cache(async(classId: number, chapterId: number, lessonId: number, challengeId: number) => {
+  await getChallengeById(classId, chapterId, lessonId, challengeId);
+
+  const challengeContents = await db.query.challengeContent.findMany({
+    where: eq(challengeContent.challengeId, challengeId)
+  });
+
+  return challengeContents.length > 0;  
+});
+
+export const getChallenges = cache(async (classID: number, chapterId: number, lessonId: number ) => {
+  await getLessonById(classID, chapterId, lessonId);
+
+  const returnChallenges = await db.query.challenges.findMany({
+    where: eq(challenges.lessonId, lessonId),
+    });
+
+  return returnChallenges
 })

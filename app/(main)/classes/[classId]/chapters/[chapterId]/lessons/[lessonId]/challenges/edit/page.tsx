@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { getChallenges, updateChallenges } from "@/database/challengeCrud";
 import Loading from "./loading";
-import { is } from "drizzle-orm";
 
 const UpdateChallengePage = ({
   params,
