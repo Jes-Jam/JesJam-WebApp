@@ -5,7 +5,7 @@ import StudentStates from "@/components/main/student-state";
 import { CurrentClass } from "@/app/(main)/study/current-class";
 import { getUserProgress, getChapters, getCurrentLatestLesson, getLessonPercentage } from "@/database/queries";
 import { redirect } from "next/navigation";
-import { Chapter } from "./chapter";
+import { Chapter } from "./Chapter";
 
 const StudyPage = async () => {
     const userProgress = await getUserProgress();

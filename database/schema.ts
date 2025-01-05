@@ -8,7 +8,7 @@ export const classes = pgTable("classes", {
     isPreviewAvailable: boolean("is_preview_available").default(false),
     previewChaptersCount: integer("preview_chapters_count").default(1),
     isPrivateClass: boolean("is_private_class").default(true),
-    ownerId: text("owner_id"),
+    ownerId: text("owner_id").notNull(),
 })
 
 // Relationship: classes hasMany userProgress and chapters
