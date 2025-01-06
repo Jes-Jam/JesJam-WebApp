@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 
 const allowedUsers = [
-    "user_2nxzFxikuSZJgD5yHAfDY5Sx9dN"
+    process.env.ADMIN_USER_ID
 ];
 
 export const getIsAdmin = async () => {

@@ -32,22 +32,15 @@ const main = async () => {
                 id: 1,
                 title: "Biology",
                 imageSrc: "/images/mascot.svg",
+                ownerId: "1"
             },
             {
                 id: 2,
-                title: "Literature",
-                imageSrc: "/images/mascot.svg",
-            },
-            {
-                id: 3,
                 title: "History",
                 imageSrc: "/images/mascot.svg",
+                ownerId: "1"
             },
-            {
-                id: 4,
-                title: "Khmer",
-                imageSrc: "/images/mascot.svg",
-            }
+           
         ])
 
         await db.insert(schema.chapters).values([

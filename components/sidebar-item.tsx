@@ -7,9 +7,10 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
 type Props = {
-    label: string,
-    iconImg: string,
-    href: string
+    iconImg?: string;
+    icon?: React.ReactNode;
+    label: string;
+    href: string;
 }
 
 /**
@@ -21,7 +22,7 @@ type Props = {
  *
  * @returns A single sidebar item.
  */
-const SidebarItem = ({ label, iconImg, href }: Props) => {
+const SidebarItem = ({ icon, iconImg, label, href }: Props) => {
     const currentUrl = usePathname();
     const isActive = currentUrl === href;
     return (
@@ -34,7 +35,7 @@ const SidebarItem = ({ label, iconImg, href }: Props) => {
             asChild
         >
             <Link href={href}>
-                <Image src={iconImg} alt={label} width={40} height={40} />
+                {icon || (iconImg && <Image src={iconImg} alt={label} width={40} height={40} />)}
                 <p className="font-simibold tracking-wide">{label}</p>
             </Link>
         </Button>
