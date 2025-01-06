@@ -5,6 +5,13 @@ import { challengeContent, challengeProgress, challenges, chapters, classEnrollm
 import { eq } from "drizzle-orm";
 
 
+export const getAdminClasses = cache(async () => {
+    const classesList = await db.query.classes.findMany({
+    });
+    console.log("Classes", classes)
+    return classesList
+})
+
 export const getClasses = cache(async () => {
     const classesList = await db.query.classes.findMany({
         where: eq(classes.isPrivateClass, false)

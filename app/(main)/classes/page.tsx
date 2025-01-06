@@ -4,14 +4,16 @@ import List from "./list";
 import AddClassButton from "./add-class-button";
 
 import {
-  getClasses,
+  // getClasses,
+  getAdminClasses,
   getUserProgress,
   getEnrollments,
 } from "@/database/queries";
 import { getCustomClasses } from "@/database/classCrud";
 
 const ClassPage = async () => {
-  const classes = await getClasses();
+  // const classes = await getClasses();
+  const adminClasses = await getAdminClasses();
   const userProgress = await getUserProgress();
   const userEnrollments = await getEnrollments();
   const customClasses = await getCustomClasses();
@@ -35,7 +37,7 @@ const ClassPage = async () => {
       </h1>
       {/* List of classes */}
       <List
-        classes={classes}
+        classes={adminClasses}
         activeClassId={userProgress?.activeClassId}
         userEnrollments={userEnrollments}
       />
@@ -44,7 +46,7 @@ const ClassPage = async () => {
       </h1>
       {customClasses.length > 0 ? (
         <div className="flex flex-col items-end">
-            <AddClassButton />
+          <AddClassButton />
           <List
             classes={customClasses}
             activeClassId={userProgress?.activeClassId}

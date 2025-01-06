@@ -1,23 +1,26 @@
-import { cn } from "@/lib/utils";
+"use client"
 
-/**
- * A simple label component.
- *
- * @param {React.ReactNode} children - The children element(s) to render within the label.
- * @param {string} [className] - The class name to apply to the label element.
- * @returns {JSX.Element}
- */
-const Label = ({ children, className }: { children: React.ReactNode, className?: string }): JSX.Element => {
-  return (
-    <label
-      className={cn(
-        "md:text-md lg:text-lg font-medium leading-none px-5 py-5 rounded-md inline-block text-center",
-        className
-      )}
-    >
-      {children}
-    </label>
-  );
-};
+import * as React from "react"
+import * as LabelPrimitive from "@radix-ui/react-label"
+import { cva, type VariantProps } from "class-variance-authority"
 
-export default Label;
+import { cn } from "@/lib/utils"
+
+const labelVariants = cva(
+  "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+)
+
+const Label = React.forwardRef<
+  React.ElementRef<typeof LabelPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
+    VariantProps<typeof labelVariants>
+>(({ className, ...props }, ref) => (
+  <LabelPrimitive.Root
+    ref={ref}
+    className={cn(labelVariants(), className)}
+    {...props}
+  />
+))
+Label.displayName = LabelPrimitive.Root.displayName
+
+export { Label }

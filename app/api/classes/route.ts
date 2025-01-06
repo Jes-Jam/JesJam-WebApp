@@ -36,8 +36,6 @@ export async function POST(req: Request) {
     const newClass = await db.insert(classes).values({
       title,
       imageSrc,
-      isPreviewAvailable,
-      previewChaptersCount,
       isPrivateClass,
       ownerId: userId,
     }).returning();
