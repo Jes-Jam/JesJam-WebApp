@@ -23,12 +23,12 @@ interface ChapterModalProps {
     onClose: () => void
     onSuccess: () => void
     classId: number
-    initialData?: {
+    initialData: {
         id: number;
         title: string;
         description: string | undefined;
         order: number;
-    }
+    } | null | undefined;
 }
 
 export const ChapterModal = ({

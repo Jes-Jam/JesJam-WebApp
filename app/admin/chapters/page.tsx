@@ -105,7 +105,7 @@ const ChaptersPage = () => {
                             setEditingChapter(null)
                         }}
                         classId={selectedClassId}
-                        initialData={editingChapter || undefined}
+                        initialData={editingChapter || null}
                     />
                     <AlertDialog
                         open={!!deletingChapterId}
