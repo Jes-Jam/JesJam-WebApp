@@ -66,32 +66,62 @@ export default function LessonPage() {
     const router = useRouter()
     const searchParams = useSearchParams()
 
-    // Initialize state from URL params
-    const [selectedClassId, setSelectedClassId] = useState<number | null>(
-        searchParams.get("classId") ? Number(searchParams.get("classId")) : null
-    )
-    const [selectedChapterId, setSelectedChapterId] = useState<number | null>(
-        searchParams.get("chapterId") ? Number(searchParams.get("chapterId")) : null
-    )
+    const [selectedClassId, setSelectedClassId] = useState<number | null>(null)
+    const [selectedChapterId, setSelectedChapterId] = useState<number | null>(null)
+    const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null)
 
-    // Update URL when selections change
-    const updateUrl = (classId: number | null, chapterId: number | null) => {
-        const params = new URLSearchParams()
-        if (classId) params.set("classId", classId.toString())
-        if (chapterId) params.set("chapterId", chapterId.toString())
-        router.push(`/admin/lessons?${params.toString()}`)
-    }
+    // Load saved state on initial render
+    useEffect(() => {
+        const savedClassId = localStorage.getItem('selectedClassId')
+        const savedChapterId = localStorage.getItem('selectedChapterId')
+        const classIdFromUrl = searchParams.get('classId')
+        const chapterIdFromUrl = searchParams.get('chapterId')
 
-    // Modified setters to update URL
+        // Priority: URL params > localStorage > null
+        const classId = classIdFromUrl || savedClassId
+        const chapterId = chapterIdFromUrl || savedChapterId
+
+        if (classId) {
+            setSelectedClassId(Number(classId))
+            localStorage.setItem('selectedClassId', classId)
+        }
+
+        if (chapterId) {
+            setSelectedChapterId(Number(chapterId))
+            localStorage.setItem('selectedChapterId', chapterId)
+        }
+    }, [searchParams])
+
+    // Update URL and localStorage when selections change
     const handleClassChange = (classId: number | null) => {
         setSelectedClassId(classId)
         setSelectedChapterId(null)
-        updateUrl(classId, null)
+        setSelectedLesson(null)
+
+        if (classId) {
+            localStorage.setItem('selectedClassId', String(classId))
+            localStorage.removeItem('selectedChapterId')
+            router.push(`/admin/lessons?classId=${classId}`)
+        } else {
+            localStorage.removeItem('selectedClassId')
+            localStorage.removeItem('selectedChapterId')
+            router.push('/admin/lessons')
+        }
     }
 
     const handleChapterChange = (chapterId: number | null) => {
         setSelectedChapterId(chapterId)
-        updateUrl(selectedClassId, chapterId)
+        setSelectedLesson(null)
+
+        if (chapterId && selectedClassId) {
+            localStorage.setItem('selectedChapterId', String(chapterId))
+            router.push(`/admin/lessons?classId=${selectedClassId}&chapterId=${chapterId}`)
+        } else {
+            localStorage.removeItem('selectedChapterId')
+            if (selectedClassId) {
+                router.push(`/admin/lessons?classId=${selectedClassId}`)
+            }
+        }
     }
 
     const [classes, setClasses] = useState<Class[]>([])
@@ -101,7 +131,6 @@ export default function LessonPage() {
     const [showModal, setShowModal] = useState(false)
     const [editingLesson, setEditingLesson] = useState<Lesson | null>(null)
     const [deletingLessonId, setDeletingLessonId] = useState<number | null>(null)
-    const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null)
 
     // Fetch classes on mount
     useEffect(() => {
@@ -194,7 +223,7 @@ export default function LessonPage() {
                             <label className="text-sm font-medium">Select Class</label>
                             <Select
                                 value={selectedClassId?.toString() || ""}
-                                onValueChange={(value) => handleClassChange(Number(value))}
+                                onValueChange={(value) => handleClassChange(value ? Number(value) : null)}
                             >
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select a class..." />

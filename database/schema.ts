@@ -50,9 +50,9 @@ export const lessonRelations = relations(lessons, ({one, many}) => ({
 }))
 
 export const challengesEnum = pgEnum("challenges_enum", [
-    "SELECT", 
     "CARD",
-    "FILL_IN_THE_BLANK",
+    "SELECT", 
+    "ANSWER_BUILDING",
 ])
 
 export const challenges = pgTable("challenges", {
