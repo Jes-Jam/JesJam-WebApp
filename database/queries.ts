@@ -1,8 +1,8 @@
 import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
-import { challengeContent, challengeProgress, challenges, chapters, classEnrollments, classes, lessons, userProgress } from "./schema";
-import { eq } from "drizzle-orm";
+import { challengeProgress, challenges, chapters, classEnrollments, classes, lessons, userProgress } from "./schema";
+import { eq, desc, asc } from "drizzle-orm";
 
 
 export const getAdminClasses = cache(async () => {
@@ -171,8 +171,6 @@ export const getLesson = cache(async (id?: number) => {
     }
 
     const activeLesson = await getCurrentLatestLesson();
-
-    // lesson can either be the latest uncompleted lesson or any specific lesson that user wanna access
     const lessonId = id ?? activeLesson?.activeLessonId;
 
     if(!lessonId) {
@@ -183,9 +181,8 @@ export const getLesson = cache(async (id?: number) => {
         where: eq(lessons.id, lessonId),
         with: {
             challenges: {
-                orderBy: (challenges, { asc }) => [asc(challenges.order)],
+                orderBy: [challenges.createdAt],
                 with: {
-                    challengeContent: true,
                     challengeProgress: {
                         where: eq(challengeProgress.userId, userId)
                     }
@@ -199,10 +196,15 @@ export const getLesson = cache(async (id?: number) => {
     }
 
     const normalizedChallenges = data.challenges.map((challenge) => {
-        const completed = challenge.challengeProgress && challenge.challengeProgress.length > 0 && challenge.challengeProgress.every((progress) => progress.completed);
+        const completed = challenge.challengeProgress && 
+            challenge.challengeProgress.length > 0 && 
+            challenge.challengeProgress.every((progress) => progress.completed);
+        
         return {
             ...challenge,
-            completed
+            completed,
+            // Map the content from the challenge itself since we removed challengeContent table
+            content: challenge.content
         }
     })
 

@@ -65,29 +65,12 @@ export const challenges = pgTable('challenges', {
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
-export const challengeRelations = relations(challenges, ({one, many}) => ({
+export const challengesRelations = relations(challenges, ({ one, many }) => ({
     lesson: one(lessons, {
         fields: [challenges.lessonId],
-        references: [lessons.id],
+        references: [lessons.id]
     }),
-    challengeContent: many(challengeContent),
     challengeProgress: many(challengeProgress)
-}))
-
-export const challengeContent = pgTable("challenge_content", {
-    id: serial("id").primaryKey(),
-    challengeId: integer("challenge_id").references(() => challenges.id, { onDelete: 'cascade' }).notNull(),
-    text: text("text").notNull(),
-    correct: boolean("correct").notNull(),
-    imageSrc: text("image_src"),
-    audioSrc: text("audio_src"),
-})
-
-export const challengeContentRelations = relations(challengeContent, ({one}) => ({
-    challenge: one(challenges, {
-        fields: [challengeContent.challengeId], 
-        references: [challenges.id],
-    })
 }))
 
 export const challengeProgress = pgTable("challenge_progress", {
