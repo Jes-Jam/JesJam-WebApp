@@ -15,9 +15,10 @@ type Props = {
     activeLessonPercentage: number;
     isLocked: boolean;
     currentLesson: boolean;
+    isSelected?: boolean;
 }
 
-export const LessonStage = ({ id, totalLessons, isLocked, currentLesson, activeLessonPercentage, index }: Props) => {
+export const LessonStage = ({ id, totalLessons, isLocked, currentLesson, activeLessonPercentage, index, isSelected }: Props) => {
     // console.log(`Active lesson percentage: ${activeLessonPercentage}`);
 
 
@@ -51,14 +52,15 @@ export const LessonStage = ({ id, totalLessons, isLocked, currentLesson, activeL
             href={href}
             key={id}
             aria-disabled={isLocked}
-            className="absolute"
+            className={`absolute ${(isSelected && !currentLesson) ? 'z-10' : ''}`}
             style={{
                 left: `${xPosition}px`,
                 top: `${yPosition}px`,
                 pointerEvents: isLocked ? "none" : "auto"
             }}
         >
-            <div className="relative">
+            <div className={`relative ${(isSelected && !currentLesson) ? 'before:absolute before:inset-[-8px] before:border-2 before:border-sky-500 before:rounded-xl before:animate-pulse' : ''
+                }`}>
 
                 {/* Your existing button/progress code */}
                 {currentLesson ? (

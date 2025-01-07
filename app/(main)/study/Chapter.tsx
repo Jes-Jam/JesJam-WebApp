@@ -1,6 +1,9 @@
+"use client"
+
 import { chapters, lessons } from "@/database/schema";
 import { ChapterHeader } from "./chapter-header";
 import { LessonStage } from "./lesson-stage";
+import { useState } from "react";
 
 type Props = {
     id: number;
@@ -17,19 +20,27 @@ type Props = {
 }
 
 export const Chapter = ({ id, title, description, order, lessons, activeLesson, activeLessonPercentage }: Props) => {
+    const [selectedLessonId, setSelectedLessonId] = useState<number | null>(null);
+
     // Calculate the number of rows needed based on 3 items per row
     const numberOfRows = Math.ceil(lessons.length / 3);
-    // Each row is 200px tall (from VERTICAL_SPACING in lesson-stage)
-    const contentHeight = numberOfRows * 200;
+    // Each row is 150px tall (from VERTICAL_SPACING in lesson-stage)
+    const contentHeight = numberOfRows * 150;
 
     return (
-        <div>
-            <ChapterHeader title={title} description={description} />
-            <div className="relative w-full p-10" style={{ height: contentHeight + 50 }}>
+        <div className="mb-20">
+            <ChapterHeader
+                title={title}
+                description={description}
+                lessons={lessons}
+                onLessonSelect={setSelectedLessonId}
+            />
+            <div className="relative w-full p-10" style={{ height: contentHeight + 20 }}>
                 <div className="relative mx-auto">
                     {lessons.map((lesson, index) => {
                         const isCurrentLesson = lesson.id === activeLesson?.id;
                         const isLockedLesson = !isCurrentLesson && !lesson.completed;
+                        const isSelected = lesson.id === selectedLessonId;
 
                         return (
                             <LessonStage
@@ -40,6 +51,7 @@ export const Chapter = ({ id, title, description, order, lessons, activeLesson, 
                                 currentLesson={isCurrentLesson}
                                 isLocked={isLockedLesson}
                                 activeLessonPercentage={activeLessonPercentage}
+                                isSelected={isSelected}
                             />
                         )
                     })}
