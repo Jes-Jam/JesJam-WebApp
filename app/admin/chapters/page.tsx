@@ -5,7 +5,6 @@ import axios from "axios"
 import { Plus, ArrowLeft, Trash, Pencil, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
-import ClassCard from "@/components/ui/classCard"
 import { ChapterModal } from "@/app/admin/chapters/chapter-modal";
 import {
     AlertDialog,
@@ -180,15 +179,17 @@ const ChaptersPage = () => {
                                             {class_.ownerId}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <button
+                                            <Button
+                                                variant="primaryOutline"
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     setSelectedClassId(class_.id)
                                                 }}
-                                                className="px-4 py-2 text-sm font-medium text-white bg-sky-500 hover:bg-sky-600 rounded-md"
+
+                                                className="px-4 py-2 text-sm font-medium text-sky-500 rounded-md"
                                             >
-                                                Select
-                                            </button>
+                                                Manage Chapters
+                                            </Button>
                                         </td>
                                     </tr>
                                 ))}
@@ -209,7 +210,7 @@ const ChaptersPage = () => {
                         <div className="flex flex-col gap-y-2">
                             <div className="flex items-center gap-x-2 text-sm text-muted-foreground">
                                 <Button
-                                    variant="ghost"
+                                    variant="primaryOutline"
                                     size="sm"
                                     onClick={() => setSelectedClassId(null)}
                                     className="h-auto p-0 text-muted-foreground hover:text-sky-500"

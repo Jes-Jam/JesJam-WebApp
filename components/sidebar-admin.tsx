@@ -50,11 +50,6 @@ const SidebarAdmin = ({ className }: Props) => {
                         icon={<GraduationCap className="h-9 w-9" />}
                         href="/admin/lessons"
                     />
-                    <SidebarItem
-                        label="Users"
-                        icon={<Users className="h-9 w-9" />}
-                        href="/admin/users"
-                    />
                 </div>
             </div>
 

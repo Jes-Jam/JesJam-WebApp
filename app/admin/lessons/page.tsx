@@ -1,10 +1,27 @@
 "use client"
 
-import { useState } from "react"
-import { useQuery } from "@tanstack/react-query"
+import { useState, useEffect } from "react"
 import axios from "axios"
 import { Plus, Pencil, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import Loading from "./loading"
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import { ChevronRight } from "lucide-react"
 
 interface Lesson {
     id: number
@@ -29,34 +46,76 @@ interface Chapter {
 export default function LessonPage() {
     const [selectedClassId, setSelectedClassId] = useState<number | null>(null)
     const [selectedChapterId, setSelectedChapterId] = useState<number | null>(null)
+    const [classes, setClasses] = useState<Class[]>([])
+    const [chapters, setChapters] = useState<Chapter[]>([])
+    const [lessons, setLessons] = useState<Lesson[]>([])
+    const [isLoading, setIsLoading] = useState(true)
 
-    const { data: classes } = useQuery({
-        queryKey: ["classes"],
-        queryFn: async () => {
-            const response = await axios.get("/api/classes")
-            return response.data
+    // Fetch classes on mount
+    useEffect(() => {
+        fetchClasses()
+    }, [])
+
+    // Fetch chapters when class is selected
+    useEffect(() => {
+        if (selectedClassId) {
+            fetchChapters()
         }
-    })
+    }, [selectedClassId])
 
-    const { data: chapters } = useQuery({
-        queryKey: ["chapters", selectedClassId],
-        queryFn: async () => {
-            if (!selectedClassId) return []
+    // Fetch lessons when chapter is selected
+    useEffect(() => {
+        if (selectedChapterId) {
+            fetchLessons()
+        }
+    }, [selectedChapterId])
+
+    const fetchClasses = async () => {
+        try {
+            const response = await axios.get("/api/classes")
+            setClasses(response.data)
+            // Set default selected class
+            if (response.data.length > 0) {
+                setSelectedClassId(response.data[0].id)
+            }
+        } catch (error) {
+            toast.error("Failed to fetch classes")
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const fetchChapters = async () => {
+        try {
             const response = await axios.get(`/api/classes/${selectedClassId}/chapters`)
-            return response.data
-        },
-        enabled: !!selectedClassId
-    })
+            setChapters(response.data)
+        } catch (error) {
+            toast.error("Failed to fetch chapters")
+        }
+    }
 
-    const { data: lessons } = useQuery({
-        queryKey: ["lessons", selectedChapterId],
-        queryFn: async () => {
-            if (!selectedChapterId) return []
+    const fetchLessons = async () => {
+        try {
             const response = await axios.get(`/api/classes/${selectedClassId}/chapters/${selectedChapterId}/lessons`)
-            return response.data
-        },
-        enabled: !!selectedChapterId
-    })
+            setLessons(response.data)
+        } catch (error) {
+            toast.error("Failed to fetch lessons")
+        }
+    }
+
+    const handleDeleteLesson = async (lessonId: number) => {
+        try {
+            await axios.delete(`/api/classes/${selectedClassId}/chapters/${selectedChapterId}/lessons/${lessonId}`)
+            toast.success("Lesson deleted successfully")
+            fetchLessons() // Refresh lessons
+        } catch (error) {
+            toast.error("Failed to delete lesson")
+        }
+    }
+
+    if (isLoading) {
+        return <Loading />
+    }
 
     return (
         <div className="p-6">
@@ -64,21 +123,27 @@ export default function LessonPage() {
                 {/* Class Selection Dropdown */}
                 <div className="flex flex-col gap-y-1">
                     <label className="text-sm font-medium">Select Class</label>
-                    <select
-                        className="w-full p-2 border rounded-md"
-                        onChange={(e) => {
-                            setSelectedClassId(Number(e.target.value))
+                    <Select
+                        value={selectedClassId?.toString() || ""}
+                        onValueChange={(value) => {
+                            setSelectedClassId(Number(value))
                             setSelectedChapterId(null)
                         }}
-                        value={selectedClassId || ""}
                     >
-                        <option value="">Select a class...</option>
-                        {classes?.map((class_: Class) => (
-                            <option key={class_.id} value={class_.id}>
-                                {class_.title}
-                            </option>
-                        ))}
-                    </select>
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a class..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {classes?.map((class_: Class) => (
+                                <SelectItem
+                                    key={class_.id}
+                                    value={class_.id.toString()}
+                                >
+                                    {class_.title}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
 
                 {/* Chapters Table */}
@@ -104,7 +169,8 @@ export default function LessonPage() {
                                             <td className="px-6 py-4 whitespace-nowrap text-right">
                                                 <Button
                                                     onClick={() => setSelectedChapterId(chapter.id)}
-                                                    className="px-4 py-2 text-sm font-medium text-white bg-sky-500 hover:bg-sky-600 rounded-md"
+                                                    variant="primaryOutline"
+                                                    className="px-4 py-2 text-sm font-medium text-sky-500 rounded-md"
                                                 >
                                                     Manage Lessons
                                                 </Button>
@@ -128,14 +194,27 @@ export default function LessonPage() {
                 {selectedChapterId && (
                     <div>
                         <div className="flex justify-between items-center mb-4">
-                            <div className="space-y-1">
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => setSelectedChapterId(null)}
-                                    className="p-0 text-sky-500 hover:text-sky-600"
-                                >
-                                    ← Back to Chapters
-                                </Button>
+                            <div className="space-y-2">
+                                <Breadcrumb>
+                                    <BreadcrumbList>
+                                        <BreadcrumbItem>
+                                            <BreadcrumbLink
+                                                onClick={() => setSelectedChapterId(null)}
+                                                className="text-sm text-muted-foreground hover:text-sky-500 cursor-pointer"
+                                            >
+                                                Chapters
+                                            </BreadcrumbLink>
+                                        </BreadcrumbItem>
+                                        <BreadcrumbSeparator>
+                                            <ChevronRight className="h-4 w-4" />
+                                        </BreadcrumbSeparator>
+                                        <BreadcrumbItem>
+                                            <BreadcrumbPage>
+                                                {chapters?.find((chapter: Chapter) => chapter.id === selectedChapterId)?.title || "Lessons"}
+                                            </BreadcrumbPage>
+                                        </BreadcrumbItem>
+                                    </BreadcrumbList>
+                                </Breadcrumb>
                                 <h2 className="text-2xl font-bold">Lessons</h2>
                             </div>
                             <Button onClick={() => { }}>
@@ -170,7 +249,7 @@ export default function LessonPage() {
                                                 </Button>
                                                 <Button
                                                     variant="ghost"
-                                                    onClick={() => { }}
+                                                    onClick={() => handleDeleteLesson(lesson.id)}
                                                     className="text-red-500 hover:bg-red-50"
                                                 >
                                                     <Trash className="h-4 w-4 mr-2" />
