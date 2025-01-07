@@ -1,9 +1,7 @@
-import { useState } from "react"
-import { Plus, Minus, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Plus, Minus } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
 
 interface SelectChallengeProps {
     index: number;
@@ -24,26 +22,33 @@ export const SelectChallenge = ({
     onChange,
     canDelete
 }: SelectChallengeProps) => {
+    // Ensure challenge has default values if undefined
+    const safeChallenge = {
+        question: challenge?.question || "",
+        options: challenge?.options || ["", ""],
+        correctAnswer: challenge?.correctAnswer || ""
+    };
+
     const handleOptionChange = (optionIndex: number, value: string) => {
-        const newOptions = [...challenge.options]
-        newOptions[optionIndex] = value
-        onChange('options', newOptions)
-    }
+        const newOptions = [...safeChallenge.options];
+        newOptions[optionIndex] = value;
+        onChange('options', newOptions);
+    };
 
     const addOption = () => {
-        const newOptions = [...challenge.options, ""]
-        onChange('options', newOptions)
-    }
+        const newOptions = [...safeChallenge.options, ""];
+        onChange('options', newOptions);
+    };
 
     const removeOption = (optionIndex: number) => {
-        const newOptions = challenge.options.filter((_, i) => i !== optionIndex)
-        onChange('options', newOptions)
+        const newOptions = safeChallenge.options.filter((_, i) => i !== optionIndex);
+        onChange('options', newOptions);
 
         // If we're removing the correct answer, reset it
-        if (challenge.options[optionIndex] === challenge.correctAnswer) {
-            onChange('correctAnswer', '')
+        if (safeChallenge.options[optionIndex] === safeChallenge.correctAnswer) {
+            onChange('correctAnswer', '');
         }
-    }
+    };
 
     return (
         <div className="p-6 bg-white rounded-lg border space-y-4">
@@ -67,7 +72,7 @@ export const SelectChallenge = ({
                 <div className="space-y-2">
                     <Input
                         placeholder="Enter your question"
-                        value={challenge.question}
+                        value={safeChallenge.question}
                         onChange={(e) => onChange('question', e.target.value)}
                         className="w-full"
                     />
@@ -76,10 +81,10 @@ export const SelectChallenge = ({
 
                 <div className="space-y-4">
                     <RadioGroup
-                        value={challenge.correctAnswer}
+                        value={safeChallenge.correctAnswer}
                         onValueChange={(value) => onChange('correctAnswer', value)}
                     >
-                        {challenge.options.map((option, optionIndex) => (
+                        {safeChallenge.options.map((option, optionIndex) => (
                             <div key={optionIndex} className="flex items-center space-x-2">
                                 <RadioGroupItem value={option} id={`option-${index}-${optionIndex}`} />
                                 <div className="flex-1">
@@ -90,7 +95,7 @@ export const SelectChallenge = ({
                                         className="w-full"
                                     />
                                 </div>
-                                {challenge.options.length > 2 && (
+                                {safeChallenge.options.length > 2 && (
                                     <Button
                                         variant="ghost"
                                         size="sm"
@@ -104,7 +109,7 @@ export const SelectChallenge = ({
                         ))}
                     </RadioGroup>
 
-                    {challenge.options.length < 6 && (
+                    {safeChallenge.options.length < 6 && (
                         <Button
                             variant="primaryOutline"
                             size="sm"
@@ -119,11 +124,10 @@ export const SelectChallenge = ({
 
                 <div className="mt-4 p-4 bg-sky-50 rounded-lg">
                     <div className="flex items-center gap-2 text-sm text-sky-700">
-                        <Check className="h-4 w-4" />
-                        Correct answer: {challenge.correctAnswer || "Not selected"}
+                        Selected answer: {safeChallenge.correctAnswer || "Not selected"}
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};

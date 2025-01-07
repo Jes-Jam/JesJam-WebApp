@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm"
-import { pgTable, integer, serial, text, pgEnum, boolean, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, integer, serial, text, pgEnum, boolean, timestamp, jsonb } from "drizzle-orm/pg-core"
 
 export const classes = pgTable("classes", {
     id: serial("id").primaryKey(),
@@ -49,18 +49,20 @@ export const lessonRelations = relations(lessons, ({one, many}) => ({
     challenges: many(challenges)
 }))
 
-export const challengesEnum = pgEnum("challenges_enum", [
-    "CARD",
-    "SELECT", 
-    "ANSWER_BUILDING",
+// Create an enum for challenge types
+export const challengeTypeEnum = pgEnum('challenge_type', [
+    'CARD',
+    'SELECT',
+    'ANSWER_BUILDING'
 ])
 
-export const challenges = pgTable("challenges", {
-    id: serial("id").primaryKey(),
-    lessonId: integer("lesson_id").references(() => lessons.id, { onDelete: 'cascade' }).notNull(),
-    type: challengesEnum("type").notNull(),
-    question: text("question").notNull(),
-    order: integer("order").notNull(),
+export const challenges = pgTable('challenges', {
+    id: serial('id').primaryKey(),
+    lessonId: integer('lesson_id').references(() => lessons.id, { onDelete: 'cascade' }).notNull(),
+    type: challengeTypeEnum('type').notNull(), // Add the type column using our enum
+    content: jsonb('content').notNull(), // Store the challenge data as JSON => more flexible
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
 export const challengeRelations = relations(challenges, ({one, many}) => ({
