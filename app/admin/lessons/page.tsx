@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import axios from "axios"
-import { Plus, Pencil, Trash } from "lucide-react"
+import { Plus, Pencil, Trash, Trophy, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import {
@@ -34,6 +34,12 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu"
 
 interface Lesson {
     id: number
@@ -144,16 +150,6 @@ export default function LessonPage() {
             setLessons(response.data)
         } catch (error) {
             toast.error("Failed to fetch lessons")
-        }
-    }
-
-    const handleDeleteLesson = async (lessonId: number) => {
-        try {
-            await axios.delete(`/api/classes/${selectedClassId}/chapters/${selectedChapterId}/lessons/${lessonId}`)
-            toast.success("Lesson deleted successfully")
-            fetchLessons() // Refresh lessons
-        } catch (error) {
-            toast.error("Failed to delete lesson")
         }
     }
 
@@ -286,6 +282,7 @@ export default function LessonPage() {
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Challenges</th>
                                         <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                     </tr>
                                 </thead>
@@ -303,29 +300,44 @@ export default function LessonPage() {
                                                     {lesson.description}
                                                 </p>
                                             </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-center">
+                                                <Button
+                                                    variant="primaryOutline"
+                                                    onClick={() => router.push(`/admin/lessons/${lesson.id}/challenges`)}
+                                                    className="px-4 py-2 text-sm"
+                                                >
+                                                    <Trophy className="h-4 w-4 mr-2" />
+                                                    Manage Challenges
+                                                </Button>
+                                            </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right">
-                                                <Button
-                                                    variant="ghost"
-                                                    onClick={() => handleEdit(lesson)}
-                                                    className="mr-2"
-                                                >
-                                                    <Pencil className="h-4 w-4 mr-2" />
-                                                    Edit
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    onClick={() => setDeletingLessonId(lesson.id)}
-                                                    className="text-red-500 hover:bg-red-50"
-                                                >
-                                                    <Trash className="h-4 w-4 mr-2" />
-                                                    Delete
-                                                </Button>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" className="h-8 w-8 p-0">
+                                                            <span className="sr-only">Open menu</span>
+                                                            <MoreHorizontal className="h-4 w-4" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem onClick={() => handleEdit(lesson)}>
+                                                            <Pencil className="h-4 w-4 mr-2" />
+                                                            Edit
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            onClick={() => setDeletingLessonId(lesson.id)}
+                                                            className="text-red-500 focus:text-red-500"
+                                                        >
+                                                            <Trash className="h-4 w-4 mr-2" />
+                                                            Delete
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
                                             </td>
                                         </tr>
                                     ))}
                                     {lessons?.length === 0 && (
                                         <tr>
-                                            <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                                            <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">
                                                 No lessons found. Create your first lesson!
                                             </td>
                                         </tr>

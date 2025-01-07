@@ -17,6 +17,14 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 type Class = {
     id: number;
@@ -121,7 +129,7 @@ const ChaptersPage = () => {
                             setEditingChapter(null)
                         }}
                         classId={selectedClassId}
-                        initialData={editingChapter || undefined}
+                        initialData={editingChapter || null}
                     />
                     <AlertDialog
                         open={!!deletingChapterId}
@@ -157,6 +165,9 @@ const ChaptersPage = () => {
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Image
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Title
                                     </th>
                                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -171,8 +182,18 @@ const ChaptersPage = () => {
                                         className="hover:bg-gray-50 cursor-pointer"
                                     >
                                         <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="h-10 w-10 relative rounded-md overflow-hidden">
+                                                <img
+                                                    src={class_.imageSrc || "/placeholder.png"}
+                                                    alt={class_.title}
+                                                    className="object-cover"
+                                                />
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             {class_.title}
                                         </td>
+
                                         <td className="px-6 py-4 whitespace-nowrap text-right">
                                             <Button
                                                 onClick={() => handleClassSelect(class_.id)}
@@ -186,7 +207,7 @@ const ChaptersPage = () => {
                                 ))}
                                 {!isLoading && classes.length === 0 && (
                                     <tr>
-                                        <td colSpan={2} className="px-6 py-4 text-center text-sm text-gray-500">
+                                        <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
                                             No classes found
                                         </td>
                                     </tr>
@@ -197,29 +218,33 @@ const ChaptersPage = () => {
                 </div>
             ) : (
                 <div>
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex flex-col gap-y-2">
-                            <div className="flex items-center gap-x-2 text-sm text-muted-foreground">
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => handleClassSelect(null)}
-                                    className="h-auto p-0 text-muted-foreground hover:text-sky-500"
-                                >
-                                    Classes
-                                </Button>
-                                <ChevronRight className="h-4 w-4" />
-                                <span className="text-sky-500 font-medium">
-                                    {classes.find(c => c.id === selectedClassId)?.title}
-                                </span>
-                            </div>
-                            <h2 className="text-2xl font-bold">
-                                Chapters
-                            </h2>
+                    <div className="flex items-center justify-between">
+                        <Breadcrumb>
+                            <BreadcrumbList>
+                                <BreadcrumbItem>
+                                    <BreadcrumbLink
+                                        onClick={() => handleClassSelect(null)}
+                                        className="text-sm text-muted-foreground hover:text-sky-500 cursor-pointer"
+                                    >
+                                        Classes
+                                    </BreadcrumbLink>
+                                </BreadcrumbItem>
+                                <BreadcrumbSeparator>
+                                    <ChevronRight className="h-4 w-4" />
+                                </BreadcrumbSeparator>
+                                <BreadcrumbItem>
+                                    <BreadcrumbPage>
+                                        {classes.find(c => c.id === selectedClassId)?.title}
+                                    </BreadcrumbPage>
+                                </BreadcrumbItem>
+                            </BreadcrumbList>
+                        </Breadcrumb>
+                        <div className="mb-4">
+                            <Button onClick={() => setShowModal(true)}>
+                                <Plus className="h-4 w-4 mr-2" />
+                                Add Chapter
+                            </Button>
                         </div>
-                        <Button onClick={() => setShowModal(true)}>
-                            <Plus className="h-4 w-4 mr-2" />
-                            Add Chapter
-                        </Button>
                     </div>
 
                     <div className="rounded-md border">
