@@ -1,7 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import  db  from "@/database/drizzle";
+import db from "@/database/drizzle";
 import { classes } from "@/database/schema";
+import { eq } from "drizzle-orm";
 
 export async function GET() {
   try {
@@ -46,3 +47,6 @@ export async function POST(req: Request) {
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+
+
+

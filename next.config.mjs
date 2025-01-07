@@ -4,10 +4,13 @@ const nextConfig = {
         removeConsole: true,
     },
     images: {
-        domains: [
-            'upload.wikimedia.org',
-        ]
-    }
+        remotePatterns: [
+          {
+            protocol: 'https',
+            hostname: '**',
+          },
+        ],
+      },
 };
 
 export default nextConfig;

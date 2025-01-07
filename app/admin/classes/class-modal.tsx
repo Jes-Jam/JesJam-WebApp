@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -22,29 +22,53 @@ interface ClassModalProps {
     isOpen: boolean
     onClose: () => void
     onSuccess: () => void
+    initialData?: {
+        id: number;
+        title: string;
+        imageSrc?: string;
+        isPrivateClass: boolean;
+    }
 }
 
 export const ClassModal = ({
     isOpen,
     onClose,
-    onSuccess
+    onSuccess,
+    initialData
 }: ClassModalProps) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: "",
-            imageSrc: "",
-            isPrivateClass: true,
+            title: initialData?.title || "",
+            imageSrc: initialData?.imageSrc || "",
+            isPrivateClass: initialData?.isPrivateClass ?? true,
         }
     })
+
+    useEffect(() => {
+        if (initialData) {
+            form.reset({
+                title: initialData.title,
+                imageSrc: initialData.imageSrc,
+                isPrivateClass: initialData.isPrivateClass,
+            })
+        }
+    }, [initialData, form])
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             setIsLoading(true)
-            await axios.post("/api/classes", values)
-            toast.success("Class created successfully")
+            if (initialData) {
+                // Update existing class
+                await axios.patch(`/api/classes/${initialData.id}`, values)
+                toast.success("Class updated successfully")
+            } else {
+                // Create new class
+                await axios.post("/api/classes", values)
+                toast.success("Class created successfully")
+            }
             form.reset()
             onSuccess()
             onClose()
@@ -59,7 +83,9 @@ export const ClassModal = ({
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Create a new class</DialogTitle>
+                    <DialogTitle>
+                        {initialData ? "Edit class" : "Create a new class"}
+                    </DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -106,7 +132,7 @@ export const ClassModal = ({
                         />
                         <div className="flex justify-end">
                             <Button disabled={isLoading} type="submit">
-                                Create
+                                {initialData ? "Save changes" : "Create"}
                             </Button>
                         </div>
                     </form>
