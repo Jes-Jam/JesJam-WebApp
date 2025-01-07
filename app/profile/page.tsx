@@ -2,16 +2,17 @@ import { UserInfoCard } from "./user-info";
 import { ExamCountdown } from "./exam-countdown";
 import { EnrolledCourses } from "./enroll-courses";
 import { getEnrollments, getUserProgress, } from "@/database/queries";
-import { redirect } from "next/navigation";
 import Image from "next/image";
 import { FlowerStore } from "./flower-store";
 import { Separator } from "@/components/ui/separator";
+import { RedirectWrapper } from "@/components/redirect-no-class-wrapper";
+
 const ProfilePage = async () => {
     const enrollments = await getEnrollments();
     const userProgress = await getUserProgress();
 
     if (!userProgress || !userProgress.activeClass) {
-        redirect("/classes")
+        return <RedirectWrapper />
     }
 
     return (

@@ -4,6 +4,7 @@ import StudentStates from "@/components/main/student-state";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
+import { RedirectWrapper } from "@/components/redirect-no-class-wrapper";
 
 
 import {
@@ -11,13 +12,13 @@ import {
     getTopStudents
 } from "@/database/queries";
 import { redirect } from "next/navigation";
-
+import { toast } from "sonner";
 const LeaderboardPage = async () => {
     const userProgress = await getUserProgress();
 
     // If user doesn't have active class
     if (!userProgress || !userProgress.activeClass) {
-        redirect("/classes")
+        return <RedirectWrapper />
     }
 
     // Get top students

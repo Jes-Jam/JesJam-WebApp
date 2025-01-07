@@ -6,18 +6,19 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { RedirectWrapper } from "@/components/redirect-no-class-wrapper";
 
 import {
     getUserProgress,
     getTopStudents
 } from "@/database/queries";
 import { redirect } from "next/navigation";
-
+import { toast } from "sonner";
 const ExplorePage = async () => {
     const userProgress = await getUserProgress();
 
     if (!userProgress || !userProgress.activeClass) {
-        redirect("/classes")
+        return <RedirectWrapper />
     }
 
     return (

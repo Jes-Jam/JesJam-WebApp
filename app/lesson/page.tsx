@@ -1,15 +1,14 @@
 const { getLesson, getUserProgress } = await import("@/database/queries");
-import { redirect } from "next/navigation";
 import { LessonProgress } from "./lesson-progress";
-import { useEffect } from "react";
 import type { Challenge } from "./lesson-progress";
+import { RedirectWrapper } from "@/components/redirect-no-class-wrapper";
 
 const LessonPage = async () => {
     const lesson = await getLesson();
     const userProgress = await getUserProgress();
 
     if (!lesson || !userProgress) {
-        redirect("/study");
+        return <RedirectWrapper />
     }
 
     const initialPercentage = lesson.challenges.filter((challenge) => challenge.completed).length / lesson.challenges.length * 100;
