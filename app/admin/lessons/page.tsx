@@ -6,6 +6,7 @@ import axios from "axios"
 import { Plus, Pencil, Trash, Trophy, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
+import { LessonModal } from "./lesson-modal"
 import {
     Select,
     SelectContent,
@@ -23,7 +24,6 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { ChevronRight } from "lucide-react"
-import { LessonModal } from "./lesson-modal"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -40,6 +40,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import { Challenges } from "./challenges"
 
 interface Lesson {
     id: number
@@ -100,6 +101,7 @@ export default function LessonPage() {
     const [showModal, setShowModal] = useState(false)
     const [editingLesson, setEditingLesson] = useState<Lesson | null>(null)
     const [deletingLessonId, setDeletingLessonId] = useState<number | null>(null)
+    const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null)
 
     // Fetch classes on mount
     useEffect(() => {
@@ -170,6 +172,14 @@ export default function LessonPage() {
         }
     }
 
+    const handleManageChallenges = (lesson: Lesson) => {
+        setSelectedLesson(lesson)
+    }
+
+    const handleBackToLessons = () => {
+        setSelectedLesson(null)
+    }
+
     if (isLoading) {
         return <Loading />
     }
@@ -178,73 +188,77 @@ export default function LessonPage() {
         <div className="p-6">
             <div className="space-y-6">
                 {/* Class Selection Dropdown */}
-                <div className="flex flex-col gap-y-1">
-                    <label className="text-sm font-medium">Select Class</label>
-                    <Select
-                        value={selectedClassId?.toString() || ""}
-                        onValueChange={(value) => handleClassChange(Number(value))}
-                    >
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a class..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {classes?.map((class_: Class) => (
-                                <SelectItem
-                                    key={class_.id}
-                                    value={class_.id.toString()}
-                                >
-                                    {class_.title}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                </div>
-
-                {/* Chapters Table */}
-                {selectedClassId && !selectedChapterId && (
-                    <div>
-                        <h2 className="text-2xl font-bold mb-4">Chapters</h2>
-                        <div className="rounded-md border">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                    {chapters?.map((chapter: Chapter) => (
-                                        <tr key={chapter.id} className="hover:bg-gray-50">
-                                            <td className="px-6 py-4 whitespace-nowrap">{chapter.order}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{chapter.title}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{chapter.description}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-right">
-                                                <Button
-                                                    onClick={() => handleChapterChange(chapter.id)}
-                                                    variant="premiumOutline"
-                                                >
-                                                    Manage Lessons
-                                                </Button>
-                                            </td>
-                                        </tr>
+                {!selectedLesson && (
+                    <div className="flex flex-col gap-y-2">
+                        <div className="flex flex-col gap-y-1">
+                            <label className="text-sm font-medium">Select Class</label>
+                            <Select
+                                value={selectedClassId?.toString() || ""}
+                                onValueChange={(value) => handleClassChange(Number(value))}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select a class..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {classes?.map((class_: Class) => (
+                                        <SelectItem
+                                            key={class_.id}
+                                            value={class_.id.toString()}
+                                        >
+                                            {class_.title}
+                                        </SelectItem>
                                     ))}
-                                    {chapters?.length === 0 && (
-                                        <tr>
-                                            <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
-                                                No chapters found in this class.
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
+                                </SelectContent>
+                            </Select>
                         </div>
+
+                        {/* Chapters Table */}
+                        {selectedClassId && !selectedChapterId && (
+                            <div>
+                                <h2 className="text-2xl font-bold mb-4">Chapters</h2>
+                                <div className="rounded-md border">
+                                    <table className="min-w-full divide-y divide-gray-200">
+                                        <thead className="bg-gray-50">
+                                            <tr>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="bg-white divide-y divide-gray-200">
+                                            {chapters?.map((chapter: Chapter) => (
+                                                <tr key={chapter.id} className="hover:bg-gray-50">
+                                                    <td className="px-6 py-4 whitespace-nowrap">{chapter.order}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap">{chapter.title}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap">{chapter.description}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                                                        <Button
+                                                            onClick={() => handleChapterChange(chapter.id)}
+                                                            variant="premiumOutline"
+                                                        >
+                                                            Manage Lessons
+                                                        </Button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                            {chapters?.length === 0 && (
+                                                <tr>
+                                                    <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                                                        No chapters found in this class.
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
                 {/* Lessons Table */}
-                {selectedChapterId && (
+                {selectedChapterId && !selectedLesson && (
                     <div>
                         <div className="flex justify-between items-center mb-4">
                             <div className="space-y-2">
@@ -303,7 +317,7 @@ export default function LessonPage() {
                                             <td className="px-6 py-4 whitespace-nowrap text-center">
                                                 <Button
                                                     variant="primaryOutline"
-                                                    onClick={() => router.push(`/admin/lessons/${lesson.id}/challenges`)}
+                                                    onClick={() => handleManageChallenges(lesson)}
                                                     className="px-4 py-2 text-sm"
                                                 >
                                                     <Trophy className="h-4 w-4 mr-2" />
@@ -346,6 +360,15 @@ export default function LessonPage() {
                             </table>
                         </div>
                     </div>
+                )}
+
+                {/* Challenges Component */}
+                {selectedLesson && (
+                    <Challenges
+                        lesson={selectedLesson}
+                        chapter={chapters.find(c => c.id === selectedChapterId)}
+                        onBack={handleBackToLessons}
+                    />
                 )}
             </div>
             {selectedChapterId && (
