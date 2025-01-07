@@ -23,7 +23,7 @@ export const Footer = ({ onCheck, status, disabled, lessonId }: Props) => {
         <footer className={cn(
             "lg:h-[140px] h-[100px] border-t-2",
             status === "CORRECT" && "border-transparent bg-[#ECEFFB]",
-            status === "INCORRECT" && "border-transparent bg-rose-500"
+            status === "INCORRECT" && "border-transparent bg-rose-400"
         )}>
             <div className="max-w-[1140px] h-full mx-auto flex items-center justify-between px-6 lg:px-10">
                 {status === "CORRECT" && (
@@ -33,7 +33,7 @@ export const Footer = ({ onCheck, status, disabled, lessonId }: Props) => {
                     </div>
                 )}
                 {status === "INCORRECT" && (
-                    <div className="text-rose-500 font-bold text-base lg:text-2xl flex items-center">
+                    <div className="text-white font-bold text-base lg:text-2xl flex items-center">
                         <XCircle className="h-6 w-6 lg:h-10 lg:w-10 mr-2" />
                         Try another one
                     </div>

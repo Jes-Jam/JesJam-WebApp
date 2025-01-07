@@ -151,3 +151,13 @@ body {
     opacity: 0.05; /* Adjust this value to control noise intensity */
     pointer-events: none;
 }
+
+/* Add these to enable 3D card flip */
+.perspective-1000 {
+    perspective: 1000px;
+}
+
+.backface-hidden {
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}

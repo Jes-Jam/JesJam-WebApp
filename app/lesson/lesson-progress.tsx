@@ -1,25 +1,35 @@
 "use client";
-import { useState, useTransition } from "react";
-import { challenges } from "@/database/schema";
 
-import { challengeContent } from "@/database/schema";
+import { useState, useTransition } from "react";
 import { Header } from "./header";
-import { Card } from "@/components/flashcard/card";
-import { ChallengeContent } from "./challenge-content";
 import { FinishScreen } from "./(finish-screen)/finish-screen";
 import { Footer } from "./footer";
 import { upsertChallengeProgress } from "@/actions/challenge-progress";
-import { toast } from "sonner";
 import { reducePetals } from "@/actions/user-progress";
 import { useEffect } from "react";
+import { CardChallenge } from "./(challenge-type)/card-challenge";
+import { SelectChallenge } from "./(challenge-type)/select-challenge";
+import { AnswerBuildingChallenge } from "./(challenge-type)/answer-build-challenge";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
+export interface Challenge {
+    id: number;
+    type: "CARD" | "SELECT" | "ANSWER_BUILDING";
+    content: {
+        term?: string;
+        definition?: string;
+        question?: string;
+        options?: string[];
+        correctAnswer?: string;
+        shuffledParts?: string[];
+    };
+    completed: boolean;
+}
 
-type Props = {
+interface Props {
     initialLessonId: number;
-    initialLessonChallenges: (typeof challenges.$inferSelect & {
-        completed: boolean;
-        challengeContent: (typeof challengeContent.$inferSelect)[];
-    })[];
+    initialLessonChallenges: Challenge[];
     initialPercentage: number;
     initialPatels: number;
     userSubscription: any;
@@ -34,125 +44,171 @@ export const LessonProgress = ({
 }: Props) => {
     const [pending, startTransition] = useTransition();
     const [percentage, setPercentage] = useState(() => {
-        return initialPercentage === 100 ? 0 : initialPercentage
+        return initialPercentage === 100 ? 0 : initialPercentage;
     });
     const [isPractice, setIsPractice] = useState(false);
     const [patels, setPatels] = useState(initialPatels);
-    const [challenges] = useState(initialLessonChallenges)
+    const [challenges] = useState(initialLessonChallenges);
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [status, setStatus] = useState<"CORRECT" | "INCORRECT" | "UNANSWERED">("UNANSWERED");
     const [activeChallengeIndex, setActiveChallengeIndex] = useState(() => {
-        const unansweredChallenge = challenges.find((challenge) => !challenge.completed)
-        return unansweredChallenge ? challenges.indexOf(unansweredChallenge) : 0
-    })
-    const challenge = challenges[activeChallengeIndex]
-    const options = challenge && challenge.challengeContent
+        const unansweredChallenge = challenges.find((challenge) => !challenge.completed);
+        return unansweredChallenge ? challenges.indexOf(unansweredChallenge) : 0;
+    });
 
-    // If it's a practice, display a tag
+    const challenge = challenges[activeChallengeIndex];
+
     useEffect(() => {
         if (initialPercentage === 100) {
-            setIsPractice(true)
+            setIsPractice(true);
         }
-    }, [])
+    }, [initialPercentage]);
 
     const onNext = () => {
-        setActiveChallengeIndex((current) => current + 1)
-    }
+        setActiveChallengeIndex((current) => current + 1);
+    };
+
+    const onSelect = (value: number | string) => {
+        if (status !== "UNANSWERED") return;
+        setSelectedOption(typeof value === 'string' ? parseInt(value) || 0 : value);
+    };
 
     const onContinue = () => {
-        if (!selectedOption) return;
+        // Debug log to see what we're comparing
+        console.log("Checking answer:", {
+            type: challenge.type,
+            selectedOption,
+            selectedValue: challenge.content.options?.[selectedOption!],
+            correctAnswer: challenge.content.correctAnswer,
+            isEqual: challenge.content.options?.[selectedOption!] === challenge.content.correctAnswer
+        });
 
+        // For SELECT type, we need selectedOption (unless it's a CARD)
+        if (selectedOption === null && challenge.type !== "CARD") {
+            return;
+        }
+
+        // Handle previous states
         if (status === "INCORRECT") {
-            setStatus("UNANSWERED")
-            setSelectedOption(null)
+            setStatus("UNANSWERED");
+            setSelectedOption(null);
             return;
         }
 
         if (status === "CORRECT") {
-            onNext()
-            setStatus("UNANSWERED")
-            setSelectedOption(null)
+            onNext();
+            setStatus("UNANSWERED");
+            setSelectedOption(null);
             return;
         }
 
-        const correctOption = options.find((option) => option.correct)
+        const isCorrect = (() => {
+            switch (challenge.type) {
+                case "CARD":
+                    return true;
+                case "SELECT":
+                    if (selectedOption === null || !challenge.content.options || !challenge.content.correctAnswer) {
+                        console.log("Missing required data for SELECT challenge");
+                        return false;
+                    }
+                    const selectedValue = challenge.content.options[selectedOption];
+                    const isMatch = selectedValue === challenge.content.correctAnswer;
+                    console.log("SELECT comparison:", { selectedValue, correctAnswer: challenge.content.correctAnswer, isMatch });
+                    return isMatch;
+                case "ANSWER_BUILDING":
+                    return selectedOption?.toString() === challenge.content.correctAnswer;
+                default:
+                    return false;
+            }
+        })();
 
-        if (!correctOption) return;
+        console.log("Answer is:", isCorrect ? "CORRECT" : "INCORRECT");
 
-        // If the selected option is the correct option, set the status to CORRECT
-        if (correctOption && correctOption?.id === selectedOption) {
-            console.log("Correct option selected")
-            startTransition(() => {
+        startTransition(() => {
+            if (isCorrect) {
                 upsertChallengeProgress(challenge.id)
                     .then((response) => {
                         if (response?.error === "hearts") {
-                            console.error("Not enough hearts")
+                            console.error("Not enough petals");
                             return;
                         }
-                        setStatus("CORRECT")
-                        setPercentage((prev) => prev + 100 / challenges.length)
+                        setStatus("CORRECT");
+                        setPercentage((prev) => prev + 100 / challenges.length);
 
-                        // If practice 
-                        if (initialPercentage === 100) {
-                            setPatels(Math.max(patels - 1, 5))
+                        if (isPractice) {
+                            setPatels(Math.max(patels - 1, 5));
                         }
-                    }).catch((error) => {
-                        toast.error("Error upserting challenge progress")
-                        console.error("Error upserting challenge progress", error)
                     })
-            })
-        } else {
-            startTransition(() => {
+                    .catch(() => {
+                        toast.error("Error saving progress");
+                    });
+            } else {
                 reducePetals(challenge.id)
                     .then((response) => {
                         if (response?.error === "patels") {
-                            // openHeartsModal();
-                            return
+                            return;
                         }
-
                         setStatus("INCORRECT");
-
-                        // incorrectControl.play();
                         if (!response?.error) {
                             setPatels((prev) => Math.max(prev - 1, 0));
                         }
                     })
-                    .catch((error) => {
-                        toast.error("Error reducing hearts")
-                        console.error("Error reducing hearts", error)
-                    })
-            })
-        }
-    }
+                    .catch(() => {
+                        toast.error("Error reducing petals");
+                    });
+            }
+        });
+    };
 
-
-    // If there are no challenges, show the finish screen
     if (!challenge) {
         return (
             <FinishScreen
                 percentage={percentage}
                 patels={patels}
-                hasActiveSubscription={userSubscription ? true : false}
+                hasActiveSubscription={!!userSubscription}
             />
-        )
+        );
     }
 
-
-    const onSelect = (id: number) => {
-        if (status !== "UNANSWERED") return;
-        setSelectedOption(id)
-    }
-
-    const title = challenge.type === "SELECT" ? challenge.question : challenge.question;
+    const renderChallenge = () => {
+        switch (challenge.type) {
+            case "CARD":
+                return (
+                    <CardChallenge
+                        challenge={challenge}
+                        onSelect={onSelect}
+                        status={status}
+                    />
+                );
+            case "SELECT":
+                return (
+                    <SelectChallenge
+                        challenge={challenge}
+                        selectedOption={selectedOption}
+                        onSelect={onSelect}
+                        status={status}
+                    />
+                );
+            case "ANSWER_BUILDING":
+                return (
+                    <AnswerBuildingChallenge
+                        challenge={challenge}
+                        onSelect={onSelect}
+                        status={status}
+                    />
+                );
+            default:
+                return null;
+        }
+    };
 
     return (
         <div className="min-h-screen flex flex-col">
             <Header
                 patels={patels}
                 percentage={percentage}
-                hasActiveSubscription={userSubscription ? true : false}
+                hasActiveSubscription={!!userSubscription}
             />
-
             <div className="flex-1 relative">
                 {isPractice && (
                     <div className="absolute -top-16 left-8 z-10 hidden md:block lg:block">
@@ -184,32 +240,21 @@ export const LessonProgress = ({
                 <div className="h-full flex items-center justify-center">
                     <div className="lg:min-h-[350px] lg:w-[800px] md:w-[600px] w-full px-6 lg:px-0 flex flex-col gap-y-12">
                         <h1 className="text-lg lg:text-2xl mt-12 text-center font-bold lg:text-start text-sky-900">
-                            {title}
+                            {challenge.content.question || challenge.content.term}
                         </h1>
-                        <div>
-                            {challenge.type === "CARD" && (
-                                <Card />
-                            )}
-                            {challenge.type === "SELECT" && (
-                                <ChallengeContent
-                                    contents={challenge.challengeContent}
-                                    status={status}
-                                    selectedOption={selectedOption}
-                                    disabled={false}
-                                    type={challenge.type}
-                                    onSelect={onSelect}
-                                />
-                            )}
-                        </div>
+                        {renderChallenge()}
                     </div>
                 </div>
             </div>
             <Footer
-                disabled={!selectedOption || pending}
+                disabled={
+                    (challenge.type === "CARD" ? false : selectedOption === null) ||
+                    pending
+                }
                 status={status}
                 onCheck={onContinue}
             />
         </div>
-    )
-}
+    );
+};
 
