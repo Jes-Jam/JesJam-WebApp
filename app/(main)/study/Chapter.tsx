@@ -17,11 +17,15 @@ type Props = {
 }
 
 export const Chapter = ({ id, title, description, order, lessons, activeLesson, activeLessonPercentage }: Props) => {
+    // Calculate the number of rows needed based on 3 items per row
+    const numberOfRows = Math.ceil(lessons.length / 3);
+    // Each row is 200px tall (from VERTICAL_SPACING in lesson-stage)
+    const contentHeight = numberOfRows * 200;
+
     return (
-        <>
+        <div>
             <ChapterHeader title={title} description={description} />
-            {/* Single container for all lessons */}
-            <div className="relative w-full min-h-[calc(100vh-100px)] p-10">
+            <div className="relative w-full p-10" style={{ height: contentHeight + 50 }}>
                 <div className="relative mx-auto">
                     {lessons.map((lesson, index) => {
                         const isCurrentLesson = lesson.id === activeLesson?.id;
@@ -41,6 +45,6 @@ export const Chapter = ({ id, title, description, order, lessons, activeLesson, 
                     })}
                 </div>
             </div>
-        </>
+        </div>
     )
 }

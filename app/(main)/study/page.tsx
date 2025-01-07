@@ -28,23 +28,18 @@ const StudyPage = async () => {
         <div className="flex flex-row gap-[50px]">
             <StudyContainer>
                 <Header title={userProgress.activeClass?.title ?? 'Undefined Title'} />
-                <div className="mb-4">
-                    {chapters.map((chapter) => {
-                        return (
-                            <div key={chapter.id}>
-                                <Chapter
-                                    id={chapter.id}
-                                    title={chapter.title}
-                                    description={chapter.description ?? ''}
-                                    order={chapter.order}
-                                    lessons={chapter.lessons}
-                                    activeLesson={activeLatestLesson?.activeLesson}
-                                    activeLessonPercentage={lessonPercentage ?? 0}
-                                />
-                            </div>
-                        )
-                    })}
-                </div>
+                {chapters.map((chapter) => (
+                    <Chapter
+                        key={chapter.id}
+                        id={chapter.id}
+                        title={chapter.title}
+                        description={chapter.description ?? ''}
+                        order={chapter.order}
+                        lessons={chapter.lessons}
+                        activeLesson={activeLatestLesson?.activeLesson}
+                        activeLessonPercentage={lessonPercentage ?? 0}
+                    />
+                ))}
             </StudyContainer>
             <StickyContainer>
                 <StudentStates activeCourse={userProgress.activeClass}

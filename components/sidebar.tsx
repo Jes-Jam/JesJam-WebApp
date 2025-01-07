@@ -38,7 +38,7 @@ const Sidebar = ({ className }: Props) => {
                     <SidebarItem label="Study" iconImg="/images/sidebar-icons/home.svg" href="/study" />
                     <SidebarItem label="Profile" iconImg="/images/sidebar-icons/account.svg" href="/profile" />
                     <SidebarItem label="Leaderboard" iconImg="/images/sidebar-icons/star.svg" href="/leaderboard" />
-                    <SidebarItem label="Explore" iconImg="/images/sidebar-icons/explore.svg" href="/explore" />
+                    {/* <SidebarItem label="Explore" iconImg="/images/sidebar-icons/explore.svg" href="/explore" /> */}
                 </div>
             </div>
 
