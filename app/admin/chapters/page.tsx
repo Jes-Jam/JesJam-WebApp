@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import axios from "axios"
 import { Plus, ArrowLeft, Trash, Pencil, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -34,13 +35,29 @@ type Chapter = {
 }
 
 const ChaptersPage = () => {
+    const router = useRouter()
+    const searchParams = useSearchParams()
+
+    // Initialize state from URL params
+    const [selectedClassId, setSelectedClassId] = useState<number | null>(
+        searchParams.get("classId") ? Number(searchParams.get("classId")) : null
+    )
     const [classes, setClasses] = useState<Class[]>([])
-    const [selectedClassId, setSelectedClassId] = useState<number | null>(null)
     const [chapters, setChapters] = useState<Chapter[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [showModal, setShowModal] = useState(false)
     const [editingChapter, setEditingChapter] = useState<Chapter | null>(null)
     const [deletingChapterId, setDeletingChapterId] = useState<number | null>(null)
+
+    // Update URL when class selection changes
+    const handleClassSelect = (classId: number | null) => {
+        setSelectedClassId(classId)
+        if (classId) {
+            router.push(`/admin/chapters?classId=${classId}`)
+        } else {
+            router.push('/admin/chapters')
+        }
+    }
 
     useEffect(() => {
         fetchClasses()
@@ -104,7 +121,7 @@ const ChaptersPage = () => {
                             setEditingChapter(null)
                         }}
                         classId={selectedClassId}
-                        initialData={editingChapter || null}
+                        initialData={editingChapter || undefined}
                     />
                     <AlertDialog
                         open={!!deletingChapterId}
@@ -134,59 +151,33 @@ const ChaptersPage = () => {
 
             {!selectedClassId ? (
                 <div>
-                    <h2 className="text-2xl font-bold text-sky-500 mb-4">Select a Class</h2>
+                    <h2 className="text-2xl font-bold mb-4">Select a Class</h2>
                     <div className="rounded-md border">
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Private</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Owner</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Title
+                                    </th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Action
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                                 {classes.map((class_) => (
                                     <tr
                                         key={class_.id}
-                                        onClick={() => setSelectedClassId(class_.id)}
-                                        className="hover:bg-gray-50 cursor-pointer transition-colors"
+                                        className="hover:bg-gray-50 cursor-pointer"
                                     >
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm font-medium text-gray-900">
-                                                {class_.title}
-                                            </div>
+                                            {class_.title}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="flex-shrink-0 h-10 w-10">
-                                                <img
-                                                    className="h-10 w-10 rounded-full object-cover"
-                                                    src={class_.imageSrc}
-                                                    alt={class_.title}
-                                                />
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${class_.isPrivateClass
-                                                ? 'bg-red-100 text-red-800'
-                                                : 'bg-green-100 text-green-800'
-                                                }`}>
-                                                {class_.isPrivateClass ? 'Private' : 'Public'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {class_.ownerId}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                        <td className="px-6 py-4 whitespace-nowrap text-right">
                                             <Button
-                                                variant="primaryOutline"
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    setSelectedClassId(class_.id)
-                                                }}
-
-                                                className="px-4 py-2 text-sm font-medium text-sky-500 rounded-md"
+                                                onClick={() => handleClassSelect(class_.id)}
+                                                variant="premiumOutline"
+                                                className="px-4 py-2 text-sm"
                                             >
                                                 Manage Chapters
                                             </Button>
@@ -195,7 +186,7 @@ const ChaptersPage = () => {
                                 ))}
                                 {!isLoading && classes.length === 0 && (
                                     <tr>
-                                        <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                                        <td colSpan={2} className="px-6 py-4 text-center text-sm text-gray-500">
                                             No classes found
                                         </td>
                                     </tr>
@@ -210,9 +201,8 @@ const ChaptersPage = () => {
                         <div className="flex flex-col gap-y-2">
                             <div className="flex items-center gap-x-2 text-sm text-muted-foreground">
                                 <Button
-                                    variant="primaryOutline"
-                                    size="sm"
-                                    onClick={() => setSelectedClassId(null)}
+                                    variant="ghost"
+                                    onClick={() => handleClassSelect(null)}
                                     className="h-auto p-0 text-muted-foreground hover:text-sky-500"
                                 >
                                     Classes

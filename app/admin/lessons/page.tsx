@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import axios from "axios"
 import { Plus, Pencil, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -22,6 +23,17 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { ChevronRight } from "lucide-react"
+import { LessonModal } from "./lesson-modal"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface Lesson {
     id: number
@@ -44,12 +56,44 @@ interface Chapter {
 }
 
 export default function LessonPage() {
-    const [selectedClassId, setSelectedClassId] = useState<number | null>(null)
-    const [selectedChapterId, setSelectedChapterId] = useState<number | null>(null)
+    const router = useRouter()
+    const searchParams = useSearchParams()
+
+    // Initialize state from URL params
+    const [selectedClassId, setSelectedClassId] = useState<number | null>(
+        searchParams.get("classId") ? Number(searchParams.get("classId")) : null
+    )
+    const [selectedChapterId, setSelectedChapterId] = useState<number | null>(
+        searchParams.get("chapterId") ? Number(searchParams.get("chapterId")) : null
+    )
+
+    // Update URL when selections change
+    const updateUrl = (classId: number | null, chapterId: number | null) => {
+        const params = new URLSearchParams()
+        if (classId) params.set("classId", classId.toString())
+        if (chapterId) params.set("chapterId", chapterId.toString())
+        router.push(`/admin/lessons?${params.toString()}`)
+    }
+
+    // Modified setters to update URL
+    const handleClassChange = (classId: number | null) => {
+        setSelectedClassId(classId)
+        setSelectedChapterId(null)
+        updateUrl(classId, null)
+    }
+
+    const handleChapterChange = (chapterId: number | null) => {
+        setSelectedChapterId(chapterId)
+        updateUrl(selectedClassId, chapterId)
+    }
+
     const [classes, setClasses] = useState<Class[]>([])
     const [chapters, setChapters] = useState<Chapter[]>([])
     const [lessons, setLessons] = useState<Lesson[]>([])
     const [isLoading, setIsLoading] = useState(true)
+    const [showModal, setShowModal] = useState(false)
+    const [editingLesson, setEditingLesson] = useState<Lesson | null>(null)
+    const [deletingLessonId, setDeletingLessonId] = useState<number | null>(null)
 
     // Fetch classes on mount
     useEffect(() => {
@@ -113,6 +157,23 @@ export default function LessonPage() {
         }
     }
 
+    const handleEdit = (lesson: Lesson) => {
+        setEditingLesson(lesson)
+        setShowModal(true)
+    }
+
+    const handleDelete = async (lessonId: number) => {
+        try {
+            await axios.delete(`/api/classes/${selectedClassId}/chapters/${selectedChapterId}/lessons/${lessonId}`)
+            toast.success("Lesson deleted successfully")
+            fetchLessons()
+        } catch (error) {
+            toast.error("Failed to delete lesson")
+        } finally {
+            setDeletingLessonId(null)
+        }
+    }
+
     if (isLoading) {
         return <Loading />
     }
@@ -125,10 +186,7 @@ export default function LessonPage() {
                     <label className="text-sm font-medium">Select Class</label>
                     <Select
                         value={selectedClassId?.toString() || ""}
-                        onValueChange={(value) => {
-                            setSelectedClassId(Number(value))
-                            setSelectedChapterId(null)
-                        }}
+                        onValueChange={(value) => handleClassChange(Number(value))}
                     >
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select a class..." />
@@ -168,9 +226,8 @@ export default function LessonPage() {
                                             <td className="px-6 py-4 whitespace-nowrap">{chapter.description}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right">
                                                 <Button
-                                                    onClick={() => setSelectedChapterId(chapter.id)}
-                                                    variant="primaryOutline"
-                                                    className="px-4 py-2 text-sm font-medium text-sky-500 rounded-md"
+                                                    onClick={() => handleChapterChange(chapter.id)}
+                                                    variant="premiumOutline"
                                                 >
                                                     Manage Lessons
                                                 </Button>
@@ -199,7 +256,7 @@ export default function LessonPage() {
                                     <BreadcrumbList>
                                         <BreadcrumbItem>
                                             <BreadcrumbLink
-                                                onClick={() => setSelectedChapterId(null)}
+                                                onClick={() => handleChapterChange(null)}
                                                 className="text-sm text-muted-foreground hover:text-sky-500 cursor-pointer"
                                             >
                                                 Chapters
@@ -217,7 +274,7 @@ export default function LessonPage() {
                                 </Breadcrumb>
                                 <h2 className="text-2xl font-bold">Lessons</h2>
                             </div>
-                            <Button onClick={() => { }}>
+                            <Button onClick={() => setShowModal(true)}>
                                 <Plus className="h-4 w-4 mr-2" />
                                 Add Lesson
                             </Button>
@@ -236,12 +293,20 @@ export default function LessonPage() {
                                     {lessons?.map((lesson: Lesson) => (
                                         <tr key={lesson.id}>
                                             <td className="px-6 py-4 whitespace-nowrap">{lesson.order}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{lesson.title}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{lesson.description}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <p className="truncate max-w-[200px]" title={lesson.title || ""}>
+                                                    {lesson.title}
+                                                </p>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <p className="truncate max-w-[200px]" title={lesson.description || ""}>
+                                                    {lesson.description}
+                                                </p>
+                                            </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right">
                                                 <Button
                                                     variant="ghost"
-                                                    onClick={() => { }}
+                                                    onClick={() => handleEdit(lesson)}
                                                     className="mr-2"
                                                 >
                                                     <Pencil className="h-4 w-4 mr-2" />
@@ -249,7 +314,7 @@ export default function LessonPage() {
                                                 </Button>
                                                 <Button
                                                     variant="ghost"
-                                                    onClick={() => handleDeleteLesson(lesson.id)}
+                                                    onClick={() => setDeletingLessonId(lesson.id)}
                                                     className="text-red-500 hover:bg-red-50"
                                                 >
                                                     <Trash className="h-4 w-4 mr-2" />
@@ -271,6 +336,47 @@ export default function LessonPage() {
                     </div>
                 )}
             </div>
+            {selectedChapterId && (
+                <>
+                    <LessonModal
+                        isOpen={showModal}
+                        onClose={() => {
+                            setShowModal(false)
+                            setEditingLesson(null)
+                        }}
+                        onSuccess={() => {
+                            fetchLessons()
+                            setEditingLesson(null)
+                        }}
+                        classId={selectedClassId!}
+                        chapterId={selectedChapterId}
+                        initialData={editingLesson}
+                    />
+                    <AlertDialog
+                        open={!!deletingLessonId}
+                        onOpenChange={() => setDeletingLessonId(null)}
+                    >
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete the lesson
+                                    and all of its contents.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={() => deletingLessonId && handleDelete(deletingLessonId)}
+                                    className="bg-red-500 text-white hover:bg-red-600"
+                                >
+                                    Delete
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </>
+            )}
         </div>
     )
 }
