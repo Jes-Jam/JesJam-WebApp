@@ -76,3 +76,41 @@ export async function POST(
         return new NextResponse("Internal Error", { status: 500 })
     }
 }
+
+export async function DELETE(
+    req: Request,
+    { params }: { params: { classId: string; chapterId: string; lessonId: string } }
+) {
+    try {
+        const { lessonId } = params
+        const { searchParams } = new URL(req.url);
+        const index = searchParams.get('index');
+
+        if (!lessonId || index === null) {
+            return new NextResponse("Lesson ID and challenge index are required", { status: 400 })
+        }
+
+        // Get existing challenges
+        const existingChallenges = await db.query.challenges.findMany({
+            where: eq(challenges.lessonId, parseInt(lessonId)),
+            orderBy: challenges.createdAt
+        });
+
+        // Remove the challenge at the specified index
+        const challengeToDelete = existingChallenges[parseInt(index)];
+        
+        if (!challengeToDelete) {
+            return new NextResponse("Challenge not found", { status: 404 });
+        }
+
+        // Delete the specific challenge
+        await db.delete(challenges)
+            .where(eq(challenges.id, challengeToDelete.id));
+
+        return new NextResponse("Challenge deleted successfully", { status: 200 });
+
+    } catch (error) {
+        console.error("[CHALLENGE_DELETE]", error)
+        return new NextResponse("Internal Error", { status: 500 })
+    }
+}

@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
 
 interface CardChallengeProps {
     index: number;
@@ -28,11 +29,12 @@ export const CardChallenge = ({
                 {canDelete && (
                     <Button
                         variant="ghost"
-                        size="sm"
+                        size="icon"
                         onClick={onDelete}
-                        className="text-red-500 hover:text-red-600"
+                        className="text-rose-500 hover:text-rose-600"
                     >
-                        Delete
+                        <Trash className="h-4 w-4" />
+                        <span className="sr-only">Delete</span>
                     </Button>
                 )}
             </div>

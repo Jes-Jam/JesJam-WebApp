@@ -100,9 +100,22 @@ export const Challenges = ({
         ]);
     };
 
-    const handleDeleteChallenge = (index: number) => {
-        const updatedChallenges = challenges.filter((_, i) => i !== index);
-        setChallenges(updatedChallenges);
+    const handleDeleteChallenge = async (index: number) => {
+        try {
+            // Delete from the database
+            await axios.delete(
+                `/api/classes/${chapter.classId}/chapters/${chapter.id}/lessons/${lesson.id}/challenges?index=${index}`
+            );
+
+            // Update local state
+            const updatedChallenges = challenges.filter((_, i) => i !== index);
+            setChallenges(updatedChallenges);
+
+            toast.success("Challenge deleted successfully");
+        } catch (error) {
+            console.error("Error deleting challenge:", error);
+            toast.error("Failed to delete challenge");
+        }
     };
 
     const handleChallengeChange = (index: number, field: string, value: any) => {

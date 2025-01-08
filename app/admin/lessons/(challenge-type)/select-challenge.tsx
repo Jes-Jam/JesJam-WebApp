@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Plus, Minus } from "lucide-react"
+import { Plus, Minus, Trash } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 interface SelectChallengeProps {
@@ -59,11 +59,12 @@ export const SelectChallenge = ({
                 {canDelete && (
                     <Button
                         variant="ghost"
-                        size="sm"
+                        size="icon"
                         onClick={onDelete}
-                        className="text-red-500 hover:text-red-600"
+                        className="text-rose-500 hover:text-rose-600"
                     >
-                        Delete
+                        <Trash className="h-4 w-4" />
+                        <span className="sr-only">Delete</span>
                     </Button>
                 )}
             </div>
@@ -100,7 +101,7 @@ export const SelectChallenge = ({
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => removeOption(optionIndex)}
-                                        className="text-red-500 hover:text-red-600"
+                                        className="text-rose-500 hover:text-rose-600"
                                     >
                                         <Minus className="h-4 w-4" />
                                     </Button>
