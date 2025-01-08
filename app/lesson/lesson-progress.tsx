@@ -49,14 +49,28 @@ export const LessonProgress = ({
     const [isPractice, setIsPractice] = useState(false);
     const [patels, setPatels] = useState(initialPatels);
     const [challenges] = useState(initialLessonChallenges);
-    const [selectedOption, setSelectedOption] = useState<number | null>(null);
+    const [selectedOption, setSelectedOption] = useState<number | number[] | null>(null);
     const [status, setStatus] = useState<"CORRECT" | "INCORRECT" | "UNANSWERED">("UNANSWERED");
     const [activeChallengeIndex, setActiveChallengeIndex] = useState(() => {
         const unansweredChallenge = challenges.find((challenge) => !challenge.completed);
         return unansweredChallenge ? challenges.indexOf(unansweredChallenge) : 0;
     });
+    const [debugInfo, setDebugInfo] = useState<any>(null);
 
     const challenge = challenges[activeChallengeIndex];
+
+    useEffect(() => {
+        console.log("Component mounted");
+    }, []);
+
+    useEffect(() => {
+        if (challenge?.type === "ANSWER_BUILDING") {
+            console.log("Challenge or selectedOption changed:", {
+                selectedOption,
+                challenge
+            });
+        }
+    }, [challenge, selectedOption]);
 
     useEffect(() => {
         if (initialPercentage === 100) {
@@ -68,20 +82,38 @@ export const LessonProgress = ({
         setActiveChallengeIndex((current) => current + 1);
     };
 
-    const onSelect = (value: number | string) => {
+    const onSelect = (value: number | string | number[]) => {
         if (status !== "UNANSWERED") return;
-        setSelectedOption(typeof value === 'string' ? parseInt(value) || 0 : value);
+
+        console.log("onSelect called with value:", value); // Debug log
+
+        if (challenge.type === "ANSWER_BUILDING") {
+            // Ensure value is an array of indices
+            if (Array.isArray(value)) {
+                setSelectedOption(value);
+            } else {
+                console.error("Expected array for ANSWER_BUILDING challenge, got:", value);
+                setDebugInfo({
+                    error: "Invalid value type for ANSWER_BUILDING",
+                    receivedValue: value,
+                    expectedType: "array of indices"
+                });
+            }
+        } else {
+            // For other challenge types (CARD, SELECT)
+            setSelectedOption(typeof value === 'string' ? parseInt(value) || 0 : value as number);
+        }
     };
 
     const onContinue = () => {
         // Debug log to see what we're comparing
-        console.log("Checking answer:", {
-            type: challenge.type,
-            selectedOption,
-            selectedValue: challenge.content.options?.[selectedOption!],
-            correctAnswer: challenge.content.correctAnswer,
-            isEqual: challenge.content.options?.[selectedOption!] === challenge.content.correctAnswer
-        });
+        // console.log("Checking answer:", {
+        //     type: challenge.type,
+        //     selectedOption,
+        //     selectedValue: challenge.content.options?.[selectedOption!],
+        //     correctAnswer: challenge.content.correctAnswer,
+        //     isEqual: challenge.content.options?.[selectedOption!] === challenge.content.correctAnswer
+        // });
 
         // For SELECT type, we need selectedOption (unless it's a CARD)
         if (selectedOption === null && challenge.type !== "CARD") {
@@ -107,16 +139,48 @@ export const LessonProgress = ({
                 case "CARD":
                     return true;
                 case "SELECT":
-                    if (selectedOption === null || !challenge.content.options || !challenge.content.correctAnswer) {
-                        console.log("Missing required data for SELECT challenge");
+                    if (!Array.isArray(selectedOption) && selectedOption !== null && challenge.content.options && challenge.content.correctAnswer) {
+                        const selectedValue = challenge.content.options[selectedOption];
+                        return selectedValue === challenge.content.correctAnswer;
+                    }
+                    return false;
+                case "ANSWER_BUILDING":
+                    if (!challenge.content.shuffledParts || !challenge.content.correctAnswer) {
+                        setDebugInfo({ error: "Missing required data" });
                         return false;
                     }
-                    const selectedValue = challenge.content.options[selectedOption];
-                    const isMatch = selectedValue === challenge.content.correctAnswer;
-                    console.log("SELECT comparison:", { selectedValue, correctAnswer: challenge.content.correctAnswer, isMatch });
-                    return isMatch;
-                case "ANSWER_BUILDING":
-                    return selectedOption?.toString() === challenge.content.correctAnswer;
+
+                    if (!Array.isArray(selectedOption)) {
+                        setDebugInfo({ error: "Selected option is not an array", selectedOption });
+                        return false;
+                    }
+
+                    const builtAnswer = selectedOption
+                        .map(index => challenge.content.shuffledParts![index])
+                        .join(" ")
+                        .trim();
+
+                    // Set debug info
+                    setDebugInfo({
+                        type: "ANSWER_BUILDING",
+                        selectedIndices: selectedOption,
+                        shuffledParts: challenge.content.shuffledParts,
+                        builtAnswer,
+                        correctAnswer: challenge.content.correctAnswer,
+                        isMatch: builtAnswer === challenge.content.correctAnswer
+                    });
+
+                    // Also try console.log
+                    console.log("Debug info:", {
+                        type: "ANSWER_BUILDING",
+                        selectedIndices: selectedOption,
+                        shuffledParts: challenge.content.shuffledParts,
+                        builtAnswer,
+                        correctAnswer: challenge.content.correctAnswer,
+                        isMatch: builtAnswer === challenge.content.correctAnswer
+                    });
+
+                    return builtAnswer === challenge.content.correctAnswer;
                 default:
                     return false;
             }
@@ -204,6 +268,15 @@ export const LessonProgress = ({
 
     return (
         <div className="min-h-screen flex flex-col">
+            {process.env.NODE_ENV !== 'production' && (
+                <div className="fixed top-0 right-0 bg-black/80 text-white p-4 m-4 rounded-lg max-w-[500px] z-50">
+                    <h3 className="font-bold mb-2">Debug Info:</h3>
+                    <pre className="text-xs overflow-auto max-h-[200px]">
+                        {JSON.stringify(debugInfo, null, 2)}
+                    </pre>
+                </div>
+            )}
+
             <Header
                 patels={patels}
                 percentage={percentage}

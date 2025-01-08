@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
 
 interface AnswerBuildingChallengeProps {
     challenge: {
@@ -8,7 +9,7 @@ interface AnswerBuildingChallengeProps {
             shuffledParts?: string[];
         };
     };
-    onSelect: (answer: string) => void;
+    onSelect: (indices: number[]) => void;
     status: "CORRECT" | "INCORRECT" | "UNANSWERED";
 }
 
@@ -17,36 +18,39 @@ export const AnswerBuildingChallenge = ({
     onSelect,
     status
 }: AnswerBuildingChallengeProps) => {
-    const [selectedParts, setSelectedParts] = useState<string[]>([]);
+    const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
+    const parts = challenge.content.shuffledParts || [];
 
-    const handlePartClick = (part: string) => {
+    const handlePartClick = (index: number) => {
         if (status !== "UNANSWERED") return;
 
-        setSelectedParts(prev => {
-            const newParts = [...prev, part];
-            const answer = newParts.join(' ');
-            onSelect(answer);
-            return newParts;
+        setSelectedIndices(prev => {
+            const newIndices = [...prev, index];
+            onSelect(newIndices);
+            return newIndices;
         });
     };
 
-    const parts = challenge.content.shuffledParts || [];
-
     return (
         <div className="space-y-6">
-            <div className="min-h-[100px] p-4 border-2 rounded-lg">
-                {selectedParts.join(' ')}
+            <div className="min-h-[100px] p-4 border-2 rounded-lg text-sky-700">
+                {selectedIndices.map(index => parts[index]).join(' ')}
             </div>
             <div className="flex flex-wrap gap-2">
                 {parts.map((part, index) => (
-                    <button
+                    <Button
                         key={index}
-                        onClick={() => handlePartClick(part)}
-                        disabled={status !== "UNANSWERED"}
-                        className="px-4 py-2 bg-sky-100 rounded-lg hover:bg-sky-200 transition"
+                        variant="premiumOutline"
+                        onClick={() => handlePartClick(index)}
+                        disabled={status !== "UNANSWERED" || selectedIndices.includes(index)}
+                        className={`px-4 py-2 rounded-lg transition
+                            ${selectedIndices.includes(index)
+                                ? 'bg-gray-100 text-muted-foreground'
+                                : 'bg-sky-100 hover:bg-sky-200'
+                            }`}
                     >
                         {part}
-                    </button>
+                    </Button>
                 ))}
             </div>
         </div>

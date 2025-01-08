@@ -22,8 +22,8 @@ export const Footer = ({ onCheck, status, disabled, lessonId }: Props) => {
     return (
         <footer className={cn(
             "lg:h-[140px] h-[100px] border-t-2",
-            status === "CORRECT" && "border-transparent bg-[#ECEFFB]",
-            status === "INCORRECT" && "border-transparent bg-rose-400"
+            status === "CORRECT" && "border-transparent bg-[#ECEFFB] border-sky-500",
+            status === "INCORRECT" && "border-transparent bg-rose-400 border-rose-500"
         )}>
             <div className="max-w-[1140px] h-full mx-auto flex items-center justify-between px-6 lg:px-10">
                 {status === "CORRECT" && (

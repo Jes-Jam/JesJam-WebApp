@@ -1,7 +1,7 @@
 "use server"
 
 import  db  from "@/database/drizzle"
-import { challengeContent, challengeProgress, challenges, userProgress } from "@/database/schema"
+import { challengeProgress, challenges, userProgress } from "@/database/schema"
 import { eq, and } from "drizzle-orm"
 import { auth } from "@clerk/nextjs/server"
 import { getUserProgress } from "@/database/queries"

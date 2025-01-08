@@ -8,7 +8,7 @@ interface SelectChallengeProps {
             correctAnswer?: string;
         };
     };
-    selectedOption: number | null;
+    selectedOption: number | number[] | null;
     onSelect: (id: number) => void;
     status: "CORRECT" | "INCORRECT" | "UNANSWERED";
 }
