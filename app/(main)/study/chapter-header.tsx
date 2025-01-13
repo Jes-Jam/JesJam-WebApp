@@ -18,7 +18,7 @@ export const ChapterHeader = ({ title, description, lessons, onLessonSelect }: P
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="w-[calc(100%-30px)] bg-white py-5 mx-10 flex items-center border-b-2 border-gray-200 justify-between">
+        <div className="w-[calc(100%-30px)] bg-white py-5 mx-10 flex items-center border-b-2 mb-10 border-gray-200 justify-between">
             <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-sky-500">{title}</h2>
                 <p className="text-gray-500">{description}</p>
@@ -34,7 +34,7 @@ export const ChapterHeader = ({ title, description, lessons, onLessonSelect }: P
                 </SheetTrigger>
                 <SheetContent>
                     <SheetHeader>
-                        <SheetTitle>{title}</SheetTitle>
+                        <SheetTitle className="text-sky-500">{title}</SheetTitle>
                     </SheetHeader>
                     <div className="mt-8 space-y-4">
                         {lessons.map((lesson, index) => (
@@ -58,7 +58,7 @@ export const ChapterHeader = ({ title, description, lessons, onLessonSelect }: P
                                         {index + 1}
                                     </div>
                                     <div>
-                                        <h3 className="font-medium">{lesson.title}</h3>
+                                        <h3 className="font-medium text-gray-600">{lesson.title}</h3>
                                         {lesson.completed && (
                                             <span className="text-sm text-sky-600">Completed</span>
                                         )}

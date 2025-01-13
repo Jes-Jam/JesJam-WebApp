@@ -1,12 +1,10 @@
-import { toast } from "sonner";
 import StickyContainer from "@/components/main/sticky-container";
 import StudyContainer from "@/components/main/study-container";
 import Header from "./header";
 import StudentStates from "@/components/main/student-state";
 import { CurrentClass } from "@/app/(main)/study/current-class";
 import { getUserProgress, getChapters, getCurrentLatestLesson, getLessonPercentage } from "@/database/queries";
-import { redirect } from "next/navigation";
-import { Chapter } from "./Chapter";
+import { Chapter } from "./chapter";
 import { RedirectWrapper } from "@/components/redirect-no-class-wrapper";
 
 const StudyPage = async () => {
