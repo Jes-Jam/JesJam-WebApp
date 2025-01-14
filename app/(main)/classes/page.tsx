@@ -1,4 +1,3 @@
-// "use client"
 
 import List from "./list";
 import AddClassButton from "./add-class-button";
@@ -9,6 +8,7 @@ import {
   getUserProgress,
   getEnrollments,
 } from "@/database/queries";
+import { useState } from "react";
 import { getCustomClasses } from "@/database/classCrud";
 
 const ClassPage = async () => {
@@ -17,6 +17,8 @@ const ClassPage = async () => {
   const userProgress = await getUserProgress();
   const userEnrollments = await getEnrollments();
   const customClasses = await getCustomClasses();
+
+
 
   return (
     <div className=" w-[900px] mx-auto pt-10 sm:px-4 md:px-4 lg:px-0 pb-[100px]">
@@ -56,8 +58,8 @@ const ClassPage = async () => {
         </div>
       ) : (
         <div className="h-40 flex items-center justify-center flex-col">
-          <p className="text-center text-slate-500 text-lg font-bold">
-            You have no custom classes yet.
+          <p className="text-center text-muted-foreground text-lg font-bold">
+            You haven't created any classes yet.
           </p>
           <AddClassButton />
         </div>

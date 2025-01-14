@@ -22,10 +22,13 @@ type Props = {
 export const Chapter = ({ id, title, description, order, lessons, activeLesson, activeLessonPercentage }: Props) => {
     const [selectedLessonId, setSelectedLessonId] = useState<number | null>(null);
 
-    // Calculate the number of rows needed based on 3 items per row
-    const numberOfRows = Math.ceil(lessons.length / 3);
-    // Each row is 150px tall (from VERTICAL_SPACING in lesson-stage)
-    const contentHeight = numberOfRows * 150;
+    // Calculate the number of rows needed based on 2 items per row
+    const numberOfRows = Math.ceil(lessons.length / 2);
+
+    // Calculate height with extra space for last row 
+    const regularRowHeight = 150;
+    const lastRowHeight = 200;
+    const contentHeight = ((numberOfRows - 1) * regularRowHeight) + lastRowHeight;
 
     return (
         <div className="mb-20">
@@ -52,6 +55,8 @@ export const Chapter = ({ id, title, description, order, lessons, activeLesson, 
                                 isLocked={isLockedLesson}
                                 activeLessonPercentage={activeLessonPercentage}
                                 isSelected={isSelected}
+                                title={lesson.title}
+                                description={lesson.description ?? ''}
                             />
                         )
                     })}

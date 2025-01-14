@@ -11,6 +11,9 @@ const nextConfig = {
           },
         ],
       },
+    logging: {
+        level: "verbose",
+    },
 };
 
 export default nextConfig;

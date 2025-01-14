@@ -1,17 +1,20 @@
-import Link from "next/link";
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
+import AddClassModal from "./create-class/add-class-modal";
+import { useState } from "react";
+const AddClassButton = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-interface AddClassButtonProps {
-  [key: string]: any; // Allows any additional props
-}
-
-const AddClassButton = ({ ...props }: AddClassButtonProps) => {
   return (
-    <Link href="/classes/create" {...props}>
-      <Button variant="primary" className="mt-4">
-        Create a private class
+    <>
+      <Button variant="primaryOutline" className="mt-4" onClick={() => setIsModalOpen(true)}>
+        <PlusIcon className="w-4 h-4 mr-2" />
+        Create your own class
       </Button>
-    </Link>
+      <AddClassModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </>
   );
 };
 

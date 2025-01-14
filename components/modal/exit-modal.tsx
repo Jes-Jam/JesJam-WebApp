@@ -29,8 +29,8 @@ export const ExitModal = () => {
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Are you sure you want to exit?</DialogTitle>
-                    <DialogDescription>
+                    <DialogTitle className="text-2xl text-[#0FA5E9]">Are you sure you want to exit?</DialogTitle>
+                    <DialogDescription className="text-lg text-[#747A87]">
                         You will lose your progress.
                     </DialogDescription>
                 </DialogHeader>

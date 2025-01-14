@@ -26,7 +26,7 @@ interface ChapterModalProps {
     initialData: {
         id: number;
         title: string;
-        description: string | undefined;
+        description: string | null | undefined;
         order: number;
     } | null | undefined;
 }
@@ -53,7 +53,7 @@ export const ChapterModal = ({
         if (initialData) {
             form.reset({
                 title: initialData.title,
-                description: initialData.description,
+                description: initialData.description || "",
                 order: initialData.order,
             })
         }

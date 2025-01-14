@@ -1,70 +1,145 @@
-import { getChapters } from "@/database/chapterCrud";
+"use client";
+
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Header from "./header";
+import Loading from "./loading";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { ChevronRight, Pencil } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import AddChapterModal from "./create-chapter/add-chapter-modal";
 
-interface Chapter {
-  id: number;
-  title: string;
-  description: string;
-  class: {
-    title: string;
-  };
-}
-
-export default async function ClassPage({ params }: { params: { classId: string } }) {
+export default function ClassPage({ params }: { params: { classId: string } }) {
   const { classId } = params;
-  let error = "";
-  let chapters: Chapter[] | undefined;
-  let className: string | undefined;
+  const [currentClass, setCurrentClass] = useState<any>(null);
+  const [chapters, setChapters] = useState<any[]>([]);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  try {
-    chapters = await getChapters(Number(classId));
-  } catch (err: any) {
-    error = err.message || "An unexpected error occurred.";
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const classResponse = await axios.get(`/api/user-classes/${classId}`);
+        const chaptersResponse = await axios.get(`/api/user-classes/${classId}/user-chapters`);
+
+        setCurrentClass(classResponse.data);
+        setChapters(chaptersResponse.data);
+      } catch (err: any) {
+        setError(err.message || "An error occurred while fetching data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [classId]);
+
+  const fetchChapters = async () => {
+    const chaptersResponse = await axios.get(`/api/user-classes/${classId}/user-chapters`);
+    setChapters(chaptersResponse.data);
+  };
+
+  if (isLoading) {
+    return <Loading />;
   }
-
-  if (chapters?.length) {
-    className = chapters[0]?.class?.title || "Unknown Class";
-  }
-
-
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-[900px] mx-auto mt-10">
-      <Header title="Chapters" />
-      <div className="flex justify-between items-center my-6 border border-blue-200 p-4 rounded-sm">
-        <h1 className="text-xl font-semibold text-blue-400">{`${className} > Chapters`}</h1>
+      <Header title={currentClass?.title || "Class Chapters"} />
+
+      <div className="flex justify-between items-center my-6">
+        <div>
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href={`/classes/${classId}`}>
+                  {currentClass?.title || "Loading..."}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator>
+                <ChevronRight className="h-4 w-4" />
+              </BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbPage>Chapters</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
         <div className="flex gap-4">
-          <Link href={`/classes/${classId}/chapters/edit`}>
-            <Button variant="secondary">Add or update chapters</Button>
-          </Link>
+          <Button
+            variant="primaryOutline"
+            onClick={() => setIsAddModalOpen(true)}
+          >
+            Add chapter
+          </Button>
         </div>
       </div>
 
-      {!error && !chapters?.length  &&
-        <div className="text-center mt-10 text-gray-500">
-          <p className="mb-4">No chapters available for this class yet.</p>
-          <Link href={`/classes/${classId}/chapters/create`}>
-            <Button variant="secondary">Add Chapters</Button>
-          </Link>
-        </div>
-      }
+      <Separator />
 
-      {!error && chapters?.length > 0 && chapters?.map((chapter) => (
-        <Link key={chapter.id} href={`/classes/${classId}/chapters/${chapter.id}/lessons`}>
-          <div className="block p-4 border-2 border-gray-300 rounded-lg hover:border-blue-200 hover:shadow transition duration-300 ease-in-out">
-            <h2 className="text-xl font-semibold pb-3">{chapter.title}</h2>
-            <p className="text-gray-500">{chapter.description}</p>
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold text-gray-500 mt-6">All Chapters</h2>
+
+        {!error && (chapters?.length ?? 0) === 0 && (
+          <div className="flex flex-col items-center justify-center mt-10 text-gray-500">
+            <div className="flex flex-col items-center justify-center">
+              <p className="mb-4 font-lg">No chapters available for this class yet.</p>
+              <Button variant="primaryOutline" onClick={() => setIsAddModalOpen(true)}>Add chapter</Button>
+            </div>
           </div>
-        </Link>
-      ))}
+        )}
 
-      {error &&
-        <div className="h-full flex items-center justify-center">
-          <p className="text-center text-red-500 text-lg font-bold">{error}</p>
-        </div>
-      }
+        {!error && chapters && chapters.length > 0 && (
+          <div className="grid gap-4">
+            {chapters.map((chapter) => (
+              <Link
+                key={chapter.id}
+                href={`/classes/${classId}/chapters/${chapter.id}/lessons`}
+              >
+                <div className="block p-4 border-2 border-gray-300 rounded-lg hover:border-blue-200 hover:shadow transition duration-300 ease-in-out">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-semibold pb-3 text-gray-500">{chapter.title}</h3>
+                    <div className="flex items-center justify-center">
+                      <Button variant="primaryOutline" onClick={() => setIsAddModalOpen(true)}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  {chapter.description && (
+                    <p className="text-gray-500/90 text-sm">{chapter.description}</p>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {error && (
+          <div className="h-full flex items-center justify-center">
+            <p className="text-center text-red-500 text-lg font-bold">{error}</p>
+          </div>
+        )}
+      </div>
+
+      <AddChapterModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        classId={Number(params.classId)}
+        onSuccess={() => {
+          // Refresh chapters list
+          fetchChapters();
+        }}
+      />
     </div>
   );
 }

@@ -7,18 +7,12 @@ import { eq, desc, asc } from "drizzle-orm";
 
 export const getAdminClasses = cache(async () => {
     const classesList = await db.query.classes.findMany({
+        where: eq(classes.isPrivateClass, false),
     });
-    console.log("Classes", classes)
-    return classesList
+    
+    console.log("Private Classes:", classesList);
+    return classesList;
 })
-
-export const getClasses = cache(async () => {
-    const classesList = await db.query.classes.findMany({
-        where: eq(classes.isPrivateClass, false)
-    });
-    console.log("Classes", classes)
-    return classesList
-});
 
 export const getClassById = cache(async (classId: number) =>{
     const data = await db.query.classes.findFirst({

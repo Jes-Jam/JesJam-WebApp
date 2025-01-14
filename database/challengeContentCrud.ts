@@ -3,7 +3,6 @@
 import db from "./drizzle"
 import { cache } from "react";
 import { getChallengeById } from "./challengeCrud";
-import { challengeContent } from "./schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 

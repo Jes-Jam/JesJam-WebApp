@@ -49,7 +49,7 @@ const Sidebar = ({ className }: Props) => {
                 </ClerkLoading>
                 <ClerkLoaded>
                     <div className="flex items-center gap-x-3">
-                        <UserButton afterSignOutUrl="/">
+                        <UserButton>
                             <Image src="/images/user.svg" alt="user" width={40} height={40} className="object-contain rounded-full border-2 border-slate-200" />
                         </UserButton>
                         <div className="flex flex-col">

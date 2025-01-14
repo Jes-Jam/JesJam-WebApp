@@ -1,6 +1,7 @@
 import StickyContainer from "@/components/main/sticky-container";
 import StudyContainer from "@/components/main/study-container";
 import StudentStates from "@/components/main/student-state";
+import ShareProgress from "./share-progress";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { RedirectWrapper } from "@/components/redirect-no-class-wrapper";
@@ -86,6 +87,7 @@ const LeaderboardPage = async () => {
                     petals={userProgress.patels}
                     points={userProgress.points}
                     isPremium={false} />
+                <ShareProgress />
             </StickyContainer>
         </div >
     )
