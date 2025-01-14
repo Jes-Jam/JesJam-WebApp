@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { Check, MoreVertical } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { hasChapters } from "@/database/chapterCrud";
 
 import {
   DropdownMenu,
@@ -70,12 +69,6 @@ function ClassCard({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showMenu]);
-
-  useEffect(() => {
-    hasChapters(currentClass.id).then((res) => {
-      setAlreadyHasChapters(res);
-    });
-  }, [currentClass.id]);
 
   return (
     <div className="relative">

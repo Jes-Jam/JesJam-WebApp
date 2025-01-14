@@ -1,7 +1,6 @@
-
 const { getLesson, getUserProgress } = await import("@/database/queries");
 import { redirect } from "next/navigation";
-import { LessonProgress } from "../lesson-progress";
+import { Challenge, LessonProgress } from "../lesson-progress";
 
 type Props = {
     params: {
@@ -23,7 +22,7 @@ const LessonPage = async ({ params }: Props) => {
         <>
             <LessonProgress
                 initialLessonId={lesson.id}
-                initialLessonChallenges={lesson.challenges}
+                initialLessonChallenges={lesson.challenges as unknown as Challenge[]}
                 initialPercentage={initialPercentage}
                 initialPatels={userProgress.patels}
                 userSubscription={null}
