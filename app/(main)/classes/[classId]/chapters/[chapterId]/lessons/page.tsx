@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/breadcrumb";
 import { ChevronRight, Pencil } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import LessonDialog from "./lessons/lesson-dialog/lesson-dialog";
 
 interface Lesson {
     id: number;
@@ -41,8 +40,6 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
     const [lessons, setLessons] = useState<Lesson[]>([]);
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(true);
-    const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
-    const [selectedLesson, setSelectedLesson] = useState<Lesson | undefined>(undefined);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -66,32 +63,13 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
         fetchData();
     }, [classId, chapterId]);
 
-    const handleAddLesson = () => {
-        setSelectedLesson(undefined);
-        setIsLessonModalOpen(true);
-    };
-
-    const handleEditLesson = (lesson: Lesson) => {
-        setSelectedLesson(lesson);
-        setIsLessonModalOpen(true);
-    };
-
-    const refreshLessons = async () => {
-        try {
-            const response = await axios.get(`/api/user-classes/${classId}/user-chapters/${chapterId}/user-lessons`);
-            setLessons(response.data);
-        } catch (err: any) {
-            setError(err.message || "Failed to refresh lessons");
-        }
-    };
-
     if (isLoading) {
         return <Loading />;
     }
 
     return (
         <div className="flex flex-col gap-4 w-full max-w-[900px] mx-auto mt-10">
-            <Header title={chapter?.title || "Chapter"} />
+            <Header title="Lessons page" />
 
             <div className="flex justify-between items-center my-6">
                 <div>
@@ -128,7 +106,7 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
                 <div className="flex gap-4">
                     <Button
                         variant="primaryOutline"
-                        onClick={handleAddLesson}
+                        onClick={() => { }} // Add lesson modal handler here
                     >
                         Add lesson
                     </Button>
@@ -138,7 +116,7 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
             <Separator />
 
             <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-gray-500 mt-6">All lessons</h2>
+                <h2 className="text-xl font-semibold text-gray-500 mt-6">Lessons</h2>
 
                 {!error && (lessons?.length ?? 0) === 0 && (
                     <div className="flex flex-col items-center justify-center mt-10 text-gray-500">
@@ -146,7 +124,7 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
                             <p className="mb-4 font-lg">No lessons available for this chapter yet.</p>
                             <Button
                                 variant="primaryOutline"
-                                onClick={handleAddLesson}
+                                onClick={() => { }} // Add lesson modal handler here
                             >
                                 Add lesson
                             </Button>
@@ -178,7 +156,7 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
                                                 className="text-gray-500"
                                                 onClick={(e) => {
                                                     e.preventDefault();
-                                                    handleEditLesson(lesson);
+                                                    // Add lesson edit handler here
                                                 }}
                                             >
                                                 <Pencil className="h-4 w-4" />
@@ -197,18 +175,6 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
                     </div>
                 )}
             </div>
-
-            <LessonDialog
-                isOpen={isLessonModalOpen}
-                onClose={() => {
-                    setIsLessonModalOpen(false);
-                    setSelectedLesson(undefined);
-                }}
-                classId={classId}
-                chapterId={chapterId}
-                lesson={selectedLesson}
-                onSuccess={refreshLessons}
-            />
         </div>
     );
 }

@@ -73,15 +73,15 @@ export default function ClassPage({ params }: { params: { classId: string } }) {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href={`/classes/${classId}`}>
-                  {currentClass?.title || "Loading..."}
-                </BreadcrumbLink>
+                <BreadcrumbLink href="/classes" className="font-bold">Classes</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator>
                 <ChevronRight className="h-4 w-4" />
               </BreadcrumbSeparator>
               <BreadcrumbItem>
-                <BreadcrumbPage>Chapters</BreadcrumbPage>
+                <BreadcrumbLink href={`/classes/${classId}`} className="text-sky-500">
+                  {currentClass?.title || "Loading..."}
+                </BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -113,14 +113,13 @@ export default function ClassPage({ params }: { params: { classId: string } }) {
         {!error && chapters && chapters.length > 0 && (
           <div className="grid gap-4">
             {chapters.map((chapter) => (
-              <Link
-                key={chapter.id}
-                href={`/classes/${classId}/chapters/${chapter.id}`}
-              >
+              <div key={chapter.id}>
                 <div className="block p-4 border-2 border-gray-300 rounded-lg hover:border-blue-200 hover:shadow transition duration-300 ease-in-out">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-xl font-semibold pb-3 text-gray-500">{chapter.title}</h3>
+                      <Link href={`/classes/${classId}/chapters/${chapter.id}`}>
+                        <h3 className="text-xl font-semibold pb-3 text-sky-500 hover:text-sky-600">{chapter.title}</h3>
+                      </Link>
                       {chapter.description && (
                         <p className="text-gray-500/90 text-sm">{chapter.description}</p>
                       )}
@@ -132,7 +131,7 @@ export default function ClassPage({ params }: { params: { classId: string } }) {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}

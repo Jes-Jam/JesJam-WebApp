@@ -1,53 +1,105 @@
-import db from "@/database/drizzle"
-import { lessons } from "@/database/schema"
-import { eq } from "drizzle-orm"
-import { NextResponse } from "next/server"
-
-export async function DELETE(
-    req: Request,
-    { params }: { params: { lessonId: string } }
-) {
-    try {
-        const { lessonId } = params
-
-        if (!lessonId) {
-            return new NextResponse("Lesson ID is required", { status: 400 })
-        }
-
-        await db.delete(lessons).where(eq(lessons.id, parseInt(lessonId)))
-
-        return new NextResponse(null, { status: 204 })
-    } catch (error) {
-        console.error("[LESSON_DELETE]", error)
-        return new NextResponse("Internal Error", { status: 500 })
-    }
-}
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import db from "@/database/drizzle";
+import { lessons, chapters, classes } from "@/database/schema";
+import { eq, and } from "drizzle-orm";
 
 export async function PATCH(
     req: Request,
-    { params }: { params: { lessonId: string } }
+    { params }: { params: { classId: string; chapterId: string; lessonId: string } }
 ) {
     try {
-        const { lessonId } = params
-        const body = await req.json()
+        const { userId } = auth();
 
-        if (!lessonId) {
-            return new NextResponse("Lesson ID is required", { status: 400 })
+        if (!userId) {
+            return new NextResponse("Unauthorized", { status: 401 });
         }
 
+        const { title, description } = await req.json();
+        const classId = parseInt(params.classId);
+        const chapterId = parseInt(params.chapterId);
+        const lessonId = parseInt(params.lessonId);
+
+        if (!classId || !chapterId || !lessonId) {
+            return new NextResponse("Invalid ID", { status: 400 });
+        }
+
+        // Verify class ownership
+        const classData = await db.query.classes.findFirst({
+            where: eq(classes.id, classId)
+        });
+
+        if (!classData || classData.ownerId !== userId) {
+            return new NextResponse("Unauthorized", { status: 401 });
+        }
+
+        // Update the lesson
         const updatedLesson = await db
             .update(lessons)
             .set({
-                title: body.title,
-                description: body.description,
-                order: body.order,
+                title,
+                description,
             })
-            .where(eq(lessons.id, parseInt(lessonId)))
-            .returning()
+            .where(
+                and(
+                    eq(lessons.id, lessonId),
+                    eq(lessons.chapterId, chapterId)
+                )
+            )
+            .returning();
 
-        return NextResponse.json(updatedLesson[0])
+        if (!updatedLesson[0]) {
+            return new NextResponse("Lesson not found", { status: 404 });
+        }
+
+        return NextResponse.json(updatedLesson[0]);
     } catch (error) {
-        console.error("[LESSON_PATCH]", error)
-        return new NextResponse("Internal Error", { status: 500 })
+        console.error("[LESSON_PATCH]", error);
+        return new NextResponse("Internal Error", { status: 500 });
+    }
+}
+
+export async function DELETE(
+    req: Request,
+    { params }: { params: { classId: string; chapterId: string; lessonId: string } }
+) {
+    try {
+        const { userId } = auth();
+
+        if (!userId) {
+            return new NextResponse("Unauthorized", { status: 401 });
+        }
+
+        const classId = parseInt(params.classId);
+        const chapterId = parseInt(params.chapterId);
+        const lessonId = parseInt(params.lessonId);
+
+        if (!classId || !chapterId || !lessonId) {
+            return new NextResponse("Invalid ID", { status: 400 });
+        }
+
+        // Verify class ownership
+        const classData = await db.query.classes.findFirst({
+            where: eq(classes.id, classId)
+        });
+
+        if (!classData || classData.ownerId !== userId) {
+            return new NextResponse("Unauthorized", { status: 401 });
+        }
+
+        // Delete the lesson
+        await db
+            .delete(lessons)
+            .where(
+                and(
+                    eq(lessons.id, lessonId),
+                    eq(lessons.chapterId, chapterId)
+                )
+            );
+
+        return new NextResponse(null, { status: 204 });
+    } catch (error) {
+        console.error("[LESSON_DELETE]", error);
+        return new NextResponse("Internal Error", { status: 500 });
     }
 }
