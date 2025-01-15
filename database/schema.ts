@@ -118,7 +118,7 @@ export const userProgress = pgTable('user_progress', {
     userImageSrc: text("user_image_src").notNull().default("https://placehold.co/40x40"),
     patels: integer("patels").notNull().default(10), 
     points: integer("points").notNull().default(0),
-    streakCount: integer("streak_count").notNull().default(1),
+    streakCount: integer("streak_count").notNull().default(0),
     lastStreakDate: date("last_streak_date").notNull().default(getCurrentDate())
 })
 
