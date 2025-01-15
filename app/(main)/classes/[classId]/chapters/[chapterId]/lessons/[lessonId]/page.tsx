@@ -8,6 +8,7 @@ import { ImageIcon, Minus, Copy } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Loading from "./loading";
 import { Card } from "@/components/ui/card";
+import { toast } from "sonner";
 
 interface Lesson {
     id: number;
@@ -48,6 +49,7 @@ export default function LessonPage({
     const [flashcards, setFlashcards] = useState<FlashCard[]>([
         { id: 1, term: "", definition: "" }
     ]);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -65,6 +67,29 @@ export default function LessonPage({
         };
 
         fetchData();
+    }, [params.classId, params.chapterId, params.lessonId]);
+
+    useEffect(() => {
+        const fetchFlashcards = async () => {
+            try {
+                const response = await axios.get(`/api/user-classes/${params.classId}/user-chapters/${params.chapterId}/user-lessons/${params.lessonId}/user-challenges`);
+
+                const existingCards = response.data
+                    .filter((challenge: any) => challenge.type === "CARD")
+                    .map((challenge: any, index: number) => ({
+                        id: index + 1,
+                        ...challenge.content
+                    }));
+
+                if (existingCards.length > 0) {
+                    setFlashcards(existingCards);
+                }
+            } catch (error) {
+                toast.error("Failed to load flashcards");
+            }
+        };
+
+        fetchFlashcards();
     }, [params.classId, params.chapterId, params.lessonId]);
 
     const addNewCard = () => {
@@ -89,9 +114,31 @@ export default function LessonPage({
         );
     };
 
-    const removeCard = (id: number) => {
-        if (flashcards.length > 1) {
+    const handleSaveCard = async (card: FlashCard) => {
+        try {
+            await axios.patch(
+                `/api/user-classes/${params.classId}/user-chapters/${params.chapterId}/user-lessons/${params.lessonId}/challenges/${card.id}`,
+                {
+                    term: card.term,
+                    definition: card.definition,
+                    imageUrl: card.imageUrl
+                }
+            );
+            toast.success("Flashcard updated successfully");
+        } catch (error) {
+            console.error("Failed to update flashcard", error);
+        }
+    };
+
+    const deleteCard = async (id: number) => {
+        try {
+            await axios.delete(
+                `/api/user-classes/${params.classId}/user-chapters/${params.chapterId}/user-lessons/${params.lessonId}/user-challenges/${id}`
+            );
             setFlashcards(cards => cards.filter(card => card.id !== id));
+            toast.success("Flashcard deleted successfully");
+        } catch (error) {
+            toast.error("Failed to delete flashcard");
         }
     };
 
@@ -103,6 +150,36 @@ export default function LessonPage({
                 ...cardToDuplicate,
                 id: newId
             }]);
+        }
+    };
+
+    const handleSave = async () => {
+        const hasEmptyFields = flashcards.some(card => !card.term || !card.definition);
+        if (hasEmptyFields) {
+            toast.error("Please fill in all flashcard fields");
+            return;
+        }
+
+        setIsSaving(true);
+        try {
+            const formattedData = {
+                flashcards: flashcards.map(({ term, definition, imageUrl }) => ({
+                    term,
+                    definition,
+                    imageUrl
+                }))
+            };
+
+            await axios.post(
+                `/api/user-classes/${params.classId}/user-chapters/${params.chapterId}/user-lessons/${params.lessonId}`,
+                formattedData
+            );
+
+            toast.success("Flashcards saved successfully");
+        } catch (error) {
+            toast.error("Failed to save flashcards");
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -145,7 +222,7 @@ export default function LessonPage({
                                             variant="ghost"
                                             size="sm"
                                             className="h-8 w-8 p-0"
-                                            onClick={() => removeCard(card.id)}
+                                            onClick={() => deleteCard(card.id)}
                                         >
                                             <Minus className="h-4 w-4" />
                                         </Button>
@@ -170,6 +247,7 @@ export default function LessonPage({
                                                 placeholder="Enter term"
                                                 value={card.term}
                                                 onChange={(e) => updateCard(card.id, 'term', e.target.value)}
+                                                onBlur={() => handleSaveCard(card)}
                                                 className="w-full p-2 border-b border-gray-200 focus:outline-none focus:border-gray-400"
                                             />
                                         </div>
@@ -180,9 +258,10 @@ export default function LessonPage({
                                             <div className="flex gap-4">
                                                 <input
                                                     type="text"
-                                                    placeholder="Enter the Definition"
+                                                    placeholder="Enter the Mathematical symbols"
                                                     value={card.definition}
                                                     onChange={(e) => updateCard(card.id, 'definition', e.target.value)}
+                                                    onBlur={() => handleSaveCard(card)}
                                                     className="w-full p-2 border-b border-gray-200 focus:outline-none focus:border-gray-400"
                                                 />
                                                 <Button
@@ -190,7 +269,8 @@ export default function LessonPage({
                                                     size="sm"
                                                     className="flex items-center gap-2"
                                                 >
-                                                    <ImageIcon className="h-4 w-4 text-gray-500" />
+                                                    <ImageIcon className="h-4 w-4" />
+                                                    Image
                                                 </Button>
                                             </div>
                                         </div>
@@ -199,29 +279,33 @@ export default function LessonPage({
                             </div>
                         ))}
                     </div>
-                    <Button
-                        className="w-full mt-6 border-sky-200"
-                        variant="primaryOutline"
-                        onClick={addNewCard}
-                    >
-                        + Add Card
-                    </Button>
+                    <div className="flex flex-col gap-4 mt-6">
+                        <Button
+                            className="w-full border-sky-200"
+                            variant="primaryOutline"
+                            onClick={addNewCard}
+                        >
+                            + Add Card
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="flex items-center justify-end">
                     <Link href={`/classes/${params.classId}/chapters/${params.chapterId}`} className="-ml-2">
                         <Button
-                            className="border-sky-200 mr-3"
+                            className="border-sky-200 mr-3 mb-6"
                             variant="primaryOutline"
                         >
                             Cancel
                         </Button>
                     </Link>
                     <Button
-                        className="border-sky-200"
+                        className="border-sky-200 mb-6"
                         variant="primary"
+                        onClick={handleSave}
+                        disabled={isSaving}
                     >
-                        Save Changes
+                        {isSaving ? "Saving..." : "Save Changes"}
                     </Button>
                 </div>
             </div>
