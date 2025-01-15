@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { ChevronRight, Pencil } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import AddChapterModal from "./create-chapter/add-chapter-modal";
+import ChapterModal from "./chapter-dialog/chapter-dialog";
 
 export default function ClassPage({ params }: { params: { classId: string } }) {
   const { classId } = params;
@@ -24,7 +24,8 @@ export default function ClassPage({ params }: { params: { classId: string } }) {
   const [chapters, setChapters] = useState<any[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedChapter, setSelectedChapter] = useState<any | undefined>(undefined);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,6 +48,16 @@ export default function ClassPage({ params }: { params: { classId: string } }) {
   const fetchChapters = async () => {
     const chaptersResponse = await axios.get(`/api/user-classes/${classId}/user-chapters`);
     setChapters(chaptersResponse.data);
+  };
+
+  const handleEditClick = (chapter: any) => {
+    setSelectedChapter(chapter);
+    setIsModalOpen(true);
+  };
+
+  const handleAddClick = () => {
+    setSelectedChapter(undefined); // Reset selected chapter
+    setIsModalOpen(true);
   };
 
   if (isLoading) {
@@ -78,7 +89,7 @@ export default function ClassPage({ params }: { params: { classId: string } }) {
         <div className="flex gap-4">
           <Button
             variant="primaryOutline"
-            onClick={() => setIsAddModalOpen(true)}
+            onClick={() => handleAddClick()}
           >
             Add chapter
           </Button>
@@ -94,7 +105,7 @@ export default function ClassPage({ params }: { params: { classId: string } }) {
           <div className="flex flex-col items-center justify-center mt-10 text-gray-500">
             <div className="flex flex-col items-center justify-center">
               <p className="mb-4 font-lg">No chapters available for this class yet.</p>
-              <Button variant="primaryOutline" onClick={() => setIsAddModalOpen(true)}>Add chapter</Button>
+              <Button variant="primaryOutline" onClick={() => handleAddClick()}>Add chapter</Button>
             </div>
           </div>
         )}
@@ -104,20 +115,22 @@ export default function ClassPage({ params }: { params: { classId: string } }) {
             {chapters.map((chapter) => (
               <Link
                 key={chapter.id}
-                href={`/classes/${classId}/chapters/${chapter.id}/lessons`}
+                href={`/classes/${classId}/chapters/${chapter.id}`}
               >
                 <div className="block p-4 border-2 border-gray-300 rounded-lg hover:border-blue-200 hover:shadow transition duration-300 ease-in-out">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-semibold pb-3 text-gray-500">{chapter.title}</h3>
-                    <div className="flex items-center justify-center">
-                      <Button variant="primaryOutline" onClick={() => setIsAddModalOpen(true)}>
+                    <div>
+                      <h3 className="text-xl font-semibold pb-3 text-gray-500">{chapter.title}</h3>
+                      {chapter.description && (
+                        <p className="text-gray-500/90 text-sm">{chapter.description}</p>
+                      )}
+                    </div>
+                    <div>
+                      <Button variant="default" className="text-gray-500" onClick={() => handleEditClick(chapter)}>
                         <Pencil className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
-                  {chapter.description && (
-                    <p className="text-gray-500/90 text-sm">{chapter.description}</p>
-                  )}
                 </div>
               </Link>
             ))}
@@ -131,10 +144,14 @@ export default function ClassPage({ params }: { params: { classId: string } }) {
         )}
       </div>
 
-      <AddChapterModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
+      <ChapterModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedChapter(undefined);
+        }}
         classId={Number(params.classId)}
+        chapter={selectedChapter}
         onSuccess={() => {
           // Refresh chapters list
           fetchChapters();

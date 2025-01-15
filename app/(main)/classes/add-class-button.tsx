@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
-import AddClassModal from "./create-class/add-class-modal";
+import AddClassModal from "./class-dialog/class-dialog";
 import { useState } from "react";
 const AddClassButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
