@@ -4,6 +4,67 @@ import db from "@/database/drizzle";
 import { lessons, chapters, classes } from "@/database/schema";
 import { eq, and } from "drizzle-orm";
 
+export async function GET(
+    req: Request,
+    { params }: { params: { classId: string; chapterId: string; lessonId: string } }
+) {
+    try {
+        const { userId } = auth();
+
+        if (!userId) {
+            return new NextResponse("Unauthorized", { status: 401 });
+        }
+
+        const classId = parseInt(params.classId);
+        const chapterId = parseInt(params.chapterId);
+        const lessonId = parseInt(params.lessonId);
+
+        if (!classId || !chapterId || !lessonId) {
+            return new NextResponse("Invalid ID", { status: 400 });
+        }
+
+        // Get the lesson with its chapter and class information
+        const lesson = await db.query.lessons.findFirst({
+            where: and(
+                eq(lessons.id, lessonId),
+                eq(lessons.chapterId, chapterId)
+            ),
+            with: {
+                chapter: {
+                    with: {
+                        class: {
+                            columns: {
+                                id: true,
+                                title: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        if (!lesson) {
+            return new NextResponse("Lesson not found", { status: 404 });
+        }
+
+        // Verify class ownership or enrollment
+        const classData = await db.query.classes.findFirst({
+            where: eq(classes.id, classId)
+        });
+
+        if (!classData || classData.ownerId !== userId) {
+            // Here you might want to check if the user is enrolled in the class
+            // if they're not the owner
+            return new NextResponse("Unauthorized", { status: 401 });
+        }
+
+        return NextResponse.json(lesson);
+    } catch (error) {
+        console.error("[LESSON_GET]", error);
+        return new NextResponse("Internal Error", { status: 500 });
+    }
+}
+
 export async function PATCH(
     req: Request,
     { params }: { params: { classId: string; chapterId: string; lessonId: string } }

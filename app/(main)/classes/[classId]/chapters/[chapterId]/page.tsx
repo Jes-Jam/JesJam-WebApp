@@ -91,7 +91,7 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
 
     return (
         <div className="flex flex-col gap-4 w-full max-w-[900px] mx-auto mt-10">
-            <Header title={chapter?.title || "Chapter"} />
+            <Header title={chapter?.title || "Chapter"} classId={classId} />
 
             <div className="flex justify-between items-center my-6">
                 <div>
