@@ -16,24 +16,46 @@ import {
 } from "@/components/ui/breadcrumb";
 import { ChevronRight, Pencil } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import LessonDialog from "./lessons/lesson-dialog/lesson-dialog";
+
+interface Lesson {
+    id: number;
+    title: string;
+    description: string | null;
+    order: number;
+}
+
+interface Chapter {
+    id: number;
+    title: string;
+    description: string | null;
+    class: {
+        id: number;
+        title: string;
+    };
+}
 
 export default function ChapterPage({ params }: { params: { classId: string, chapterId: string } }) {
     const { classId, chapterId } = params;
-    const [currentClass, setCurrentClass] = useState<any>(null);
-    const [chapters, setChapters] = useState<any[]>([]);
+    const [chapter, setChapter] = useState<Chapter | null>(null);
+    const [lessons, setLessons] = useState<Lesson[]>([]);
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(true);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedChapter, setSelectedChapter] = useState<any | undefined>(undefined);
+    const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
+    const [selectedLesson, setSelectedLesson] = useState<Lesson | undefined>(undefined);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const classResponse = await axios.get(`/api/user-classes/${classId}`);
-                const chaptersResponse = await axios.get(`/api/user-classes/${classId}/user-chapters`);
+                const [chapterResponse, lessonsResponse] = await Promise.all([
+                    axios.get(`/api/user-classes/${classId}/user-chapters/${chapterId}`),
+                    axios.get(`/api/user-classes/${classId}/user-chapters/${chapterId}/user-lessons`)
+                ]);
 
-                setCurrentClass(classResponse.data);
-                setChapters(chaptersResponse.data);
+                setChapter(chapterResponse.data);
+
+                console.log(chapterResponse.data);
+                setLessons(lessonsResponse.data);
             } catch (err: any) {
                 setError(err.message || "An error occurred while fetching data");
             } finally {
@@ -42,21 +64,25 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
         };
 
         fetchData();
-    }, [classId]);
+    }, [classId, chapterId]);
 
-    const fetchChapters = async () => {
-        const chaptersResponse = await axios.get(`/api/user-classes/${classId}/user-chapters`);
-        setChapters(chaptersResponse.data);
+    const handleAddLesson = () => {
+        setSelectedLesson(undefined);
+        setIsLessonModalOpen(true);
     };
 
-    const handleEditClick = (chapter: any) => {
-        setSelectedChapter(chapter);
-        setIsModalOpen(true);
+    const handleEditLesson = (lesson: Lesson) => {
+        setSelectedLesson(lesson);
+        setIsLessonModalOpen(true);
     };
 
-    const handleAddClick = () => {
-        setSelectedChapter(undefined); // Reset selected chapter
-        setIsModalOpen(true);
+    const refreshLessons = async () => {
+        try {
+            const response = await axios.get(`/api/user-classes/${classId}/user-chapters/${chapterId}/user-lessons`);
+            setLessons(response.data);
+        } catch (err: any) {
+            setError(err.message || "Failed to refresh lessons");
+        }
     };
 
     if (isLoading) {
@@ -65,22 +91,36 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
 
     return (
         <div className="flex flex-col gap-4 w-full max-w-[900px] mx-auto mt-10">
-            <Header title={currentClass?.title || "Class Chapters"} />
+            <Header title={chapter?.title || "Chapter"} classId={classId} />
 
             <div className="flex justify-between items-center my-6">
                 <div>
                     <Breadcrumb>
                         <BreadcrumbList>
                             <BreadcrumbItem>
-                                <BreadcrumbLink href={`/classes/${classId}`}>
-                                    {currentClass?.title || "Loading..."}
+                                <BreadcrumbLink href="/classes" className="font-bold">Classes</BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator>
+                                <ChevronRight className="h-4 w-4" />
+                            </BreadcrumbSeparator>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink href={`/classes/${classId}`} className="text-sky-500">
+                                    {chapter?.class.title}
                                 </BreadcrumbLink>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator>
                                 <ChevronRight className="h-4 w-4" />
                             </BreadcrumbSeparator>
                             <BreadcrumbItem>
-                                <BreadcrumbPage>Chapters</BreadcrumbPage>
+                                <BreadcrumbLink href={`/classes/${classId}/chapters`} className="font-bold">
+                                    Chapters
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator>
+                                <ChevronRight className="h-4 w-4" />
+                            </BreadcrumbSeparator>
+                            <BreadcrumbItem>
+                                <BreadcrumbPage className="text-sky-500">{chapter?.title}</BreadcrumbPage>
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
@@ -88,9 +128,9 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
                 <div className="flex gap-4">
                     <Button
                         variant="primaryOutline"
-                        onClick={() => handleAddClick()}
+                        onClick={handleAddLesson}
                     >
-                        Add chapter
+                        Add lesson
                     </Button>
                 </div>
             </div>
@@ -98,40 +138,55 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
             <Separator />
 
             <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-gray-500 mt-6">All Chapters</h2>
+                <h2 className="text-xl font-semibold text-gray-500 mt-6">All lessons</h2>
 
-                {!error && (chapters?.length ?? 0) === 0 && (
+                {!error && (lessons?.length ?? 0) === 0 && (
                     <div className="flex flex-col items-center justify-center mt-10 text-gray-500">
                         <div className="flex flex-col items-center justify-center">
-                            <p className="mb-4 font-lg">No chapters available for this class yet.</p>
-                            <Button variant="primaryOutline" onClick={() => handleAddClick()}>Add chapter</Button>
+                            <p className="mb-4 font-lg">No lessons available for this chapter yet.</p>
+                            <Button
+                                variant="primaryOutline"
+                                onClick={handleAddLesson}
+                            >
+                                Add lesson
+                            </Button>
                         </div>
                     </div>
                 )}
 
-                {!error && chapters && chapters.length > 0 && (
+                {!error && lessons && lessons.length > 0 && (
                     <div className="grid gap-4">
-                        {chapters.map((chapter) => (
-                            <Link
-                                key={chapter.id}
-                                href="#"
-                            >
+                        {lessons.map((lesson) => (
+                            <div key={lesson.id}>
                                 <div className="block p-4 border-2 border-gray-300 rounded-lg hover:border-blue-200 hover:shadow transition duration-300 ease-in-out">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <h3 className="text-xl font-semibold pb-3 text-gray-500">{chapter.title}</h3>
-                                            {chapter.description && (
-                                                <p className="text-gray-500/90 text-sm">{chapter.description}</p>
+                                            <Link href={`/classes/${classId}/chapters/${chapterId}/lessons/${lesson.id}`}>
+                                                <h3 className="text-xl font-semibold pb-3 text-sky-500 hover:text-sky-600">
+                                                    {lesson.title}
+                                                </h3>
+                                            </Link>
+                                            {lesson.description && (
+                                                <p className="text-gray-500/90 text-sm">
+                                                    {lesson.description}
+                                                </p>
                                             )}
                                         </div>
                                         <div>
-                                            <Button variant="default" className="text-gray-500" onClick={() => handleEditClick(chapter)}>
+                                            <Button
+                                                variant="default"
+                                                className="text-gray-500"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleEditLesson(lesson);
+                                                }}
+                                            >
                                                 <Pencil className="h-4 w-4" />
                                             </Button>
                                         </div>
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                     </div>
                 )}
@@ -142,6 +197,18 @@ export default function ChapterPage({ params }: { params: { classId: string, cha
                     </div>
                 )}
             </div>
+
+            <LessonDialog
+                isOpen={isLessonModalOpen}
+                onClose={() => {
+                    setIsLessonModalOpen(false);
+                    setSelectedLesson(undefined);
+                }}
+                classId={classId}
+                chapterId={chapterId}
+                lesson={selectedLesson}
+                onSuccess={refreshLessons}
+            />
         </div>
     );
 }

@@ -132,6 +132,22 @@ export const userProgressRelations = relations(userProgress, ({one, many}) => ({
     enrollments: many(classEnrollments)
 }))
 
+export const publicAccessRequests = pgTable("public_access_requests", {
+    id: serial("id").primaryKey(),
+    classId: integer("class_id").references(() => classes.id, { onDelete: 'cascade' }).notNull(),
+    status: text("status", { enum: ["pending", "approved", "rejected"] }).notNull().default("pending"),
+    requestedAt: timestamp("requested_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+    ownerId: text("owner_id").notNull(),
+});
+
+export const publicAccessRequestsRelations = relations(publicAccessRequests, ({ one }) => ({
+    class: one(classes, {
+        fields: [publicAccessRequests.classId],
+        references: [classes.id],
+    }),
+}));
+
 
 
 
