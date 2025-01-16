@@ -35,11 +35,6 @@ const Header = () => {
                             >
                                 <Button size="lg" variant="ghost">Sign In</Button>
                             </SignInButton>
-                            <Link href="/study">
-                                <Button size="lg" variant="sidebar">
-                                    Start Learning For Free
-                                </Button>
-                            </Link>
                         </div>
                     </SignedOut>
                 </ClerkLoaded>

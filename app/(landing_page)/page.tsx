@@ -143,7 +143,9 @@ export default function Home() {
       {/* recruit */}
       <div className="w-screen flex flex-col justify-center items-center gap-3 bg-[#2980B9] py-12">
         <p className="font-bold text-lg text-white">Enter the next level of digital learning</p>
-        <Button variant="sidebar" className="text-sky-700">Start Learning Now!</Button>
+        <Link href="/classes">
+          <Button variant="sidebar" className="text-sky-700">Start Learning Now!</Button>
+        </Link>
       </div>
     </div>
   );
