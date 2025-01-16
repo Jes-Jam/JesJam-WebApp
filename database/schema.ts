@@ -1,5 +1,7 @@
 import { relations } from "drizzle-orm"
-import { pgTable, integer, serial, text, pgEnum, boolean, timestamp, jsonb } from "drizzle-orm/pg-core"
+import { pgTable, integer, serial, text, pgEnum, boolean, timestamp, jsonb, date } from "drizzle-orm/pg-core"
+
+const getCurrentDate = () => new Date().toISOString().split('T')[0];
 
 export const classes = pgTable("classes", {
     id: serial("id").primaryKey(),
@@ -117,6 +119,8 @@ export const userProgress = pgTable('user_progress', {
     userImageSrc: text("user_image_src").notNull().default("https://placehold.co/40x40"),
     patels: integer("patels").notNull().default(10), 
     points: integer("points").notNull().default(0),
+    streakCount: integer("streak_count").notNull().default(0),
+    lastStreakDate: date("last_streak_date").notNull().default(getCurrentDate())
 })
 
 
@@ -128,6 +132,22 @@ export const userProgressRelations = relations(userProgress, ({one, many}) => ({
     }),
     enrollments: many(classEnrollments)
 }))
+
+export const publicAccessRequests = pgTable("public_access_requests", {
+    id: serial("id").primaryKey(),
+    classId: integer("class_id").references(() => classes.id, { onDelete: 'cascade' }).notNull(),
+    status: text("status", { enum: ["pending", "approved", "rejected"] }).notNull().default("pending"),
+    requestedAt: timestamp("requested_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+    ownerId: text("owner_id").notNull(),
+});
+
+export const publicAccessRequestsRelations = relations(publicAccessRequests, ({ one }) => ({
+    class: one(classes, {
+        fields: [publicAccessRequests.classId],
+        references: [classes.id],
+    }),
+}));
 
 
 

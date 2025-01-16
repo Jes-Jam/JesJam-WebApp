@@ -82,12 +82,6 @@ function ClassCard({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-[200px]">
               <DropdownMenuItem
-                onClick={() => onClick(currentClass.id)}
-              >
-                Start Learning
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
                 onClick={() => router.push(`/classes/${currentClass.id}/chapters`)}
               >
                 View chapters

@@ -66,7 +66,7 @@ export default function ClassPage({ params }: { params: { classId: string } }) {
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-[900px] mx-auto mt-10">
-      <Header title={currentClass?.title || "Class Chapters"} />
+      <Header title={currentClass?.title || "Class Chapters"} classId={classId} />
 
       <div className="flex justify-between items-center my-6">
         <div>
