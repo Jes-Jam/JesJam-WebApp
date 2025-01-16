@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 // import { loadConfettiPreset } from "@tsparticles/confetti";
 import { confetti } from "@tsparticles/confetti";
+import { updateStreak, getStreak, resetStreak } from "@/database/streak";
+import { getCurrentDate, calculateDaysDifference } from "@/lib/date";
 
 
 type Props = {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { use, useState, useTransition } from "react";
 import { Header } from "./header";
 import { FinishScreen } from "./(finish-screen)/finish-screen";
 import { Footer } from "./footer";
@@ -12,6 +12,8 @@ import { SelectChallenge } from "./(challenge-type)/select-challenge";
 import { AnswerBuildingChallenge } from "./(challenge-type)/answer-build-challenge";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { updateStreak, getStreak, resetStreak, validateStreak } from "@/database/streak";
+import { getCurrentDate, calculateDaysDifference } from "@/lib/date";
 
 export interface Challenge {
     id: number;
@@ -42,6 +44,7 @@ export const LessonProgress = ({
     initialPatels,
     userSubscription
 }: Props) => {
+    const [hasUpdatedstreak, setHasUpdatedstreak] = useState(false);
     const [pending, startTransition] = useTransition();
     const [percentage, setPercentage] = useState(() => {
         return initialPercentage === 100 ? 0 : initialPercentage;
@@ -62,6 +65,21 @@ export const LessonProgress = ({
     useEffect(() => {
         console.log("Component mounted");
     }, []);
+
+    useEffect(() => {
+
+        const update = async () => {
+            if (!challenge && !hasUpdatedstreak) {
+                console.log("Updating Streak");
+                
+                await validateStreak();
+                setHasUpdatedstreak(false);
+            }
+        };
+
+        update()
+          
+    }, [hasUpdatedstreak, activeChallengeIndex]);
 
     useEffect(() => {
         if (challenge?.type === "ANSWER_BUILDING") {
@@ -225,6 +243,33 @@ export const LessonProgress = ({
     };
 
     if (!challenge) {
+
+        // (async () => {
+        //     const streak = await getStreak();
+        
+        //     if (!streak) {
+        //     return;
+        //     }
+        
+        //     const { streakCount, lastStreakDate } = streak;
+        
+        //     if (!lastStreakDate || !streakCount) {
+        //     return;
+        //     }
+        
+        //     const currentDate = getCurrentDate();
+        
+        //     const daysDifference = calculateDaysDifference(lastStreakDate, currentDate);
+        
+        // //   if (daysDifference <= 0) {
+        // //     await updateStreak();
+        // //   } else {
+        // //     await resetStreak();
+        // //   }
+        //     await updateStreak();
+        
+        // })();
+        
         return (
             <FinishScreen
                 percentage={percentage}

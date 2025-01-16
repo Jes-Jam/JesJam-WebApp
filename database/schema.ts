@@ -1,7 +1,6 @@
 import { relations } from "drizzle-orm"
 import { pgTable, integer, serial, text, pgEnum, boolean, timestamp, jsonb, date } from "drizzle-orm/pg-core"
-
-const getCurrentDate = () => new Date().toISOString().split('T')[0];
+import { getCurrentDate } from "@/lib/date"
 
 export const classes = pgTable("classes", {
     id: serial("id").primaryKey(),

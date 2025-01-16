@@ -3,6 +3,7 @@ import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
 import { challengeProgress, challenges, chapters, classEnrollments, classes, lessons, userProgress } from "./schema";
 import { eq, desc, asc } from "drizzle-orm";
+import { validateStreak } from "./streak";
 
 
 export const getAdminClasses = cache(async () => {
@@ -46,7 +47,9 @@ export const getUserProgress = cache(async () => {
         return;
     }
 
+    
     try {
+        await validateStreak();
         const data = await db.query.userProgress.findFirst({
             where: eq(userProgress.userId, userId),
             with: {

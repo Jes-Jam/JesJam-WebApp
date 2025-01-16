@@ -19,10 +19,10 @@ export const getCustomClasses = cache(async () => {
       eq(classes.ownerId, userId),
       eq(classes.isPrivateClass, true)
     ),
-    with: {
-      userProgress: true,
-      enrollments: true
-    }
+    // with: {
+    //   userProgress: true,
+    //   enrollments: true
+    // }
   });
 
   return data;

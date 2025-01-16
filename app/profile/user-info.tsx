@@ -31,7 +31,7 @@ export const UserInfoCard = async () => {
                             <Button variant="ghost" className="text-white">
                                 {/* <Flame className="w-6 h-6 text-sky-500" /> */}
                                 <Image src="/images/streak.svg" alt="Points" width={45} height={45} className="object-contain" />
-                                {<p className="text-gray-500">{userProgress?.points || 0} Streaks</p>}
+                                {<p className="text-gray-500">{userProgress?.streakCount || 0} Streaks</p>}
                             </Button>
                         </div>
                     </div>
