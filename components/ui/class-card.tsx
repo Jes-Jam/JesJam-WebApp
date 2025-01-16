@@ -83,7 +83,6 @@ function ClassCard({
 
   return (
     <div className="relative">
-      {!isJesJamClass && !isPrivateClass && <PublicClassBadge />}
       {isEdittable && (
         <div className="absolute top-2 left-2 z-50">
           <DropdownMenu>
