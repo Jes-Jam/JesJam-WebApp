@@ -43,6 +43,7 @@ const StudyPage = async () => {
                 <StickyContainer>
                     <StudentStates
                         activeCourse={userProgress.activeClass}
+                        streakCount={userProgress.streakCount}
                         petals={userProgress.patels}
                         points={userProgress.points}
                         isPremium={false}
