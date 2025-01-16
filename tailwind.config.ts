@@ -49,7 +49,10 @@ const config: Config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+				'fire-red': '#ff4500',
+        'fire-orange': '#ff8c00',
+        'fire-yellow': '#ffd700',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -72,13 +75,33 @@ const config: Config = {
 			shine: {
 				'0%': { transform: 'translateX(-100%)' },
 				'100%': { transform: 'translateX(100%)' }
-			}
+			},
+			flicker: {
+				'0%, 100%': { opacity: 0.8, transform: 'translateY(0) scale(1)' },
+				'50%': { opacity: 1, transform: 'translateY(-5px) scale(1.1)' },
+			},
+			flicker1: {
+				'0%, 100%': { opacity: 0.7, transform: 'translateY(0) scale(1)' },
+				'50%': { opacity: 1, transform: 'translateY(-4px) translateX(-2px) scale(1.1)' },
+			},
+			flicker2: {
+				'0%, 100%': { opacity: 0.6, transform: 'translateY(0) scale(1)' },
+				'50%': { opacity: 1, transform: 'translateY(-3px) translateX(1px) scale(1.1)' },
+			},
+			wave: {
+				'0%, 100%': { transform: 'translateX(0)' },
+				'50%': { transform: 'translateX(5px)' },
+			},
 		},
 		animation: {
 			'sway': 'sway 4s ease-in-out infinite',
 			'bounce-daisy': 'bounce-daisy 6s ease-in-out infinite',
 			'sway-grass': 'sway-grass 4s ease-in-out infinite',
 			shine: 'shine 2s ease-in-out infinite',
+			flicker: 'flicker 4s infinite',
+			flicker1: 'flicker1 3.8s infinite',
+			flicker2: 'flicker2 3.5s infinite',
+			wave: 'wave 6s ease-in-out infinite',
 		}
   	}
   },
