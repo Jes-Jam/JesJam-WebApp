@@ -77,16 +77,16 @@ const config: Config = {
 				'100%': { transform: 'translateX(100%)' }
 			},
 			flicker: {
-				'0%, 100%': { opacity: 0.8, transform: 'translateY(0) scale(1)' },
-				'50%': { opacity: 1, transform: 'translateY(-5px) scale(1.1)' },
+				'0%, 100%': { opacity: '0.8', transform: 'translateY(0) scale(1)' },
+				'50%': { opacity: '1', transform: 'translateY(-5px) scale(1.1)' },
 			},
 			flicker1: {
-				'0%, 100%': { opacity: 0.7, transform: 'translateY(0) scale(1)' },
-				'50%': { opacity: 1, transform: 'translateY(-4px) translateX(-2px) scale(1.1)' },
+				'0%, 100%': { opacity: '0.7', transform: 'translateY(0) scale(1)' },
+				'50%': { opacity: '1', transform: 'translateY(-4px) translateX(-2px) scale(1.1)' },
 			},
 			flicker2: {
-				'0%, 100%': { opacity: 0.6, transform: 'translateY(0) scale(1)' },
-				'50%': { opacity: 1, transform: 'translateY(-3px) translateX(1px) scale(1.1)' },
+				'0%, 100%': { opacity: '0.6', transform: 'translateY(0) scale(1)' },
+				'50%': { opacity: '1', transform: 'translateY(-3px) translateX(1px) scale(1.1)' },
 			},
 			wave: {
 				'0%, 100%': { transform: 'translateX(0)' },
