@@ -62,7 +62,7 @@ export const validateStreak = cache(async () => {
   const { lastStreakDate } = currentStreak;
   const currentDate = getCurrentDate();
 
-  const daysSinceLastStreak = calculateDaysDifference(getCurrentDate(lastStreakDate), '2025-01-18');
+  const daysSinceLastStreak = calculateDaysDifference(getCurrentDate(lastStreakDate), currentDate);
 
   if (daysSinceLastStreak === 1) { // Check if it's a new day just 1 day after
     await updateStreak();
