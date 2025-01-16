@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { classEnrollments, classes, userProgress } from "@/database/schema"
-import { useMotionValue } from "framer-motion"
 import ClassCard from "@/components/ui/class-card"
 import { useRouter } from "next/navigation"
 import { upsertUserProgress } from "@/actions/user-progress"
@@ -14,11 +13,12 @@ type Props = {
     classes: typeof classes.$inferSelect[];
     activeClassId?: typeof userProgress.$inferSelect["activeClassId"];
     userEnrollments?: typeof classEnrollments.$inferSelect[];
-    isGuest?: boolean;
     isEdittable?: boolean;
+    isJesJamClass?: boolean;
+    isPrivateClass?: boolean;
 }
 
-const List = ({ classes, activeClassId, userEnrollments, isGuest = false, isEdittable }: Props) => {
+const List = ({ classes, activeClassId, userEnrollments, isEdittable, isJesJamClass, isPrivateClass }: Props) => {
     const router = useRouter();
     const [classList, setClassList] = useState(classes);
     const [isPending, startTransition] = React.useTransition();
@@ -113,6 +113,8 @@ const List = ({ classes, activeClassId, userEnrollments, isGuest = false, isEdit
                     setIsHoveringEnrolled={setIsHoveringEnrolled}
                     isEdittable={isEdittable}
                     onDelete={handleDelete}
+                    isJesJamClass={isJesJamClass}
+                    isPrivateClass={isPrivateClass}
                 />
             ))}
         </div>

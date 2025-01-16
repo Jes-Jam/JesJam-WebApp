@@ -2,16 +2,19 @@ import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
 import { challengeProgress, challenges, chapters, classEnrollments, classes, lessons, userProgress } from "./schema";
-import { eq, desc, asc } from "drizzle-orm";
+import { eq, desc, asc, and } from "drizzle-orm";
 import { validateStreak } from "./streak";
 
 
 export const getAdminClasses = cache(async () => {
     const classesList = await db.query.classes.findMany({
-        where: eq(classes.isPrivateClass, false),
+        where: and(
+            eq(classes.isPrivateClass, false),
+            eq(classes.isJesJamClass, true)
+        ),
     });
     
-    console.log("Private Classes:", classesList);
+    console.log("JesJam Public Classes:", classesList);
     return classesList;
 })
 

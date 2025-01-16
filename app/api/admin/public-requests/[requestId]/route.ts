@@ -50,10 +50,13 @@ export async function PATCH(
             })
             .where(eq(publicAccessRequests.id, requestId));
 
-        // If approved, update class privacy
+        // If approved, update class privacy and mark as non-JesJam class
         if (action === "approve") {
             await db.update(classes)
-                .set({ isPrivateClass: false })
+                .set({ 
+                    isPrivateClass: false,
+                    isJesJamClass: false
+                })
                 .where(eq(classes.id, existingRequest.classId));
         }
 

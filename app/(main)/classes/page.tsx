@@ -18,6 +18,14 @@ const ClassPage = async () => {
   const userEnrollments = await getEnrollments();
   const customClasses = await getCustomClasses();
 
+  const isJesJamClass = customClasses.some(
+    (customClass) => customClass.isJesJamClass
+  );
+
+  const isPrivateClass = customClasses.some(
+    (customClass) => customClass.isPrivateClass
+  );
+
 
 
   return (
@@ -42,6 +50,8 @@ const ClassPage = async () => {
         classes={adminClasses}
         activeClassId={userProgress?.activeClassId}
         userEnrollments={userEnrollments}
+        isJesJamClass={isJesJamClass}
+        isPrivateClass={isPrivateClass}
       />
       <h1 className="text-2xl font-bold text-sky-500 my-10">
         Your Custom Classes 👨‍🎓
@@ -54,6 +64,8 @@ const ClassPage = async () => {
             activeClassId={userProgress?.activeClassId}
             userEnrollments={userEnrollments}
             isEdittable={true}
+            isJesJamClass={isJesJamClass}
+            isPrivateClass={isPrivateClass}
           />
         </div>
       ) : (

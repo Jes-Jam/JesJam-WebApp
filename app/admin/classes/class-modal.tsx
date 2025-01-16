@@ -115,7 +115,7 @@ export const ClassModal = ({
                                 </FormItem>
                             )}
                         />
-                        <FormField
+                        {/* <FormField
                             control={form.control}
                             name="isPrivateClass"
                             render={({ field }) => (
@@ -129,7 +129,7 @@ export const ClassModal = ({
                                     <FormLabel className="font-normal">Private class</FormLabel>
                                 </FormItem>
                             )}
-                        />
+                        /> */}
                         <div className="flex justify-end">
                             <Button disabled={isLoading} type="submit">
                                 {initialData ? "Save changes" : "Create"}

@@ -17,12 +17,8 @@ export const getCustomClasses = cache(async () => {
   const data = await db.query.classes.findMany({
     where: and(
       eq(classes.ownerId, userId),
-      eq(classes.isPrivateClass, true)
+      eq(classes.isJesJamClass, false),
     ),
-    // with: {
-    //   userProgress: true,
-    //   enrollments: true
-    // }
   });
 
   return data;

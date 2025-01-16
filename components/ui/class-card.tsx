@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Check, MoreVertical } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { PublicClassBadge } from "@/components/public-class-badge"
 
 import {
   DropdownMenu,
@@ -27,6 +28,8 @@ type ClassCardProps = {
   setIsHoveringEnrolled: (state: boolean) => void;
   isEdittable?: boolean;
   onDelete: (classId: number) => void;
+  isJesJamClass?: boolean;
+  isPrivateClass?: boolean;
 };
 
 function ClassCard({
@@ -42,13 +45,21 @@ function ClassCard({
   setIsHoveringEnrolled,
   isEdittable,
   onDelete,
+  isJesJamClass,
+  isPrivateClass
 }: ClassCardProps) {
 
-  const [isTransitionPending, startTransition] = useTransition();
   const router = useRouter();
-  const [alreadyHasChapters, setAlreadyHasChapters] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // const isPublicClass = !isJesJamClass && !isPrivateClass;
+
+  useEffect(() => {
+    console.log("isJesJamClass", isJesJamClass);
+    console.log("isPrivateClass", isPrivateClass);
+    // console.log("isPublicClass", isPublicClass);
+  }, [isJesJamClass, isPrivateClass]);
 
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -72,6 +83,7 @@ function ClassCard({
 
   return (
     <div className="relative">
+      {!isJesJamClass && !isPrivateClass && <PublicClassBadge />}
       {isEdittable && (
         <div className="absolute top-2 left-2 z-50">
           <DropdownMenu>

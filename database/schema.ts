@@ -8,6 +8,7 @@ export const classes = pgTable("classes", {
     imageSrc: text("imageSrc"),
     isPrivateClass: boolean("is_private_class").default(true),
     ownerId: text("owner_id").notNull(),
+    isJesJamClass: boolean("is_jesjam_class").default(false),
 })
 
 // Relationship: classes hasMany userProgress and chapters
