@@ -5,7 +5,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { ClerkLoading, ClerkLoaded, UserButton, useUser } from "@clerk/nextjs"
 import { Loader, Layout, BookOpen, BookText, GraduationCap, Users } from "lucide-react"
-import SidebarItem from "@/components/sidebar-item"
+import { useRequestCount } from "@/states/useRequestCount"
+import SidebarItemAdmin from "./sidebar-item-admin"
 
 type Props = {
     className?: string
@@ -13,6 +14,7 @@ type Props = {
 
 const SidebarAdmin = ({ className }: Props) => {
     const { user } = useUser()
+    const requestCount = useRequestCount();
 
     return (
         <div className={cn(
@@ -30,24 +32,31 @@ const SidebarAdmin = ({ className }: Props) => {
                     </div>
                 </Link>
                 <div className="flex flex-col gap-y-3">
-                    <SidebarItem
-                        label="Dashboard"
-                        icon={<Layout className="h-9 w-9" />}
-                        href="/admin"
-                    />
-                    <SidebarItem
+                    <div className="relative">
+                        <SidebarItemAdmin
+                            label="Dashboard"
+                            icon={<Layout className="h-5 w-5" />}
+                            href="/admin/dashboard"
+                        />
+                        {requestCount > 0 && (
+                            <div className="absolute -top-1 -right-1 bg-rose-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                {requestCount}
+                            </div>
+                        )}
+                    </div>
+                    <SidebarItemAdmin
                         label="Classes"
-                        icon={<BookOpen className="h-9 w-9" />}
+                        icon={<BookOpen className="h-5 w-5" />}
                         href="/admin/classes"
                     />
-                    <SidebarItem
+                    <SidebarItemAdmin
                         label="Chapters"
-                        icon={<BookText className="h-9 w-9" />}
+                        icon={<BookText className="h-5 w-5" />}
                         href="/admin/chapters"
                     />
-                    <SidebarItem
+                    <SidebarItemAdmin
                         label="Lessons"
-                        icon={<GraduationCap className="h-9 w-9" />}
+                        icon={<GraduationCap className="h-5 w-5" />}
                         href="/admin/lessons"
                     />
                 </div>
